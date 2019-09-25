@@ -37,36 +37,42 @@ class PruningModule(nn.Module):
         return num_features
 
 
-    def compute_fp(self, monitored):
+    def compute_fp(self, monitored):  # use unpruned indices?
+        layer_fp = {}
         with torch.no_grad():
-            layer_fp = {name: frame_potential(param.data, param.data.shape[0]) 
-                            for name, param in self.named_parameters() if name in monitored}
-
+            for layer in monitored:
+                param = getattr(self, layer)
+                w = param.get_weights()
+                N = len(param.unpruned_parameters())
+                fp = frame_potential(w, N)
+                layer_fp[layer] = fp
         return layer_fp
 
 
-    def reduced_fps(self, layer):  # change layer to string?
+    def selective_fps(self, layer):  # add if mask
         partial_fps = []
         with torch.no_grad():  # not necessary?
-            w = layer.weight.data
-            rows, cols = w.shape
-
-            for i in range(rows):
-                indices = [j for j in range(rows) if j != i]
+            param = getattr(self, layer)
+            w = param.get_weights()
+            unpruned_indices = param.unpruned_parameters()
+            N = len(unpruned_indices)
+            for i in unpruned_indices:
+                indices = [j for j in unpruned_indices if j != i]
                 indices = torch.tensor(indices)
                 all_but_one = torch.index_select(w, 0, indices)
-                partial_fps.append(frame_potential(all_but_one, rows-1))
-        
+                fp = frame_potential(all_but_one, N-1)
+                partial_fps.append((fp, i))
         return partial_fps
 
     
-    def prune_element(self, layer, pruning_idx):
+    def prune_element(self, layer, pruning_idx):  # test function
         with torch.no_grad():  # not necessary?
-            w = layer.weight.data
+            param = getattr(self, layer)
+            w = param.get_weights()
             rows, cols = w.shape
-            mask = w.new_full(w.shape, 1.)  # should have same device
+            mask = param.mask if param.mask_flag else w.new_full(w.shape, 1.)  # should have same device
             mask[pruning_idx] = torch.zeros(cols)
-            layer.set_mask(mask)
+            param.set_mask(mask)
 
 
 class LeNet_300_100(PruningModule):

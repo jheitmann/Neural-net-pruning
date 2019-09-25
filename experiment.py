@@ -1,5 +1,4 @@
 import logging
-import numpy as np
 import os
 import time
 import torch
@@ -10,7 +9,6 @@ import helpers
 
 # Seeding for reproducibility
 torch.manual_seed(common.SEED)
-np.random.seed(common.SEED)
 
 # Set up logging
 """ logger = logging.getLogger(__name__)
@@ -99,7 +97,9 @@ class Experiment():
 
     def prune(self, layers, increase_fp=True):
         for layer in layers:
-            reduced_fps = np.array(self.model.reduced_fps(layer))
-            pruning_idx = np.argmax(reduced_fps) if increase_fp else np.argmin(reduced_fps)
+            partial_fps = self.model.selective_fps(layer)
+            _, min_idx = min(partial_fps)
+            _, max_idx = max(partial_fps)
+            pruning_idx = max_idx if increase_fp else min_idx
             self.model.prune_element(layer, pruning_idx)
         
