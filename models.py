@@ -10,14 +10,13 @@ from layers import MaskedLinear
 torch.manual_seed(common.SEED)
 
 
-def frame_potential(w):
-    rows, cols = w.shape
+def frame_potential(w, N):
     w_normalized = F.normalize(w, p=2, dim=1)  # normalized weight rows
     
     T_mod = w_normalized.matmul(w_normalized.t())
     inner_product_sum = T_mod.matmul(T_mod).trace().item()  
 
-    fp = inner_product_sum / (rows**2)
+    fp = inner_product_sum / (N**2)
     return fp
 
 
@@ -40,25 +39,34 @@ class PruningModule(nn.Module):
 
     def compute_fp(self, monitored):
         with torch.no_grad():
-            layer_fp = {name: frame_potential(param.data) for name, param 
-                            in self.named_parameters() if name.replace('.weight', '') in monitored}
+            layer_fp = {name: frame_potential(param.data, param.data.shape[0]) 
+                            for name, param in self.named_parameters() if name in monitored}
 
         return layer_fp
 
 
-    def reduced_fps(self, layer):
+    def reduced_fps(self, layer):  # change layer to string?
         partial_fps = []
-        with torch.no_grad():
-            w = getattr(self, layer).weight.data
+        with torch.no_grad():  # not necessary?
+            w = layer.weight.data
             rows, cols = w.shape
 
             for i in range(rows):
                 indices = [j for j in range(rows) if j != i]
                 indices = torch.tensor(indices)
                 all_but_one = torch.index_select(w, 0, indices)
-                partial_fps.append(frame_potential(all_but_one))
+                partial_fps.append(frame_potential(all_but_one, rows-1))
         
         return partial_fps
+
+    
+    def prune_element(self, layer, pruning_idx):
+        with torch.no_grad():  # not necessary?
+            w = layer.weight.data
+            rows, cols = w.shape
+            mask = w.new_full(w.shape, 1.)  # should have same device
+            mask[pruning_idx] = torch.zeros(cols)
+            layer.set_mask(mask)
 
 
 class LeNet_300_100(PruningModule):

@@ -16,9 +16,18 @@ class MaskedLinear(nn.Linear):
         #self.weight.data = self.weight.data*mask_var.data
         self.mask_flag = True
 
+    
+    def unpruned_parameters(self):
+        N = self.weight.shape[0]
+        if self.mask_flag:
+            first_col = self.mask[:, 0]
+            n_pruned = (first_col == 0.).sum().item()
+            N -= n_pruned
+        return N
+
 
     def forward(self, x):
-        if self.mask_flag == True:
+        if self.mask_flag:
             weight = self.weight * self.mask
             return F.linear(x, weight, self.bias)
         else:
