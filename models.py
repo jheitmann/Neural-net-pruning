@@ -9,6 +9,10 @@ from layers import MaskedLinear
 # Seeding for reproducibility
 torch.manual_seed(common.SEED)
 
+"""
+General remark: add detach()
+"""
+
 
 def frame_potential(w, N):
     w_normalized = F.normalize(w, p=2, dim=1)  # normalized weight rows
@@ -43,7 +47,7 @@ class PruningModule(nn.Module):
             for layer in monitored:
                 param = getattr(self, layer)
                 w = param.get_weights()
-                N = len(param.unpruned_parameters())
+                N = param.unpruned_parameters().shape[0]
                 fp = frame_potential(w, N)
                 layer_fp[layer] = fp
         return layer_fp
@@ -55,11 +59,11 @@ class PruningModule(nn.Module):
             param = getattr(self, layer)
             w = param.get_weights()
             unpruned_indices = param.unpruned_parameters()
-            N = len(unpruned_indices)
-            for i in unpruned_indices:
-                indices = [j for j in unpruned_indices if j != i]
-                indices = torch.tensor(indices)
-                all_but_one = torch.index_select(w, 0, indices)
+            N = unpruned_indices.shape[0]
+            indices_ls = unpruned_indices.clone().detach().tolist()
+            for i in indices_ls:
+                indices = [j for j in indices_ls if j != i]
+                all_but_one = torch.index_select(w, 0, unpruned_indices.new_tensor(indices))
                 fp = frame_potential(all_but_one, N-1)
                 partial_fps.append((fp, i))
         return partial_fps
