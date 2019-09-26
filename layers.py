@@ -27,10 +27,10 @@ class MaskedLinear(nn.Linear):
     def unpruned_parameters(self):
         if self.mask_flag:
             first_col = self.mask[:, 0]
-            return first_col.nonzero().flatten().to(self.weight.device)
+            return first_col.nonzero().flatten().tolist()
         else:
             N = self.weight.shape[0]
-            return torch.arange(N).to(self.weight.device)
+            return torch.arange(N).tolist()
 
 
     def forward(self, x):

@@ -1,4 +1,5 @@
 import logging
+import numpy as np
 import os
 import time
 import torch
@@ -9,6 +10,7 @@ import helpers
 
 # Seeding for reproducibility
 torch.manual_seed(common.SEED)
+np.random.seed(common.SEED)
 
 # Set up logging
 """ logger = logging.getLogger(__name__)
@@ -69,7 +71,7 @@ class Experiment():
         test_loss /= len(self.testloader)
         test_accuracy = 100. * correct / len(self.testloader.dataset)
 
-        layer_fp = self.model.compute_fp(monitored)
+        layer_fp = self.model.compute_fp(monitored) if monitored else {}
 
         print('\nTest set: Average loss: {:.4f}, Accuracy: {:6d}/{:6d} ({:.0f}%)\n'.format(
             test_loss, correct, len(self.testloader.dataset),test_accuracy))
@@ -95,11 +97,31 @@ class Experiment():
         return test_accuracies, frame_potentials
 
 
-    def prune(self, layers, increase_fp=True):
+    def fp_pruning(self, layers, increase_fp=True):
         for layer in layers:
             partial_fps = self.model.selective_fps(layer)
             _, min_idx = min(partial_fps)
             _, max_idx = max(partial_fps)
             pruning_idx = max_idx if increase_fp else min_idx
             self.model.prune_element(layer, pruning_idx)
+
         
+    def random_pruning(self, layers):
+        for layer in layers:
+            param = getattr(self.model, layer)
+            unpruned_indices = param.unpruned_parameters()
+            pruning_idx = np.random.choice(unpruned_indices)
+            self.model.prune_element(layer, pruning_idx)
+
+    
+    def prune_and_test(self, criterion, layers, pruning_iters, *, prune_on_fp=True, increase_fp=True):
+        test_accuracies = [self.test(criterion)[0]]
+        for pruning_iter in range(pruning_iters):
+            if prune_on_fp:
+                self.fp_pruning(layers, increase_fp)
+            else:
+                self.random_pruning(layers)
+
+            test_accuracies.append(self.test(criterion)[0])
+
+        return test_accuracies
