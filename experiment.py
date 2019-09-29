@@ -8,21 +8,22 @@ import torch.nn.functional as F
 import common
 import helpers
 
-# Seeding for reproducibility
+# Seeding for reproducibility, only once (remove from nb?)
 torch.manual_seed(common.SEED)
 np.random.seed(common.SEED)
 
-# Set up logging
-""" logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
-file_handler = logging.FileHandler(helpers.log_file_path())
-formatter = logging.Formatter('%(asctime)s : %(levelname)s : %(name)s : %(message)s')
-file_handler.setFormatter(formatter)
-logger.addHandler(file_handler) """
 
-"""
-ADD mkdir for models and logging
-"""
+def save_results(model, epochs, test_accuracies, frame_potentials):
+    model_fname = helpers.model_file_path(model.model_ID())
+    torch.save(model.state_dict(), model_fname)
+    print("Saved trained model to:", model_fname)
+    acc_fname = helpers.metric_file_path(model.model_ID(), epochs, "acc")
+    np.save(test_accuracies, acc_fname)
+    print("Saved validation accuracies to:", acc_fname + ".npy")
+    if frame_potentials:
+        fp_fname = helpers.metric_file_path(model.model_ID(), epochs, "fp")
+        np.save(frame_potentials, fp_fname)  # when loading set allow_pickle=True
+        print("Saved frame potentials to:", fp_fname + ".npy")
 
 
 class Experiment():  
@@ -48,7 +49,7 @@ class Experiment():
             optimizer.step()
             
             if batch_idx % log_interval == 0:
-                print('Train Epoch: {:3d} [{:6d}/{:6d} ({:.0f}%)]\tLoss: {:.6f}'.format(
+                print("Train Epoch: {:3d} [{:6d}/{:6d} ({:.0f}%)]\tLoss: {:.6f}".format(
                     epoch, batch_idx * len(data), len(self.trainloader.dataset),
                     100. * batch_idx / len(self.trainloader), loss.item()))
 
@@ -73,13 +74,13 @@ class Experiment():
 
         layer_fp = self.model.compute_fp(monitored) if monitored else {}
 
-        print('\nTest set: Average loss: {:.4f}, Accuracy: {:6d}/{:6d} ({:.0f}%)\n'.format(
+        print("\nTest set: Average loss: {:.4f}, Accuracy: {:6d}/{:6d} ({:.0f}%)\n".format(
             test_loss, correct, len(self.testloader.dataset),test_accuracy))
 
         return test_accuracy, layer_fp
 
 
-    def fit(self, epochs, criterion, optimizer, *, monitored=[], save_model=False, log_interval=100):
+    def fit(self, epochs, criterion, optimizer, *, monitored=[], save_results=False, log_interval=100):
         initial_acc, initial_fps = self.test(criterion, monitored=monitored)
         test_accuracies = [initial_acc]
         frame_potentials = {name: [fp] for name, fp in initial_fps.items()}
@@ -91,8 +92,8 @@ class Experiment():
             for name, fp in layer_fp.items():
                 frame_potentials[name].append(fp)
 
-        if save_model:
-            torch.save(self.model.state_dict(), helpers.model_file_path(self.model.model_ID()))
+        if save_results:
+            save_results(model, epochs, test_accuracies, frame_potentials)
         
         return test_accuracies, frame_potentials
 
@@ -114,14 +115,24 @@ class Experiment():
             self.model.prune_element(layer, pruning_idx)
 
     
-    def prune_and_test(self, criterion, layers, pruning_iters, *, prune_on_fp=True, increase_fp=True):
-        test_accuracies = [self.test(criterion)[0]]
-        for pruning_iter in range(pruning_iters):
+    def prune_and_test(self, criterion, layers, pruning_iters, *, prune_on_fp=True, increase_fp=True, log_interval=10):
+        initial_acc, initial_fps = self.test(criterion, monitored=layers)
+        test_accuracies = [initial_acc]
+        frame_potentials = {name: [fp] for name, fp in initial_fps.items()}
+        
+        for pruning_iter in range(1, pruning_iters + 1):
             if prune_on_fp:
                 self.fp_pruning(layers, increase_fp)
             else:
                 self.random_pruning(layers)
 
-            test_accuracies.append(self.test(criterion)[0])
+            accuracy, layer_fp = self.test(criterion, monitored=layers)
+            test_accuracies.append(accuracy)
+            for name, fp in layer_fp.items():
+                frame_potentials[name].append(fp)
 
-        return test_accuracies
+            if pruning_iter % log_interval == 0:
+                print("Pruning round: [{:3d}/{:3d} ({:.0f}%)]".format(
+                    pruning_iter, pruning_iters, 100. * pruning_iter / pruning_iters))
+        
+        return test_accuracies, frame_potentials

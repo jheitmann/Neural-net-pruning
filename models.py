@@ -3,15 +3,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 import common
-from layers import MaskedLinear
-
-
-# Seeding for reproducibility
-torch.manual_seed(common.SEED)
-
-"""
-General remark: add detach()
-"""
+from layers import MaskedLinear, MaskedConv2d
 
 
 def frame_potential(w, N):
@@ -41,7 +33,7 @@ class PruningModule(nn.Module):
         return num_features
 
 
-    def compute_fp(self, monitored):  # use unpruned indices?
+    def compute_fp(self, monitored):
         layer_fp = {}
         with torch.no_grad():
             for layer in monitored:
@@ -53,7 +45,7 @@ class PruningModule(nn.Module):
         return layer_fp
 
 
-    def selective_fps(self, layer):  # add if mask
+    def selective_fps(self, layer):
         partial_fps = []
         with torch.no_grad():  # not necessary?
             param = getattr(self, layer)
@@ -68,7 +60,7 @@ class PruningModule(nn.Module):
         return partial_fps
 
     
-    def prune_element(self, layer, pruning_idx):  # test function
+    def prune_element(self, layer, pruning_idx):
         with torch.no_grad():  # not necessary?
             param = getattr(self, layer)
             w = param.get_weights()
@@ -81,22 +73,6 @@ class PruningModule(nn.Module):
 class LeNet_300_100(PruningModule):
     def __init__(self):
         super(LeNet_300_100, self).__init__()
-        self.fc1 = nn.Linear(28*28, 300)
-        self.fc2 = nn.Linear(300, 100)
-        self.fc3 = nn.Linear(100, 10)
-
-
-    def forward(self, x):
-        x = x.view(-1, 28*28)
-        x = F.relu(self.fc1(x))
-        x = F.relu(self.fc2(x))
-        x = self.fc3(x)
-        return x
-
-
-class LeNet_300_100_Pruned(PruningModule):
-    def __init__(self):
-        super(LeNet_300_100_Pruned, self).__init__()
         self.fc1 = MaskedLinear(28*28, 300)
         self.fc2 = MaskedLinear(300, 100)
         self.fc3 = MaskedLinear(100, 10)
@@ -110,32 +86,16 @@ class LeNet_300_100_Pruned(PruningModule):
         return x
 
 
-class LeNet_300_100_SELU(nn.Module):
-    def __init__(self):
-        super(LeNet_300_100_SELU, self).__init__()
-        self.fc1 = nn.Linear(28*28, 300)
-        self.fc2 = nn.Linear(300, 100)
-        self.fc3 = nn.Linear(100, 10)
-
-
-    def forward(self, x):
-        x = x.view(-1, 28*28)
-        x = F.selu(self.fc1(x))
-        x = F.selu(self.fc2(x))
-        x = self.fc3(x)
-        return x
-
-
-class Conv2(nn.Module):
+class Conv2(PruningModule):
     def __init__(self):
         super(Conv2, self).__init__()
-        self.conv1 = nn.Conv2d(3, 64, 3)
-        self.conv2 = nn.Conv2d(64, 64, 3)
+        self.conv1 = MaskedConv2d(3, 64, 3)
+        self.conv2 = MaskedConv2d(64, 64, 3)
         self.pool = nn.MaxPool2d(2, 2)
         
-        self.fc1 = nn.Linear(64 * 14 * 14, 256)
-        self.fc2 = nn.Linear(256, 256)
-        self.fc3 = nn.Linear(256, 10)
+        self.fc1 = MaskedLinear(64 * 14 * 14, 256)
+        self.fc2 = MaskedLinear(256, 256)
+        self.fc3 = MaskedLinear(256, 10)
 
 
     def forward(self, x):

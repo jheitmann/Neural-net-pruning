@@ -4,13 +4,15 @@ from datetime import datetime
 import common
 
 
-def log_file_path(*, log_prefix="train-logs"):
-    date = datetime.now()
-    log_file_name = log_prefix + '_' + date.strftime("%d-%m-%Y")
-    return os.path.join(common.LOG_PATH, log_file_name)
-
-
 def model_file_path(model_id):
     date = datetime.now()
-    model_file_name = model_id + '_' + date.strftime("%d-%m-%Y_%H:%M:%S")
-    return os.path.join(common.MODEL_PATH, model_file_name)
+    ts = date.strftime("%d-%m-%Y_%H:%M:%S")
+    model_fname = model_id + '_' + ts
+    return os.path.join(common.MODEL_PATH, model_fname)
+
+
+def metric_file_path(model_id, epochs, metric):
+    date = datetime.now()
+    ts = date.strftime("%d-%m-%Y_%H:%M:%S")
+    results_fname = "{}_{}_{}_{}".format(model_id, metric, epochs, ts)
+    return os.path.join(common.METRICS_PATH, results_fname)
