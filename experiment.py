@@ -13,16 +13,16 @@ torch.manual_seed(common.SEED)
 np.random.seed(common.SEED)
 
 
-def save_results(model, epochs, test_accuracies, frame_potentials):
+def save_training_meta(model, epochs, test_accuracies, frame_potentials):
     model_fname = helpers.model_file_path(model.model_ID())
     torch.save(model.state_dict(), model_fname)
     print("Saved trained model to:", model_fname)
     acc_fname = helpers.metric_file_path(model.model_ID(), epochs, "acc")
-    np.save(test_accuracies, acc_fname)
+    np.save(acc_fname, test_accuracies)
     print("Saved validation accuracies to:", acc_fname + ".npy")
     if frame_potentials:
         fp_fname = helpers.metric_file_path(model.model_ID(), epochs, "fp")
-        np.save(frame_potentials, fp_fname)  # when loading set allow_pickle=True
+        np.save(fp_fname, frame_potentials)  # when loading set allow_pickle=True
         print("Saved frame potentials to:", fp_fname + ".npy")
 
 
@@ -93,7 +93,7 @@ class Experiment():
                 frame_potentials[name].append(fp)
 
         if save_results:
-            save_results(model, epochs, test_accuracies, frame_potentials)
+            save_training_meta(self.model, epochs, test_accuracies, frame_potentials)
         
         return test_accuracies, frame_potentials
 

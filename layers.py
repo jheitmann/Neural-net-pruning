@@ -17,6 +17,10 @@ class MaskedLinear(nn.Linear):
         self.mask_flag = True
 
 
+    def get_mask(self):  # add .clone()?
+        return self.mask
+
+
     def get_weights(self):
         w = self.weight.detach()
         if self.mask_flag:
@@ -54,6 +58,10 @@ class MaskedConv2d(nn.Conv2d):
         #mask_var = self.get_mask()
         #self.weight.data = self.weight.data*mask_var.data
         self.mask_flag = True
+
+
+    def get_mask(self):  # add .clone()?
+        return self.mask.view(self.mask.shape[0], -1)
 
 
     def get_weights(self):
