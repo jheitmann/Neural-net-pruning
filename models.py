@@ -65,7 +65,7 @@ class PruningModule(nn.Module):
             param = getattr(self, layer)
             w = param.get_weights()
             rows, cols = w.shape
-            mask = param.get_mask() if param.mask_flag else w.new_full(w.shape, 1.)  # should have same device
+            mask = param.get_mask()
             mask[pruning_idx] = torch.zeros(cols)
             param.set_mask(mask)
 
