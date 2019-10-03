@@ -6,6 +6,11 @@ import common
 from layers import MaskedLinear, MaskedConv2d
 
 
+def squared_norm(w):
+    squared_norms = w.matmul(w.t())
+    return squared_norms
+
+
 def frame_potential(w, N):
     w_normalized = F.normalize(w, p=2, dim=1)  # normalized weight rows
     
@@ -40,7 +45,7 @@ class PruningModule(nn.Module):
                 param = getattr(self, layer)
                 w = param.get_weights()
                 N = len(param.unpruned_parameters())
-                fp = frame_potential(w, N)
+                fp = frame_potential(w, N)  # changeme N = w.shape[0]
                 layer_fp[layer] = fp
         return layer_fp
 
@@ -55,9 +60,19 @@ class PruningModule(nn.Module):
             for i in unpruned_indices:
                 indices = [j for j in unpruned_indices if j != i]
                 all_but_one = torch.index_select(w, 0, w.new_tensor(indices, dtype=torch.long))
-                fp = frame_potential(all_but_one, N-1)
+                fp = frame_potential(all_but_one, N-1)  # changeme N = w.shape[0]
                 partial_fps.append((fp, i))
         return partial_fps
+
+
+    def compute_squared_norms(self, layer):  # no need to compute norms every time if no re-train
+        squared_norms = []
+        with torch.no_grad():
+            param = getattr(self, layer)
+            w = param.get_weights()
+            unpruned_indices = param.unpruned_parameters()
+            squared_norms = [(w[i].matmul(w[i].t()), i) for i in unpruned_indices]
+        return squared_norms
 
     
     def prune_element(self, layer, pruning_idx):
@@ -126,3 +141,4 @@ class ConvTest(PruningModule):
         x = F.relu(self.fc2(x))
         x = self.fc3(x)
         return x
+        
