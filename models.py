@@ -44,28 +44,26 @@ class PruningModule(nn.Module):
             for layer in monitored:
                 param = getattr(self, layer)
                 w = param.get_weights()
-                N = len(param.unpruned_parameters())
-                fp = frame_potential(w, N)  # changeme N = w.shape[0]
+                fp = frame_potential(w, w.shape[0])
                 layer_fp[layer] = fp
         return layer_fp
 
 
     def selective_fps(self, layer):
         partial_fps = []
-        with torch.no_grad():  # not necessary?
+        with torch.no_grad():
             param = getattr(self, layer)
             w = param.get_weights()
             unpruned_indices = param.unpruned_parameters()
-            N = len(unpruned_indices)
             for i in unpruned_indices:
                 indices = [j for j in unpruned_indices if j != i]
                 all_but_one = torch.index_select(w, 0, w.new_tensor(indices, dtype=torch.long))
-                fp = frame_potential(all_but_one, N-1)  # changeme N = w.shape[0]
+                fp = frame_potential(all_but_one, w.shape[0])
                 partial_fps.append((fp, i))
         return partial_fps
 
 
-    def compute_squared_norms(self, layer):  # no need to compute norms every time if no re-train
+    def compute_squared_norms(self, layer):
         squared_norms = []
         with torch.no_grad():
             param = getattr(self, layer)
@@ -76,7 +74,7 @@ class PruningModule(nn.Module):
 
     
     def prune_element(self, layer, pruning_idx):
-        with torch.no_grad():  # not necessary?
+        with torch.no_grad():
             param = getattr(self, layer)
             w = param.get_weights()
             rows, cols = w.shape

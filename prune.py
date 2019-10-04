@@ -25,12 +25,12 @@ def fp_pruning(model, layer, pruning_iters, increase_fp):
 
 
 def max_fp_pruning(model, layer, pruning_iters):
-    for pruning_idx in fp_pruning(layer, pruning_iters, increase_fp=True):
+    for pruning_idx in fp_pruning(model, layer, pruning_iters, increase_fp=True):
         yield pruning_idx
 
 
 def min_fp_pruning(model, layer, pruning_iters):
-    for pruning_idx in fp_pruning(layer, pruning_iters, increase_fp=False):
+    for pruning_idx in fp_pruning(model, layer, pruning_iters, increase_fp=False):
         yield pruning_idx
 
 
@@ -77,7 +77,7 @@ def prune_and_test(experiment, criterion, layer, pruning, pruning_ratio, *, save
 
 def random_pruning_rounds(experiment, criterion, layer, n_rounds, pruning_ratio, *, save_results=False):
     exp_acc = []
-    exp_fps = []  
+    exp_fps = []
     for i in range(n_rounds):
         print("Random pruning experiment N°", i+1)
         experiment.init_model()
@@ -86,7 +86,7 @@ def random_pruning_rounds(experiment, criterion, layer, n_rounds, pruning_ratio,
         exp_fps.append(frame_potentials)
     
     if save_results:
-        save_pruning_meta(experiment.model, layer, len(exp_acc), "rnd", exp_acc, exp_fps)
+        save_pruning_meta(experiment.model, layer, len(exp_acc), random_pruning.__name__, exp_acc, exp_fps)
             
     return exp_acc, exp_fps
     

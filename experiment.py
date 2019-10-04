@@ -42,7 +42,7 @@ class Experiment():
         self.model.to(self.device)
     
 
-    def train(self, criterion, optimizer, epoch, log_interval):  # add inter-batch testing for MNIST
+    def train(self, criterion, optimizer, epoch, log_interval):
         self.model.train()
         for batch_idx, (data, target) in enumerate(self.trainloader):
             
@@ -58,7 +58,7 @@ class Experiment():
             if batch_idx % log_interval == 0:
                 print("Train Epoch: {:3d} [{:6d}/{:6d} ({:.0f}%)]\tLoss: {:.6f}".format(
                     epoch, batch_idx * len(data), len(self.trainloader.dataset),
-                    100. * batch_idx / len(self.trainloader), loss.item()))  # inter-batch here
+                    100. * batch_idx / len(self.trainloader), loss.item()))
 
 
     def test(self, criterion, *, monitored=[]):
@@ -85,6 +85,28 @@ class Experiment():
             test_loss, correct, len(self.testloader.dataset),test_accuracy))
 
         return test_accuracy, layer_fp
+
+
+    def custom_train(self, criterion, optimizer, epoch, monitored, log_interval):  # changeme
+        self.model.train()
+        for batch_idx, (data, target) in enumerate(self.trainloader):
+            
+            data, target = data.to(self.device), target.to(self.device)
+            
+            optimizer.zero_grad()
+            
+            output = self.model(data)
+            loss = criterion(output, target)
+            loss.backward()
+            optimizer.step()
+            
+            if batch_idx % log_interval == 0:
+                print("Train Epoch: {:3d} [{:6d}/{:6d} ({:.0f}%)]\tLoss: {:.6f}".format(
+                    epoch, batch_idx * len(data), len(self.trainloader.dataset),
+                    100. * batch_idx / len(self.trainloader), loss.item()))
+                accuracy, layer_fp = self.test(criterion, monitored=monitored)
+                yield accuracy, layer_fp
+                self.model.train()
 
 
     def fit(self, epochs, criterion, optimizer, *, monitored=[], save_results=False, log_interval=100):  # add inter-batch testing option
