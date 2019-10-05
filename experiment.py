@@ -101,8 +101,8 @@ class Experiment():
             optimizer.step()
             
             if batch_idx % log_interval == 0:
-                print("Train Epoch: {:3d} [{:6d}/{:6d} ({:.0f}%)]\tLoss: {:.6f}".format(
-                    epoch, batch_idx * len(data), len(self.trainloader.dataset),
+                print("Train Iteration: {:3d} [{:6d}/{:6d} ({:.0f}%)]\tLoss: {:.6f}".format(
+                    batch_idx // log_interval, batch_idx * len(data), len(self.trainloader.dataset),
                     100. * batch_idx / len(self.trainloader), loss.item()))
                 accuracy, layer_fp = self.test(criterion, monitored=monitored)
                 yield accuracy, layer_fp
@@ -125,3 +125,27 @@ class Experiment():
             save_training_meta(self.model, epochs, test_accuracies, frame_potentials)
         
         return test_accuracies, frame_potentials
+
+
+    def create_snapshots(self, epochs, criterion, optimizer, saving_times, *, log_interval=100):
+        initial_acc, _ = self.test(criterion, monitored=[])
+        test_accuracies = [initial_acc]
+
+        for epoch in range(1, epochs + 1):
+            self.train(criterion, optimizer, epoch, log_interval)
+            accuracy, _ = self.test(criterion, monitored=[])
+            test_accuracies.append(accuracy)  # has to use custom_train
+
+            if epoch in saving_times:
+                torch.save({
+                            'model_state_dict': self.model.state_dict(),
+                            'optimizer_state_dict': optimizer.state_dict()
+                            }, helpers.snapshot_file_path(self.model.model_ID(), epoch))
+
+        # save model
+        torch.save({
+                    'model_state_dict': self.model.state_dict(),
+                    'optimizer_state_dict': optimizer.state_dict()
+                    }, helpers.snapshot_file_path(self.model.model_ID(), epochs))
+
+        return test_accuracies

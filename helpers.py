@@ -11,6 +11,13 @@ def model_file_path(model_id):
     return os.path.join(common.MODEL_PATH, model_fname)
 
 
+def snapshot_file_path(model_id, saving_time):
+    date = datetime.now()
+    ts = date.strftime("%d-%m-%Y_%H:%M:%S")
+    model_fname = "{}_{}_{}".format(model_id, saving_time, ts)
+    return os.path.join(common.SNAPSHOT_PATH, model_fname)
+
+
 def train_results_path(model_id, epochs, metric):
     date = datetime.now()
     ts = date.strftime("%d-%m-%Y_%H:%M:%S")

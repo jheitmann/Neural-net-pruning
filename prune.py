@@ -42,6 +42,10 @@ def magnitude_pruning(model, layer, pruning_iters):
         yield pruning_idx
 
 
+def min_mag(model, layer):  # compare with min_fp_pruning
+    pass
+
+
 def random_pruning(model, layer, pruning_iters):
     param = getattr(model, layer)
     unpruned_indices = param.unpruned_parameters()
@@ -89,4 +93,25 @@ def random_pruning_rounds(experiment, criterion, layer, n_rounds, pruning_ratio,
         save_pruning_meta(experiment.model, layer, len(exp_acc), random_pruning.__name__, exp_acc, exp_fps)
             
     return exp_acc, exp_fps
+
+
+def fit_and_prune(experiment, epochs, criterion, optimizer, layer, pruning, pruning_ratio, 
+                    pruning_time, stop_time, *, save_results=False, log_interval=100):
+    test_accuracies = []
+    frame_potentials = []
+    time = 0
+    for epoch in range(1, epochs + 1):
+        for accuracy, layer_fp in experiment.custom_train(criterion, optimizer, epoch, [layer], log_interval): 
+            test_accuracies.append(accuracy)
+            frame_potentials.append(layer_fp[layer])
+            if time == pruning_time:
+                acc, fp = prune_and_test(experiment, criterion, layer, pruning, pruning_ratio)
+                # does something need to be done?
+            elif time == stop_time:
+                return test_accuracies, frame_potentials
+            time += 1
+
+    #if save_results:
+    #    save_training_meta(experiment.model, epochs, test_accuracies, frame_potentials)
     
+    return test_accuracies, frame_potentials

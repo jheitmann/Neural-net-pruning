@@ -5,7 +5,7 @@ import torchvision.transforms as transforms
 import common
 
 
-torch.manual_seed(common.SEED)
+#torch.manual_seed(common.SEED)
 
 
 def get_mnist(train_batch_size, test_batch_size):
@@ -22,9 +22,9 @@ def get_mnist(train_batch_size, test_batch_size):
     kwargs = {'num_workers': 1, 'pin_memory': True} if torch.cuda.is_available() else {}
 
     trainloader = torch.utils.data.DataLoader(trainset, batch_size=train_batch_size,
-                                            shuffle=True, **kwargs)
+                                            shuffle=False, **kwargs)
     testloader = torch.utils.data.DataLoader(testset, batch_size=test_batch_size,
-                                            shuffle=True, **kwargs)
+                                            shuffle=False, **kwargs)
                                         
     classes = ('0', '1', '2', '3', '4', '5', '6', '7', '8', '9')
 
@@ -43,10 +43,10 @@ def get_cifar(train_batch_size, test_batch_size):
     kwargs = {'num_workers': 1, 'pin_memory': True} if torch.cuda.is_available() else {}
 
     trainloader = torch.utils.data.DataLoader(trainset, batch_size=train_batch_size,
-                                            shuffle=True, **kwargs)
+                                            shuffle=False, **kwargs)
 
     testloader = torch.utils.data.DataLoader(testset, batch_size=test_batch_size,
-                                            shuffle=True, **kwargs)
+                                            shuffle=False, **kwargs)
 
     classes = ('plane', 'car', 'bird', 'cat', 'deer', 
                 'dog', 'frog', 'horse', 'ship', 'truck')
