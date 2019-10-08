@@ -55,8 +55,8 @@ def random_pruning(model, layer, pruning_iters):
         yield pruning_idx
 
 
-def prune_and_test(experiment, criterion, layer, pruning, pruning_ratio, *, save_results=False, log_interval=10):
-    initial_acc, initial_fps = experiment.test(criterion, monitored=[layer])
+def prune_and_test(experiment, testloader, layer, pruning, pruning_ratio, *, save_results=False, log_interval=10):
+    initial_acc, initial_fps = experiment.test(testloader, [layer])
     test_accuracies = [initial_acc]
     frame_potentials = [initial_fps[layer]]
 
@@ -65,7 +65,7 @@ def prune_and_test(experiment, criterion, layer, pruning, pruning_ratio, *, save
     
     for pruning_iter, pruning_idx in enumerate(pruning(experiment.model, layer, pruning_iters)):
         experiment.model.prune_element(layer, pruning_idx)
-        accuracy, layer_fp = experiment.test(criterion, monitored=[layer])
+        accuracy, layer_fp = experiment.test(testloader, [layer])
         test_accuracies.append(accuracy)
         frame_potentials.append(layer_fp[layer])
 
@@ -79,13 +79,13 @@ def prune_and_test(experiment, criterion, layer, pruning, pruning_ratio, *, save
     return test_accuracies, frame_potentials
 
 
-def random_pruning_rounds(experiment, criterion, layer, n_rounds, pruning_ratio, *, save_results=False):
+def random_pruning_rounds(experiment, testloader, layer, n_rounds, pruning_ratio, *, save_results=False):
     exp_acc = []
     exp_fps = []
     for i in range(n_rounds):
         print("Random pruning experiment N°", i+1)
         experiment.init_model()
-        test_accuracies, frame_potentials = prune_and_test(experiment, criterion, layer, random_pruning, pruning_ratio)
+        test_accuracies, frame_potentials = prune_and_test(experiment, testloader, layer, random_pruning, pruning_ratio)
         exp_acc.append(test_accuracies)
         exp_fps.append(frame_potentials)
     
@@ -94,12 +94,13 @@ def random_pruning_rounds(experiment, criterion, layer, n_rounds, pruning_ratio,
             
     return exp_acc, exp_fps
 
-
+"""
 def fit_and_prune(experiment, epochs, criterion, optimizer, layer, pruning, pruning_ratio, 
                     pruning_time, stop_time, *, save_results=False, log_interval=100):
-    test_accuracies = []
-    frame_potentials = []
-    time = 0
+    initial_acc, initial_fps = experiment.test(criterion, monitored=[layer])
+    test_accuracies = [initial_acc]  # test before step
+    frame_potentials = [initial_fps[layer]]
+    time = 1
     for epoch in range(1, epochs + 1):
         for accuracy, layer_fp in experiment.custom_train(criterion, optimizer, epoch, [layer], log_interval): 
             test_accuracies.append(accuracy)
@@ -115,3 +116,32 @@ def fit_and_prune(experiment, epochs, criterion, optimizer, layer, pruning, prun
     #    save_training_meta(experiment.model, epochs, test_accuracies, frame_potentials)
     
     return test_accuracies, frame_potentials
+"""
+
+def to_be_defined(experiment, trainloader, testloader, epochs, 
+                    test_interval, saving_times, layer, pruning_ratio):
+    trainable = {0: experiment}
+    initial_acc, _ = experiment.test(testloader, [])
+    accuracies = {0: [initial_acc]}
+
+    time = 1
+    for epoch in range(epochs):
+        for batch_idx, (data, target) in enumerate(trainloader):
+            
+            for _, e in trainable.items():
+                training_loss = e.batch_train(data, target)
+            
+            if batch_idx % test_interval == (test_interval-1):
+                if time in saving_times:
+                    new_experiment = experiment.clone()
+                    prune_and_test(new_experiment, testloader, layer, max_fp_pruning, pruning_ratio)  # changeme
+                    trainable[time] = new_experiment
+                    accuracies[time] = accuracies[0].copy()
+
+                for init_time, e in trainable.items():
+                    test_accuracy, _ = e.test(testloader, [])
+                    accuracies[init_time].append(test_accuracy)
+                
+                time += 1
+
+    return trainable, accuracies
