@@ -37,6 +37,10 @@ class PruningModule(nn.Module):
             num_features *= s
         return num_features
 
+    
+    def modified_dp(self, monitored):
+        pass  # sum(abs(w @ w.T))
+
 
     def compute_fp(self, monitored):
         layer_fp = {}
@@ -81,6 +85,11 @@ class PruningModule(nn.Module):
             mask = param.get_mask()
             mask[pruning_idx] = torch.zeros(cols)
             param.set_mask(mask)
+
+    
+    def prune_layer(self, layer, pruning, pruning_iters):
+        for pruning_iter, pruning_idx in enumerate(pruning(self, layer, pruning_iters)):
+            self.prune_element(layer, pruning_idx)
 
 
 class LeNet_300_100(PruningModule):

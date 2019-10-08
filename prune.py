@@ -34,7 +34,7 @@ def min_fp_pruning(model, layer, pruning_iters):
         yield pruning_idx
 
 
-def magnitude_pruning(model, layer, pruning_iters):
+def max_mag_pruning(model, layer, pruning_iters):
     squared_norms = model.compute_squared_norms(layer)
     squared_norms.sort()
     for i in range(pruning_iters):
@@ -42,8 +42,12 @@ def magnitude_pruning(model, layer, pruning_iters):
         yield pruning_idx
 
 
-def min_mag(model, layer):  # compare with min_fp_pruning
-    pass
+def min_mag_pruning(model, layer, pruning_iters):
+    squared_norms = model.compute_squared_norms(layer)
+    squared_norms.sort(reverse=True)
+    for i in range(pruning_iters):
+        _, pruning_idx = squared_norms[i]
+        yield pruning_idx
 
 
 def random_pruning(model, layer, pruning_iters):
@@ -118,23 +122,26 @@ def fit_and_prune(experiment, epochs, criterion, optimizer, layer, pruning, prun
     return test_accuracies, frame_potentials
 """
 
-def to_be_defined(experiment, trainloader, testloader, epochs, 
+def pruning_schedule(experiment, trainloader, testloader, epochs, 
                     test_interval, saving_times, layer, pruning_ratio):
     trainable = {0: experiment}
     initial_acc, _ = experiment.test(testloader, [])
     accuracies = {0: [initial_acc]}
+    n_elem = getattr(experiment.model, layer).weight.shape[0]
+    pruning_iters = int(pruning_ratio * n_elem)
 
     time = 1
     for epoch in range(epochs):
         for batch_idx, (data, target) in enumerate(trainloader):
             
-            for _, e in trainable.items():
+            for e in trainable.values():
                 training_loss = e.batch_train(data, target)
             
             if batch_idx % test_interval == (test_interval-1):
+                print("Evaluating model accuracies [{:3d}/{:3d}]".format(time, epochs * (len(trainloader) // test_interval)))
                 if time in saving_times:
                     new_experiment = experiment.clone()
-                    prune_and_test(new_experiment, testloader, layer, max_fp_pruning, pruning_ratio)  # changeme
+                    new_experiment.model.prune_layer(layer, max_fp_pruning, pruning_iters)
                     trainable[time] = new_experiment
                     accuracies[time] = accuracies[0].copy()
 

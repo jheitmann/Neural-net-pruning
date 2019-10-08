@@ -112,7 +112,7 @@ class Experiment():  # remove loaders, add criterion and optimizer
         layer_fp = self.model.compute_fp(monitored) if monitored else {}
 
         print("\nTest set: Average loss: {:.4f}, Accuracy: {:6d}/{:6d} ({:.0f}%)\n".format(
-            test_loss, correct, len(testloader.dataset),test_accuracy))
+            test_loss, correct, len(testloader.dataset), test_accuracy))
 
         return test_accuracy, layer_fp
 
@@ -157,6 +157,7 @@ class Experiment():  # remove loaders, add criterion and optimizer
             save_training_meta(self.model, epochs, test_accuracies, frame_potentials)
         
         return test_accuracies, frame_potentials
+
 
     """
     def create_snapshots(self, epochs, saving_times, *, log_interval=100):
