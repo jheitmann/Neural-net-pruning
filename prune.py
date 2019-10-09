@@ -24,13 +24,21 @@ def fp_pruning(model, layer, pruning_iters, increase_fp):
         yield pruning_idx
 
 
-def max_fp_pruning(model, layer, pruning_iters):
+def max_fp_pruning(model, layer, pruning_iters):  # Visualize least decrease in frame potential
     for pruning_idx in fp_pruning(model, layer, pruning_iters, increase_fp=True):
         yield pruning_idx
 
 
 def min_fp_pruning(model, layer, pruning_iters):
     for pruning_idx in fp_pruning(model, layer, pruning_iters, increase_fp=False):
+        yield pruning_idx
+
+
+def max_ip_pruning(model, layer, pruning_iters):
+    for i in range(pruning_iters):
+        partial_fps = model.selective_fps(layer, l2_norm=False)
+        _, max_idx = max(partial_fps)
+        pruning_idx = max_idx
         yield pruning_idx
 
 
@@ -123,12 +131,14 @@ def fit_and_prune(experiment, epochs, criterion, optimizer, layer, pruning, prun
 """
 
 def pruning_schedule(experiment, trainloader, testloader, epochs, 
-                    test_interval, saving_times, layer, pruning_ratio):
+                    test_interval, saving_times, layer, pruning_ratio, *, layers=[]):  # add possibility to prune different layers, at different time?
     trainable = {0: experiment}
     initial_acc, _ = experiment.test(testloader, [])
     accuracies = {0: [initial_acc]}
-    n_elem = getattr(experiment.model, layer).weight.shape[0]
-    pruning_iters = int(pruning_ratio * n_elem)
+    #n_elem = getattr(experiment.model, layer).weight.shape[0]
+    #pruning_iters = int(pruning_ratio * n_elem)
+
+    layers.append(layer)  # Debug
 
     time = 1
     for epoch in range(epochs):
@@ -141,7 +151,10 @@ def pruning_schedule(experiment, trainloader, testloader, epochs,
                 print("Evaluating model accuracies [{:3d}/{:3d}]".format(time, epochs * (len(trainloader) // test_interval)))
                 if time in saving_times:
                     new_experiment = experiment.clone()
-                    new_experiment.model.prune_layer(layer, max_fp_pruning, pruning_iters)
+                    for l in layers:
+                        n_elem = getattr(new_experiment.model, l).weight.shape[0]
+                        pruning_iters = int(pruning_ratio * n_elem)
+                        new_experiment.model.prune_layer(l, max_fp_pruning, pruning_iters)
                     trainable[time] = new_experiment
                     accuracies[time] = accuracies[0].copy()
 

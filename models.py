@@ -21,6 +21,16 @@ def frame_potential(w, N):
     return fp
 
 
+def mean_inner_product(w, N):  # not really mean inner product (zero weights)
+    w_normalized = F.normalize(w, p=2, dim=1)  # normalized weight rows
+
+    T_mod = w_normalized.matmul(w_normalized.t())
+    abs_ip_sum = torch.abs(T_mod).sum().item()
+
+    mean_abs_ip = abs_ip_sum / (N**2)
+    return mean_abs_ip
+
+
 class PruningModule(nn.Module):
     def __init__(self):
         super(PruningModule, self).__init__()
@@ -38,8 +48,15 @@ class PruningModule(nn.Module):
         return num_features
 
     
-    def modified_dp(self, monitored):
-        pass  # sum(abs(w @ w.T))
+    def compute_mean_ip(self, monitored):
+        layer_mean_ip = {}
+        with torch.no_grad():
+            for layer in monitored:
+                param = getattr(self, layer)
+                w = param.get_weights()
+                mean_abs_ip = mean_inner_product(w, w.shape[0])
+                layer_mean_ip[layer] = mean_abs_ip
+        return layer_mean_ip
 
 
     def compute_fp(self, monitored):
@@ -53,8 +70,9 @@ class PruningModule(nn.Module):
         return layer_fp
 
 
-    def selective_fps(self, layer):
+    def selective_fps(self, layer, *, l2_norm=True):
         partial_fps = []
+        corr_metric = frame_potential if l2_norm else mean_inner_product
         with torch.no_grad():
             param = getattr(self, layer)
             w = param.get_weights()
@@ -62,7 +80,7 @@ class PruningModule(nn.Module):
             for i in unpruned_indices:
                 indices = [j for j in unpruned_indices if j != i]
                 all_but_one = torch.index_select(w, 0, w.new_tensor(indices, dtype=torch.long))
-                fp = frame_potential(all_but_one, w.shape[0])
+                fp = corr_metric(all_but_one, w.shape[0])
                 partial_fps.append((fp, i))
         return partial_fps
 
