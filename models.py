@@ -11,20 +11,22 @@ def squared_norm(w):
     return squared_norms
 
 
-def frame_potential(w, N):
-    w_normalized = F.normalize(w, p=2, dim=1)  # normalized weight rows
+def frame_potential(w, N, normalize=True):
+    if normalize:
+        w = F.normalize(w, p=2, dim=1)  # normalized weight rows
     
-    T_mod = w_normalized.matmul(w_normalized.t())
+    T_mod = w.matmul(w.t())
     inner_product_sum = T_mod.matmul(T_mod).trace().item()  
 
     fp = inner_product_sum / (N**2)
     return fp
 
 
-def mean_inner_product(w, N):  # not really mean inner product (zero weights)
-    w_normalized = F.normalize(w, p=2, dim=1)  # normalized weight rows
+def mean_inner_product(w, N, normalize=True):  # not really mean inner product (zero weights)
+    if normalize:
+        w = F.normalize(w, p=2, dim=1)  # normalized weight rows
 
-    T_mod = w_normalized.matmul(w_normalized.t())
+    T_mod = w.matmul(w.t())
     abs_ip_sum = torch.abs(T_mod).sum().item()
 
     mean_abs_ip = abs_ip_sum / (N**2)
@@ -70,7 +72,7 @@ class PruningModule(nn.Module):
         return layer_fp
 
 
-    def selective_fps(self, layer, *, l2_norm=True):
+    def selective_correlation(self, layer, l2_norm=True, normalize=True):
         partial_fps = []
         corr_metric = frame_potential if l2_norm else mean_inner_product
         with torch.no_grad():
@@ -80,7 +82,7 @@ class PruningModule(nn.Module):
             for i in unpruned_indices:
                 indices = [j for j in unpruned_indices if j != i]
                 all_but_one = torch.index_select(w, 0, w.new_tensor(indices, dtype=torch.long))
-                fp = corr_metric(all_but_one, w.shape[0])
+                fp = corr_metric(all_but_one, w.shape[0], normalize)
                 partial_fps.append((fp, i))
         return partial_fps
 

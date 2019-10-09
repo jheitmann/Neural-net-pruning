@@ -15,30 +15,42 @@ def save_pruning_meta(model, layer, pruning_iters, pruning_method, test_accuraci
     print("Saved frame potentials to:", fp_fname + ".npy")
 
 
-def fp_pruning(model, layer, pruning_iters, increase_fp):
+def fp_pruning(model, layer, pruning_iters, *, least_decrease=True, l2_norm=True, normalize=True):
     for i in range(pruning_iters):
-        partial_fps = model.selective_fps(layer)
+        partial_fps = model.selective_correlation(layer, l2_norm, normalize)
         _, min_idx = min(partial_fps)
         _, max_idx = max(partial_fps)
-        pruning_idx = max_idx if increase_fp else min_idx
+        pruning_idx = max_idx if least_decrease else min_idx
         yield pruning_idx
 
 
-def max_fp_pruning(model, layer, pruning_iters):  # Visualize least decrease in frame potential
-    for pruning_idx in fp_pruning(model, layer, pruning_iters, increase_fp=True):
+def max_fp_pruning(model, layer, pruning_iters):
+    for pruning_idx in fp_pruning(model, layer, pruning_iters):
         yield pruning_idx
 
 
 def min_fp_pruning(model, layer, pruning_iters):
-    for pruning_idx in fp_pruning(model, layer, pruning_iters, increase_fp=False):
+    for pruning_idx in fp_pruning(model, layer, pruning_iters, least_decrease=False):
         yield pruning_idx
 
 
 def max_ip_pruning(model, layer, pruning_iters):
-    for i in range(pruning_iters):
-        partial_fps = model.selective_fps(layer, l2_norm=False)
-        _, max_idx = max(partial_fps)
-        pruning_idx = max_idx
+    for pruning_idx in fp_pruning(model, layer, pruning_iters, l2_norm=False):
+        yield pruning_idx
+
+
+def min_ip_pruning(model, layer, pruning_iters):
+    for pruning_idx in fp_pruning(model, layer, pruning_iters, least_decrease=False, l2_norm=False):
+        yield pruning_idx
+
+    
+def max_fp_mod_pruning(model, layer, pruning_iters):
+    for pruning_idx in fp_pruning(model, layer, pruning_iters, normalize=False):
+        yield pruning_idx
+
+
+def min_fp_mod_pruning(model, layer, pruning_iters):
+    for pruning_idx in fp_pruning(model, layer, pruning_iters, least_decrease=False, normalize=False):
         yield pruning_idx
 
 
