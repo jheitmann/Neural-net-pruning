@@ -103,7 +103,9 @@ venv.bak/
 # mypy
 .mypy_cache/
 
-# Data and logs
+# Data and results
 data/
-logs/
 out/
+
+# PyCharm project
+.idea/

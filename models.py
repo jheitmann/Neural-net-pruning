@@ -14,11 +14,11 @@ def squared_norm(w):
 def frame_potential(w, N, normalize=True):
     if normalize:
         w = F.normalize(w, p=2, dim=1)  # normalized weight rows
-    
-    T_mod = w.matmul(w.t())
-    inner_product_sum = T_mod.matmul(T_mod).trace().item()  
 
-    fp = inner_product_sum / (N**2)
+    T_mod = w.matmul(w.t())
+    inner_product_sum = T_mod.matmul(T_mod).trace().item()
+
+    fp = inner_product_sum / (N ** 2)
     return fp
 
 
@@ -29,7 +29,7 @@ def mean_inner_product(w, N, normalize=True):  # not really mean inner product (
     T_mod = w.matmul(w.t())
     abs_ip_sum = torch.abs(T_mod).sum().item()
 
-    mean_abs_ip = abs_ip_sum / (N**2)
+    mean_abs_ip = abs_ip_sum / (N ** 2)
     return mean_abs_ip
 
 
@@ -37,10 +37,8 @@ class PruningModule(nn.Module):
     def __init__(self):
         super(PruningModule, self).__init__()
 
-
     def model_ID(self):
         return self.__class__.__name__
-    
 
     def num_flat_features(self, x):
         size = x.size()[1:]  # all dimensions except the batch dimension
@@ -49,7 +47,6 @@ class PruningModule(nn.Module):
             num_features *= s
         return num_features
 
-    
     def compute_mean_ip(self, monitored):
         layer_mean_ip = {}
         with torch.no_grad():
@@ -60,7 +57,6 @@ class PruningModule(nn.Module):
                 layer_mean_ip[layer] = mean_abs_ip
         return layer_mean_ip
 
-
     def compute_fp(self, monitored):
         layer_fp = {}
         with torch.no_grad():
@@ -70,7 +66,6 @@ class PruningModule(nn.Module):
                 fp = frame_potential(w, w.shape[0])
                 layer_fp[layer] = fp
         return layer_fp
-
 
     def selective_correlation(self, layer, l2_norm=True, normalize=True):
         partial_fps = []
@@ -86,7 +81,6 @@ class PruningModule(nn.Module):
                 partial_fps.append((fp, i))
         return partial_fps
 
-
     def compute_squared_norms(self, layer):
         squared_norms = []
         with torch.no_grad():
@@ -96,7 +90,6 @@ class PruningModule(nn.Module):
             squared_norms = [(w[i].matmul(w[i].t()), i) for i in unpruned_indices]
         return squared_norms
 
-    
     def prune_element(self, layer, pruning_idx):
         with torch.no_grad():
             param = getattr(self, layer)
@@ -106,22 +99,16 @@ class PruningModule(nn.Module):
             mask[pruning_idx] = torch.zeros(cols)
             param.set_mask(mask)
 
-    
-    def prune_layer(self, layer, pruning, pruning_iters):
-        for pruning_iter, pruning_idx in enumerate(pruning(self, layer, pruning_iters)):
-            self.prune_element(layer, pruning_idx)
-
 
 class LeNet_300_100(PruningModule):
     def __init__(self):
         super(LeNet_300_100, self).__init__()
-        self.fc1 = MaskedLinear(28*28, 300)
+        self.fc1 = MaskedLinear(28 * 28, 300)
         self.fc2 = MaskedLinear(300, 100)
         self.fc3 = MaskedLinear(100, 10)
 
-
     def forward(self, x):
-        x = x.view(-1, 28*28)
+        x = x.view(-1, 28 * 28)
         x = F.relu(self.fc1(x))
         x = F.relu(self.fc2(x))
         x = self.fc3(x)
@@ -134,11 +121,10 @@ class Conv2(PruningModule):
         self.conv1 = MaskedConv2d(3, 64, 3)
         self.conv2 = MaskedConv2d(64, 64, 3)
         self.pool = nn.MaxPool2d(2, 2)
-        
+
         self.fc1 = MaskedLinear(64 * 14 * 14, 256)
         self.fc2 = MaskedLinear(256, 256)
         self.fc3 = MaskedLinear(256, 10)
-
 
     def forward(self, x):
         x = F.relu(self.conv1(x))
@@ -168,4 +154,3 @@ class ConvTest(PruningModule):
         x = F.relu(self.fc2(x))
         x = self.fc3(x)
         return x
-        

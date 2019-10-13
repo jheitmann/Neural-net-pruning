@@ -18,8 +18,8 @@ def train_results_path(model_id, epochs, metric):
     return os.path.join(common.TRAIN_METRICS_PATH, results_fname)
 
 
-def prune_results_path(model_id, layer, pruning_iters, pruning_method, metric):
+def prune_results_path(model_id, layer, pruning_method, pruning_ratio, metric):
     date = datetime.now()
     ts = date.strftime("%d-%m-%Y_%H:%M:%S")
-    results_fname = "{}_{}_{}p_{}_{}_{}".format(model_id, layer, pruning_iters, pruning_method, metric, ts)
+    results_fname = "{}_{}_{}_{}_{}_{}".format(model_id, layer, pruning_method, pruning_ratio, metric, ts)
     return os.path.join(common.PRUNE_METRICS_PATH, results_fname)
