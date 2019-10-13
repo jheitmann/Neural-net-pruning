@@ -1,0 +1,182 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% University Assignment Title Page 
+% LaTeX Template
+% Version 1.0 (27/12/12)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Original author:
+% WikiBooks (http://en.wikibooks.org/wiki/LaTeX/Title_Creation)
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+% 
+% Instructions for using this template:
+% This title page is capable of being compiled as is. This is not useful for 
+% including it in another document. To do this, you have two options: 
+%
+% 1) Copy/paste everything between \begin{document} and \end{document} 
+% starting at \begin{titlepage} and paste this into another LaTeX file where you 
+% want your title page.
+% OR
+% 2) Remove everything outside the \begin{titlepage} and \end{titlepage} and 
+% move this file to the same directory as the LaTeX file you wish to add it to. 
+% Then add \input{./title_page_1.tex} to your LaTeX file where you want your
+% title page.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\title{Title page with logo}
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[12pt, french]{article}
+\usepackage[utf8]{inputenc} % remove x to make it compatible to biblography
+\usepackage[T1]{fontenc} % added instead of utf8x
+\usepackage{textcomp} % added instead of utf8x
+\usepackage{babel}
+
+\usepackage{amsmath}
+\usepackage{graphicx}
+%\usepackage{hyperref} % commented and use fix below instead
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage{caption}
+\usepackage{verbatim}
+\usepackage{ragged2e}
+\usepackage[hyphens]{url} % quick and dirty fix to the overflowing url problem
+%\usepackage{biblatex}
+\usepackage{csquotes}
+\usepackage[backend=biber,style=alphabetic,sorting=nyt]{biblatex}
+\addbibresource{sources.bib}
+\justifying
+\renewcommand*\contentsname{Table des matières}
+\begin{document}
+
+\begin{titlepage}
+
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}} % Defines a new command for the horizontal lines, change thickness here
+
+\center % Center everything on the page
+ 
+%----------------------------------------------------------------------------------------
+%	HEADING SECTIONS
+%----------------------------------------------------------------------------------------
+
+\textsc{\LARGE Data Science Semester Project}\\[1.5cm] % Name of your university/college
+\textsc{\large{Author: }Julien Heitmann}\\[0.5cm] % Major heading such as course name
+
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION
+%----------------------------------------------------------------------------------------
+
+\HRule \\[0.6cm]
+{ \huge \bfseries Neural network pruning and weight geometry}\\[0.5cm] % Title of your document
+\HRule \\[1.5cm]
+ 
+%----------------------------------------------------------------------------------------
+%	AUTHOR SECTION
+%----------------------------------------------------------------------------------------
+
+
+% If you don't want a supervisor, uncomment the two lines below and remove the section above
+%\Large \emph{Author:}\\
+%John \textsc{Smith}\\[3cm] % Your name
+
+%----------------------------------------------------------------------------------------
+%	DATE SECTION
+%----------------------------------------------------------------------------------------
+\begin{figure}[!h] 
+        \centering \includegraphics[width=1\columnwidth]{images/EPFL_Logo_Digital_RGB_PROD.jpg}
+\end{figure}
+
+\vfill % Fill the rest of the page with whitespace
+\end{titlepage}
+\tableofcontents
+\newpage
+\justify
+
+\section{Introduction}
+
+\section{Contexte historique}
+
+\subsection{De la révolution culturelle au lancement du premier satellite}
+
+\subsection{Réformes et modernisation du programme spatial chinois}
+
+\subsection{La Chine s'affirme comme puissance spatiale majeure}
+
+\section{Objectifs et enjeux du programme spatial}
+
+\subsection{Économie}
+
+\subsection{La conquête spatiale, au service de l'image de la Chine}
+
+\subsection{Enjeux militaires - Rétablir l'équilibre}
+
+\section{Scénarios sur l'évolution du programme spatial chinois}
+
+\subsection{Scénario 1: Course aux étoiles}
+
+\subsection{Scénario 3: Statu quo}
+
+\section{Conclusion}
+
+\section{Bibliographie}
+
+
+% TODO YANN: https://www.overleaf.com/learn/latex/Bibliography_management_in_LaTeX
+\nocite{*} % displays even unused sources
+\printbibliography[keyword={livre}, title={Livres}]
+\printbibliography[keyword={monographie}, title={Monographies}]
+\printbibliography[keyword={article}, title={Articles}]
+\printbibliography[keyword={source}, title={Sources}]
+\printbibliography[keyword={internet}, title={Internet}]
+\printbibliography[keyword={illustration}, title={Illustrations}]
+%\printbibliography[keyword={yann}, title={Yann}]
+%\printbibliography[keyword={tiago}, title={Tiago}]
+%\printbibliography[keyword={benno}, title={Benno}]
+%\printbibliography[keyword={julien}, title={Julien}]
+
+%\newpage
+%Salut yanjboy :)
+
+%\section*{6. Autres idées à proposer aux profs}
+%\begin{enumerate}
+%    \item Pourquoi tout le monde veut aller sur la Lune / Mars ?
+%    \item Extraire matières premières des astéroïdes, rêve ou bientôt une réalité?
+%    \item Parler des capacité hardware? Détails de programmes spatiaux, fusées, manned spaceflight, satellites ?
+%\end{enumerate}
+
+%Autres sous-sections qu'on peut ajouter:
+%\begin{enumerate}
+%    \item Définition d'une space race -> est-ce véritablement si négatif? (Martian -> Chine sauve astronaute américain) définir en opposant à une coopération %comme actuellement le cas (ESA, US - Russie)
+%    \item Quels seraient les objets d'intérêts dans une space race (buts concrets de la missions) ? Lune, Mars, asteroids, orbit terre, soleil etc?
+%    \item Aspect juridique, quels sont les lois en place en ce moment? Est-ce probable que de nouvelles traités soient ratifiés? Faut-il déjà ce poser les %questions à qui appartient la Lune par exemple?
+%    \item Ou en est la Chine en ce moment ? Pleins de nouvelles impressionnantes, mais véritablement autant de capacités que les US et la Russie ? Article le %temps: les US font peur pour avoir plus de budget ! (mentionner!)
+%    \item (déjà planifié) Comment vont réagir les grands aux avancés de la Chine? NASA semble être heureux, la politique pas trop. Course pour la Lune ou% coopération?
+%    \item Mentionner que même au travers de crises diplomatiques, les relations dans l'espace n'ont pas vraiment souffert entre US - Russie
+%    \item 
+%\end{enumerate}
+
+
+%\section*{Questions pour meeting}
+%begin{enumerate}
+ %   \item Définition d'une course à l'espace, chapitre tel quel ?
+ %   \item 3 scénarios dans partie 4, comparer leur probabilité dans la conclusion ou dans une sous conclusions de chapitre ? (aka conclusions doit elle redire %des choses déjà dites ou pas?)
+ %   \item Sources en notes de bas de page, ou référant à la fin ?
+  %  \item Scénarios, combien? Trois scénarios assez précis, comparer leur probabilité dans la conclusion?
+%\end{enumerate}
+%coopération chine (uniquement si profite à la chine)
+%2049 objectifs centenaire
+%opacité
+%enjeux réels de la chine (affirmés publiquement ou supposés ?)
+%critique de nos sources (US vs Chine)%
+
+% 
+% TODO add oa picture of a chinese rocket.
+
+% notes yann: domaine privée, a toujours été important pour usa (rockwell -> boing), ils ont pas de retard?, ASAT metnionné 3 fois, course à l'espace mentionné trop de fois, inconsistance dates, course espace fin/départ, début station spatiale ?
+% - Partie historique dans Economie -> est-ce que on répète trop la partie historique?
+
+
+\end{document}
