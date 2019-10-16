@@ -3,51 +3,58 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 import common
+import helpers
 from layers import MaskedLinear, MaskedConv2d
 
 
-def squared_norm(w):
-    squared_norms = w.matmul(w.t())
-    return squared_norms
-
-
-def frame_potential(w, N, normalize=True):
+def inner_products(w, normalize=True):
     if normalize:
         w = F.normalize(w, p=2, dim=1)  # normalized weight rows
+    ips = w.matmul(w.t())
+    return ips
 
-    T_mod = w.matmul(w.t())
-    inner_product_sum = T_mod.matmul(T_mod).trace().item()
 
+def frame_potential(ips, N):
+    inner_product_sum = ips.matmul(ips).trace().item()
     fp = inner_product_sum / (N ** 2)
     return fp
 
 
-def mean_inner_product(w, N, normalize=True):  # not really mean inner product (zero weights)
-    if normalize:
-        w = F.normalize(w, p=2, dim=1)  # normalized weight rows
-
-    T_mod = w.matmul(w.t())
-    abs_ip_sum = torch.abs(T_mod).sum().item()
-
+def mean_inner_product(ips, N):  # not really mean inner product (zero weights)
+    abs_ip_sum = torch.abs(ips).sum().item()
     mean_abs_ip = abs_ip_sum / (N ** 2)
     return mean_abs_ip
+
+
+def num_flat_features(x):
+    size = x.size()[1:]  # all dimensions except the batch dimension
+    num_features = 1
+    for s in size:
+        num_features *= s
+    return num_features
 
 
 class PruningModule(nn.Module):
     def __init__(self):
         super(PruningModule, self).__init__()
 
-    def model_ID(self):
+    def model_id(self):
         return self.__class__.__name__
 
-    def num_flat_features(self, x):
-        size = x.size()[1:]  # all dimensions except the batch dimension
-        num_features = 1
-        for s in size:
-            num_features *= s
-        return num_features
+    def compute_fp(self, monitored):
+        layer_ips = {}
+        layer_fp = {}
+        with torch.no_grad():
+            for layer in monitored:
+                param = getattr(self, layer)
+                w = param.get_weights()
+                ips = inner_products(w)  # add normalize=True?
+                fp = frame_potential(ips, w.shape[0])
+                layer_ips[layer] = ips
+                layer_fp[layer] = fp
+        return layer_ips, layer_fp
 
-    def compute_mean_ip(self, monitored):
+    def compute_mean_ip(self, monitored):  # changeme
         layer_mean_ip = {}
         with torch.no_grad():
             for layer in monitored:
@@ -57,18 +64,8 @@ class PruningModule(nn.Module):
                 layer_mean_ip[layer] = mean_abs_ip
         return layer_mean_ip
 
-    def compute_fp(self, monitored):
-        layer_fp = {}
-        with torch.no_grad():
-            for layer in monitored:
-                param = getattr(self, layer)
-                w = param.get_weights()
-                fp = frame_potential(w, w.shape[0])
-                layer_fp[layer] = fp
-        return layer_fp
-
     def selective_correlation(self, layer, l2_norm=True, normalize=True):
-        partial_fps = []
+        partial_corrs = []
         corr_metric = frame_potential if l2_norm else mean_inner_product
         with torch.no_grad():
             param = getattr(self, layer)
@@ -77,12 +74,12 @@ class PruningModule(nn.Module):
             for i in unpruned_indices:
                 indices = [j for j in unpruned_indices if j != i]
                 all_but_one = torch.index_select(w, 0, w.new_tensor(indices, dtype=torch.long))
-                fp = corr_metric(all_but_one, w.shape[0], normalize)
-                partial_fps.append((fp, i))
-        return partial_fps
+                ips = inner_products(all_but_one, normalize)
+                corr = corr_metric(ips, w.shape[0])
+                partial_corrs.append((corr, i))
+        return partial_corrs
 
     def compute_squared_norms(self, layer):
-        squared_norms = []
         with torch.no_grad():
             param = getattr(self, layer)
             w = param.get_weights()

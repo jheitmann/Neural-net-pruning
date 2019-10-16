@@ -10,18 +10,24 @@ import helpers
 # Seeding for reproducibility, only once (remove from nb?)
 torch.manual_seed(common.SEED)
 
-
-def save_training_meta(model, epochs, test_accuracies, frame_potentials):
-    model_fname = helpers.model_file_path(model.model_ID())
+"""
+def save_training_meta(model, epochs, test_accuracies, frame_potentials, *, inner_products={}):
+    model_fname = helpers.model_file_path(model.model_id())
     torch.save(model.state_dict(), model_fname)
     print("Saved trained model to:", model_fname)
-    acc_fname = helpers.train_results_path(model.model_ID(), epochs, "acc")
+    acc_fname = helpers.train_results_path(model.model_id(), epochs, "acc")
     np.save(acc_fname, test_accuracies)
     print("Saved validation accuracies to:", acc_fname + ".npy")
     if frame_potentials:
-        fp_fname = helpers.train_results_path(model.model_ID(), epochs, "fp")
-        np.save(fp_fname, frame_potentials)  # when loading set allow_pickle=True
+        fp_fname = helpers.train_results_path(model.model_id(), epochs, "fp")
+        np.save(fp_fname, frame_potentials)
         print("Saved frame potentials to:", fp_fname + ".npy")
+    if inner_products:
+        for layer, ips_ls in inner_products.items():
+            ips_fname = helpers.train_results_path(model.model_id(), epochs, "ips", layer=layer)
+            np.save(ips_fname, torch.stack(ips_ls).numpy())
+            print("Saved {} cosine distances to: {}".format(layer, ips_fname + ".npy"))
+"""
 
 
 class Experiment:
@@ -71,7 +77,7 @@ class Experiment:
                     epoch, batch_idx * len(data), len(trainloader.dataset),
                            100. * batch_idx / len(trainloader), train_loss))
 
-    def test(self, testloader, monitored):
+    def test(self, testloader, monitored):  # changeme: monitored not needed
         self.model.eval()
 
         test_loss = 0
@@ -89,26 +95,33 @@ class Experiment:
         test_loss /= len(testloader)
         test_accuracy = 100. * correct / len(testloader.dataset)
 
-        layer_fp = self.model.compute_fp(monitored) if monitored else {}
+        layer_ips, layer_fp = self.model.compute_fp(monitored)
 
         print("\nTest set: Average loss: {:.4f}, Accuracy: {:6d}/{:6d} ({:.0f}%)\n".format(
             test_loss, correct, len(testloader.dataset), test_accuracy))
 
-        return test_accuracy, layer_fp
+        return test_accuracy, layer_ips, layer_fp
 
     def fit(self, trainloader, testloader, epochs, *, monitored=[], save_results=False, log_interval=100):
-        initial_acc, initial_fps = self.test(testloader, monitored)
+        initial_acc, initial_ips, initial_fps = self.test(testloader, monitored)
         test_accuracies = [initial_acc]
-        frame_potentials = {name: [fp] for name, fp in initial_fps.items()}
+
+        if save_results:
+            dir_name = helpers.model_file_path(self.model.model_id())
+            os.mkdir(dir_name)
+            print("Created model snapshot directory:", dir_name)
+            snapshot_fname = os.path.join(dir_name, '0')
+            torch.save(self.model.state_dict(), snapshot_fname)
 
         for epoch in range(1, epochs + 1):
             self.train(trainloader, epoch, log_interval)
-            accuracy, layer_fp = self.test(testloader, monitored)
+            accuracy, layer_ips, layer_fp = self.test(testloader, monitored)
             test_accuracies.append(accuracy)
-            for name, fp in layer_fp.items():
-                frame_potentials[name].append(fp)
+            if save_results:
+                snapshot_fname = os.path.join(dir_name, str(epoch))
+                torch.save(self.model.state_dict(), snapshot_fname)
 
         if save_results:
-            save_training_meta(self.model, epochs, test_accuracies, frame_potentials)
+            print("Saved final model to:", snapshot_fname)
 
-        return test_accuracies, frame_potentials
+        return test_accuracies
