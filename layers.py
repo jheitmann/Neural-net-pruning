@@ -23,6 +23,10 @@ class MaskedLinear(nn.Linear):
         w = w * self.mask
         return w
 
+    def get_biases(self):
+        b = self.bias.clone().detach()
+        return b
+
     def unpruned_parameters(self):
         first_col = self.mask[:, 0]
         return first_col.nonzero().flatten().tolist()
@@ -50,6 +54,10 @@ class MaskedConv2d(nn.Conv2d):
         w = self.weight.detach()
         w = w * self.mask
         return w.view(w.shape[0], -1)
+
+    def get_biases(self):
+        b = self.bias.clone().detach()
+        return b
 
     def unpruned_parameters(self):
         first_col = self.mask[:, 0, 0, 0]

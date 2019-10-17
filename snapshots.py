@@ -3,11 +3,12 @@ import torch
 
 
 class Snapshots:
-    def __init__(self, dir_name, epochs, Model):  # epochs is a list
+    def __init__(self, dir_name, epochs, model_class):  # epochs is a list
         self.models = {}
+        self.epochs = epochs
         for epoch in epochs:
             snapshot_fname = os.path.join(dir_name, str(epoch))
-            model = Model()
+            model = model_class()
             device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
             model_state = torch.load(snapshot_fname, map_location=device)
             model.load_state_dict(model_state)
@@ -26,16 +27,21 @@ class Snapshots:
         for epoch in self.epochs:
             model = self.models[epoch]
             layer_ips, _ = model.compute_fp([layer])
-            inner_products.append(layer_ips)
+            inner_products.append(layer_ips[layer])
         return torch.stack(inner_products)
 
     def compute_weight_norms(self, layer):  # matrix
-        weight_norms = []
+        norm_series = []
         for epoch in self.epochs:
             model = self.models[epoch]
-            norms = model.compute_squared_norms(layer)
-            weight_norms.append(norms)
-        return torch.stack(weight_norms, dim=1)
+            weight_norms = model.compute_norms(layer)
+            norm_series.append(weight_norms)
+        return torch.stack(norm_series)
 
     def get_biases(self, layer):  # matrix
-        pass
+        bias_series = []
+        for epoch in self.epochs:
+            model = self.models[epoch]
+            biases = model.layer_biases(layer)
+            bias_series.append(biases)
+        return torch.stack(bias_series)

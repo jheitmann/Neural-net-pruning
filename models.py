@@ -79,6 +79,19 @@ class PruningModule(nn.Module):
                 partial_corrs.append((corr, i))
         return partial_corrs
 
+    def compute_norms(self, layer):
+        with torch.no_grad():
+            param = getattr(self, layer)
+            w = param.get_weights()
+            weight_norms = w.norm(dim=1)
+        return weight_norms
+
+    def layer_biases(self, layer):
+        param = getattr(self, layer)
+        b = param.get_biases()
+        return b
+
+    """
     def compute_squared_norms(self, layer):
         with torch.no_grad():
             param = getattr(self, layer)
@@ -86,6 +99,7 @@ class PruningModule(nn.Module):
             unpruned_indices = param.unpruned_parameters()
             squared_norms = [(w[i].matmul(w[i].t()), i) for i in unpruned_indices]
         return squared_norms
+    """
 
     def prune_element(self, layer, pruning_idx):
         with torch.no_grad():

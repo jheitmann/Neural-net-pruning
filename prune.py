@@ -55,20 +55,18 @@ def min_fp_mod_pruning(model, layer, pruning_iters):
         yield pruning_idx
 
 
-def max_mag_pruning(model, layer, pruning_iters):
-    squared_norms = model.compute_squared_norms(layer)
-    squared_norms.sort()
-    for i in range(pruning_iters):
-        _, pruning_idx = squared_norms[i]
-        yield pruning_idx
+def max_mag_pruning(model, layer, pruning_iters):  # can't prune in cycles
+    weight_norms = model.compute_norms(layer)
+    _, indices = weight_norms.sort()
+    for idx in indices.tolist()[:pruning_iters]:
+        yield idx
 
 
-def min_mag_pruning(model, layer, pruning_iters):
-    squared_norms = model.compute_squared_norms(layer)
-    squared_norms.sort(reverse=True)
-    for i in range(pruning_iters):
-        _, pruning_idx = squared_norms[i]
-        yield pruning_idx
+def min_mag_pruning(model, layer, pruning_iters):  # can't prune in cycles
+    weight_norms = model.compute_norms(layer)
+    _, indices = weight_norms.sort(descending=True)
+    for idx in indices.tolist()[:pruning_iters]:
+        yield idx
 
 
 def random_pruning(model, layer, pruning_iters):
