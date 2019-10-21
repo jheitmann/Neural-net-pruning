@@ -112,11 +112,11 @@ class PruningModule(nn.Module):
 
 
 class LeNet_300_100(PruningModule):
-    def __init__(self):
+    def __init__(self, bias=True):
         super(LeNet_300_100, self).__init__()
-        self.fc1 = MaskedLinear(28 * 28, 300)
-        self.fc2 = MaskedLinear(300, 100)
-        self.fc3 = MaskedLinear(100, 10)
+        self.fc1 = MaskedLinear(28 * 28, 300, bias=bias)
+        self.fc2 = MaskedLinear(300, 100, bias=bias)
+        self.fc3 = MaskedLinear(100, 10, bias=bias)
 
     def forward(self, x):
         x = x.view(-1, 28 * 28)
@@ -127,15 +127,15 @@ class LeNet_300_100(PruningModule):
 
 
 class Conv2(PruningModule):
-    def __init__(self):
+    def __init__(self, bias=True):
         super(Conv2, self).__init__()
-        self.conv1 = MaskedConv2d(3, 64, 3)
-        self.conv2 = MaskedConv2d(64, 64, 3)
+        self.conv1 = MaskedConv2d(3, 64, 3, bias=bias)
+        self.conv2 = MaskedConv2d(64, 64, 3, bias=bias)
         self.pool = nn.MaxPool2d(2, 2)
 
-        self.fc1 = MaskedLinear(64 * 14 * 14, 256)
-        self.fc2 = MaskedLinear(256, 256)
-        self.fc3 = MaskedLinear(256, 10)
+        self.fc1 = MaskedLinear(64 * 14 * 14, 256, bias=bias)
+        self.fc2 = MaskedLinear(256, 256, bias=bias)
+        self.fc3 = MaskedLinear(256, 10, bias=bias)
 
     def forward(self, x):
         x = F.relu(self.conv1(x))

@@ -3,12 +3,12 @@ import torch
 
 
 class Snapshots:
-    def __init__(self, dir_name, epochs, model_class):  # epochs is a list
+    def __init__(self, dir_name, epochs, model_class, bias=True):  # epochs is a list
         self.models = {}
         self.epochs = epochs
         for epoch in epochs:
             snapshot_fname = os.path.join(dir_name, str(epoch))
-            model = model_class()
+            model = model_class(bias=bias)
             device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
             model_state = torch.load(snapshot_fname, map_location=device)
             model.load_state_dict(model_state)
