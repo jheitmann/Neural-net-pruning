@@ -48,7 +48,7 @@ def weight_dist(dir_name, epochs, model_class, layer, *, bias=True):
     ax2.legend()
 
     plt.show()
-    return adjacency, weight_norms
+    return adjacency, weight_norms, kernel_width
 
 
 def plot_connected_components(adjacency, thresholds):

@@ -1,5 +1,6 @@
 import os
 import torch
+import torch.nn.functional as F
 
 
 class Snapshots:
@@ -38,6 +39,14 @@ class Snapshots:
             norm_series.append(weight_norms)
         return torch.stack(norm_series)
 
+    def get_weights(self, layer):
+        weight_series = []
+        for epoch in self.epochs:
+            model = self.models[epoch]
+            w = model.layer_weights(layer)
+            weight_series.append(w)
+        return torch.stack(weight_series)
+
     def get_biases(self, layer):  # matrix
         bias_series = []
         for epoch in self.epochs:
@@ -45,3 +54,11 @@ class Snapshots:
             biases = model.layer_biases(layer)
             bias_series.append(biases)
         return torch.stack(bias_series)
+
+    def compute_ips_with(self, layer, w_mod, epoch):
+        model = self.models[epoch]
+        w = model.layer_weights(layer)
+        w = F.normalize(w, p=2, dim=1)
+        w_mod = F.normalize(w_mod, p=2, dim=1)
+        inner_products = w_mod.matmul(w.t())
+        return inner_products

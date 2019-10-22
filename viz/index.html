@@ -41,7 +41,7 @@
             .on("start.interrupt", function() { slider.interrupt(); })
             .on("start drag", function() { return hue(x.invert(d3.event.x)); }));
 
-    var years = d3.range(0,20,1)
+    var years = d3.range(0,21,1)
     var dx = L/(years.length-1)
     var xticks = d3.range(0,L+dx,dx)
 
