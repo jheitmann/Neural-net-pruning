@@ -35,11 +35,15 @@ def num_flat_features(x):
 
 
 class PruningModule(nn.Module):
-    def __init__(self):
+    def __init__(self, bias):
         super(PruningModule, self).__init__()
+        self.bias = bias
 
     def model_id(self):
-        return self.__class__.__name__
+        id = self.__class__.__name__
+        if not self.bias:
+            id = id + "_unbiased"
+        return id
 
     def compute_fp(self, monitored):
         layer_ips = {}
@@ -91,16 +95,6 @@ class PruningModule(nn.Module):
         b = param.get_biases()
         return b
 
-    """
-    def compute_squared_norms(self, layer):
-        with torch.no_grad():
-            param = getattr(self, layer)
-            w = param.get_weights()
-            unpruned_indices = param.unpruned_parameters()
-            squared_norms = [(w[i].matmul(w[i].t()), i) for i in unpruned_indices]
-        return squared_norms
-    """
-
     def prune_element(self, layer, pruning_idx):
         with torch.no_grad():
             param = getattr(self, layer)
@@ -113,7 +107,7 @@ class PruningModule(nn.Module):
 
 class LeNet_300_100(PruningModule):
     def __init__(self, bias=True):
-        super(LeNet_300_100, self).__init__()
+        super(LeNet_300_100, self).__init__(bias)
         self.fc1 = MaskedLinear(28 * 28, 300, bias=bias)
         self.fc2 = MaskedLinear(300, 100, bias=bias)
         self.fc3 = MaskedLinear(100, 10, bias=bias)
@@ -128,7 +122,7 @@ class LeNet_300_100(PruningModule):
 
 class Conv2(PruningModule):
     def __init__(self, bias=True):
-        super(Conv2, self).__init__()
+        super(Conv2, self).__init__(bias)
         self.conv1 = MaskedConv2d(3, 64, 3, bias=bias)
         self.conv2 = MaskedConv2d(64, 64, 3, bias=bias)
         self.pool = nn.MaxPool2d(2, 2)
@@ -141,26 +135,6 @@ class Conv2(PruningModule):
         x = F.relu(self.conv1(x))
         x = self.pool(F.relu(self.conv2(x)))
         x = x.view(-1, 64 * 14 * 14)
-        x = F.relu(self.fc1(x))
-        x = F.relu(self.fc2(x))
-        x = self.fc3(x)
-        return x
-
-
-class ConvTest(PruningModule):
-    def __init__(self):
-        super(ConvTest, self).__init__()
-        self.conv1 = MaskedConv2d(3, 6, 5)
-        self.pool = nn.MaxPool2d(2, 2)
-        self.conv2 = MaskedConv2d(6, 16, 5)
-        self.fc1 = MaskedLinear(16 * 5 * 5, 120)
-        self.fc2 = MaskedLinear(120, 84)
-        self.fc3 = MaskedLinear(84, 10)
-
-    def forward(self, x):
-        x = self.pool(F.relu(self.conv1(x)))
-        x = self.pool(F.relu(self.conv2(x)))
-        x = x.view(-1, 16 * 5 * 5)
         x = F.relu(self.fc1(x))
         x = F.relu(self.fc2(x))
         x = self.fc3(x)

@@ -2,6 +2,7 @@ import os
 
 
 OUT_DIR = "out"
+VIZ_DIR = "viz"
 FIGURE_PATH = os.path.join(OUT_DIR, "figures")
 MODEL_PATH = os.path.join(OUT_DIR, "models")
 METRICS_PATH = os.path.join(OUT_DIR, "metrics")
