@@ -8,26 +8,52 @@ import common
 
 def model_file_path(model_id):
     date = datetime.now()
-    ts = date.strftime("%d-%m-%Y_%H:%M:%S")
-    model_fname = model_id + '_' + ts
+    ts = date.strftime("%d_%m_%Y-%H:%M:%S")
+    model_fname = '-'.join((model_id, ts))
     return os.path.join(common.MODEL_PATH, model_fname)
 
 
-def train_results_path(model_id, epochs, metric, *, layer=""):
+def model_results_path(model_id):
     date = datetime.now()
-    ts = date.strftime("%d-%m-%Y_%H:%M:%S")
-    if layer:
-        results_fname = "{}_{}e_{}_{}_{}".format(model_id, epochs, metric, layer, ts)
-    else:
-        results_fname = "{}_{}e_{}_{}".format(model_id, epochs, metric, ts)
-    return os.path.join(common.TRAIN_METRICS_PATH, results_fname)
+    ts = date.strftime("%d_%m_%Y-%H:%M:%S")
+    base_dir_name = '-'.join((model_id, ts))
+    base_dir = os.path.join(common.OUT_DIR, base_dir_name)
+    os.mkdir(base_dir)
+    print("Created model directory:", base_dir)
+
+    dir_paths = {}
+    for dir_name, sub_dirs in common.DIR_STRUCTURE.items():
+        result_dir = os.path.join(base_dir, dir_name)
+        os.mkdir(result_dir)
+        dir_paths[dir_name] = result_dir
+        for sub_dir_name in sub_dirs:
+            sub_dir = os.path.join(result_dir, sub_dir_name)
+            os.mkdir(sub_dir)
+            dir_paths[sub_dir_name] = sub_dir
+
+    return dir_paths
+
+
+def train_results_path(base_dir, prefix, layer):
+    results_fname = "{}-{}.npy".format(prefix, layer)
+    return os.path.join(base_dir, common.METRICS_DIR, common.TRAINING_DIR, results_fname)
 
 
 def prune_results_path(model_id, layer, pruning_method, pruning_ratio, metric):
     date = datetime.now()
-    ts = date.strftime("%d-%m-%Y_%H:%M:%S")
-    results_fname = "{}_{}_{}_{}_{}_{}".format(model_id, layer, pruning_method, pruning_ratio, metric, ts)
+    ts = date.strftime("%d_%m_%Y-%H:%M:%S")
+    results_fname = '-'.join((model_id, layer, pruning_method, pruning_ratio, metric, ts))
     return os.path.join(common.PRUNE_METRICS_PATH, results_fname)
+
+
+def plot_train_fps(fp_paths, layers):
+    n_plots = len(layers)
+    fig, axes = plt.subplots(1, n_plots, sharex=True, figsize=(20, 5))
+    for i, layer in enumerate(layers):
+        layer_fp = np.load(fp_paths[layer])
+        axes[i].plot(layer_fp)
+        axes[i].set_title(f"Frame potential of {layer}")
+        axes[i].set(xlabel="epoch", ylabel="FP")
 
 
 def draw_acc_plot(layer, exp_acc_fname, pruning_acc_fname, *, figsize=(25, 12), fig_name=""):

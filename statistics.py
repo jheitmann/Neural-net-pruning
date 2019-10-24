@@ -8,12 +8,7 @@ import common
 from snapshots import Snapshots
 
 
-def weight_dist(dir_name, epochs, model_class, layer, *, bias=True):
-    # Load model snapshots
-    s = Snapshots(dir_name, epochs, model_class, bias)
-    inner_products = s.compute_ips(layer).numpy()
-    weight_norms = s.compute_weight_norms(layer).numpy()
-
+def weight_dist(inner_products):
     # Transform inner-products to distances between 0 and 1
     ips_mod = -0.5 * (inner_products - 1)
     kernel_width = ips_mod.mean()
@@ -48,7 +43,7 @@ def weight_dist(dir_name, epochs, model_class, layer, *, bias=True):
     ax2.legend()
 
     plt.show()
-    return adjacency, weight_norms, kernel_width
+    return adjacency, kernel_width
 
 
 def plot_connected_components(adjacency, thresholds):

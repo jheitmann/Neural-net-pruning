@@ -86,7 +86,7 @@ def prune_layer(model, layer, pruning, pruning_ratio):
 
 
 def prune_and_test(experiment, testloader, layer, pruning, pruning_ratio, *, save_results=False, log_interval=10):  # changeme for ips
-    initial_acc, initial_ips, initial_fps = experiment.test(testloader, [layer])
+    initial_acc, initial_fps = experiment.test(testloader, [layer])
     test_accuracies = [initial_acc]
     frame_potentials = [initial_fps[layer]]
 
@@ -95,7 +95,7 @@ def prune_and_test(experiment, testloader, layer, pruning, pruning_ratio, *, sav
 
     for pruning_iter, pruning_idx in enumerate(pruning(experiment.model, layer, pruning_iters)):
         experiment.model.prune_element(layer, pruning_idx)
-        accuracy, layer_ips, layer_fp = experiment.test(testloader, [layer])
+        accuracy, layer_fp = experiment.test(testloader, [layer])
         test_accuracies.append(accuracy)
         frame_potentials.append(layer_fp[layer])
 
@@ -127,7 +127,7 @@ def random_pruning_rounds(experiment, testloader, layer, n_rounds, pruning_ratio
 
 def evaluate_models(testloader, trainable, layers, accuracies, frame_potentials):  # changeme for ips
     for init_time, e in trainable.items():
-        accuracy, layer_ips, layer_fp = e.test(testloader, layers)
+        accuracy, layer_fp = e.test(testloader, layers)
         accuracies.setdefault(init_time, []).append(accuracy)
         model_fps = frame_potentials.setdefault(init_time, {})
         for layer, fp in layer_fp.items():

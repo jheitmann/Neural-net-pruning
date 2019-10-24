@@ -40,32 +40,29 @@ class PruningModule(nn.Module):
         self.bias = bias
 
     def model_id(self):
-        id = self.__class__.__name__
+        name = self.__class__.__name__
         if not self.bias:
-            id = id + "_unbiased"
-        return id
+            name = '-'.join((name, "unbiased"))
+        return name
 
-    def compute_fp(self, monitored):
+    def compute_ips(self, monitored):
         layer_ips = {}
-        layer_fp = {}
         with torch.no_grad():
             for layer in monitored:
                 param = getattr(self, layer)
                 w = param.get_weights()
                 ips = inner_products(w)  # add normalize=True?
-                fp = frame_potential(ips, w.shape[0])
                 layer_ips[layer] = ips
-                layer_fp[layer] = fp
-        return layer_ips, layer_fp
+        return layer_ips
 
-    def compute_mean_ip(self, monitored):  # changeme
-        layer_mean_ip = {}
-        with torch.no_grad():
-            for layer in monitored:
-                param = getattr(self, layer)
-                w = param.get_weights()
-                mean_abs_ip = mean_inner_product(w, w.shape[0])
-                layer_mean_ip[layer] = mean_abs_ip
+    def compute_fp(self, monitored):
+        layer_ips = self.compute_ips(monitored)
+        layer_fp = {layer: frame_potential(ips, ips.shape[0]) for layer, ips in layer_ips.items()}
+        return layer_fp
+
+    def compute_mean_ip(self, monitored):
+        layer_ips = self.compute_ips(monitored)
+        layer_mean_ip = {layer: mean_inner_product(ips, ips.shape[0]) for layer, ips in layer_ips.items()}
         return layer_mean_ip
 
     def selective_correlation(self, layer, l2_norm=True, normalize=True):

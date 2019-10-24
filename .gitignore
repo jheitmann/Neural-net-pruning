@@ -106,6 +106,7 @@ venv.bak/
 # Data and results
 data/
 out/
+flaskcode/
 
 # PyCharm project
 .idea/
