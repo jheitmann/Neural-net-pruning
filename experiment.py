@@ -1,8 +1,7 @@
 import numpy as np
 import os
-import time
+import pickle
 import torch
-import torch.nn.functional as F
 
 import common
 import helpers
@@ -88,7 +87,7 @@ class Experiment:
         test_accuracies = [initial_acc]
 
         if save_results:
-            dir_paths = helpers.model_results_path(self.model.model_id())
+            base_dir, dir_paths = helpers.model_results_path(self.model.model_id())
             snapshot_dir = dir_paths[common.SNAPSHOTS_DIR]
             snapshot_fname = os.path.join(snapshot_dir, '0')
             torch.save(self.model.state_dict(), snapshot_fname)
@@ -107,5 +106,13 @@ class Experiment:
             acc_path = os.path.join(training_dir, common.ACCURACY_FNAME)
             np.save(acc_path, test_accuracies)
             print("Saved validation accuracies to:", acc_path)
+            if os.path.exists(common.MODEL_LIST_PATH):
+                with open(common.MODEL_LIST_PATH, 'rb') as rfp:
+                    models = pickle.load(rfp)
+            else:
+                models = []
+            models.append(base_dir)
+            with open(common.MODEL_LIST_PATH, "wb") as wfp:
+                pickle.dump(models, wfp)
 
         return test_accuracies

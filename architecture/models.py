@@ -2,9 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-import common
-import helpers
-from layers import MaskedLinear, MaskedConv2d
+from architecture.layers import MaskedLinear, MaskedConv2d
 
 
 def inner_products(w, normalize=True):

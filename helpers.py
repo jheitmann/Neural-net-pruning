@@ -31,7 +31,7 @@ def model_results_path(model_id):
             os.mkdir(sub_dir)
             dir_paths[sub_dir_name] = sub_dir
 
-    return dir_paths
+    return base_dir, dir_paths
 
 
 def train_results_path(base_dir, prefix, layer):

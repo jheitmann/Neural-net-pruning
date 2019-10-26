@@ -5,7 +5,6 @@ import numpy as np
 import os
 
 import common
-from snapshots import Snapshots
 
 
 def weight_dist(inner_products):

@@ -14,6 +14,7 @@ MODEL_PATH = os.path.join(OUT_DIR, "models")
 METRICS_PATH = os.path.join(OUT_DIR, "metrics")
 PRUNE_METRICS_PATH = os.path.join(METRICS_PATH, "pruning")
 
+MODEL_LIST_PATH = os.path.join(OUT_DIR, "model_list.pkl")
 ACCURACY_FNAME = "accuracies.npy"
 FP_PREFIX = "frame_potentials"
 NORM_PREFIX = "weight_norms"
