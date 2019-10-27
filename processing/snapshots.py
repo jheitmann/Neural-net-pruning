@@ -3,13 +3,16 @@ import os
 import torch
 import torch.nn.functional as F
 
+import architecture.models as models
 import common
 import helpers
 
 
 class Snapshots:  # add option to save all results
-    def __init__(self, base_dir, model_class):
+    def __init__(self, base_dir):
         self.base_dir = base_dir
+        model_folder = base_dir.split('/')[-1]
+        self.model_class = eval("models." + model_folder.split('-')[0])
         snapshots_path = os.path.join(base_dir, common.SNAPSHOTS_DIR)
         snapshot_fnames = [_ for _ in os.listdir(snapshots_path)]
         self.epochs = len(snapshot_fnames)
@@ -18,7 +21,7 @@ class Snapshots:  # add option to save all results
         self.models = []
         for epoch in range(self.epochs):
             snapshot_path = os.path.join(snapshots_path, str(epoch))
-            model = model_class(bias=bias)
+            model = self.model_class(bias=bias)
             device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
             model_state = torch.load(snapshot_path, map_location=device)
             model.load_state_dict(model_state)
@@ -59,6 +62,53 @@ class Snapshots:  # add option to save all results
         np.save(norms_path, weight_norms)
         print("Saved weight vector norms to:", norms_path)
         return fp_path, ip_path, norms_path
+
+    def create_adjacency(self, layer):  # 3-D tensor
+        ip_path = helpers.train_results_path(self.base_dir, common.IP_PREFIX, layer)
+        inner_products = np.load(ip_path)
+
+        # Transform inner-products to distances between 0 and 1
+        ips_mod = -0.5 * (inner_products - 1)
+        kernel_width = ips_mod.mean()
+        adjacency = np.exp(-ips_mod**2 / (kernel_width**2))
+
+        # No self-loops
+        for time in range(inner_products.shape[0]):
+            for node_idx in range(inner_products.shape[1]):
+                adjacency[time, node_idx, node_idx] = 0.
+
+        adjacency_path = helpers.train_results_path(self.base_dir, common.ADJACENCY_PREFIX, layer)
+        np.save(adjacency_path, adjacency)
+        print("Saved adjacency matrix to:", adjacency_path)
+
+        return adjacency, kernel_width
+
+    def training_graph(self, layer, cut_off):
+        adjacency_path = helpers.train_results_path(self.base_dir, common.ADJACENCY_PREFIX, layer)
+        norms_path = helpers.train_results_path(self.base_dir, common.NORM_PREFIX, layer)
+        adjacency = np.load(adjacency_path)
+        weight_norms = np.load(norms_path)
+        n_epochs = adjacency.shape[0]
+        n_nodes = adjacency.shape[1]
+        w = adjacency.copy()
+        w[w < cut_off] = 0.
+
+        graph = {"nodes": [], "links": []}
+        for node_id in range(n_nodes):
+            norms = {str(epoch): float("{:.3f}".format(weight_norms[epoch, node_id])) for epoch in range(n_epochs)}
+            node_entry = {"id": str(node_id), "norm": norms}
+            graph["nodes"].append(node_entry)
+
+        for epoch in range(n_epochs):
+            for i in range(n_nodes):
+                for j in range(i + 1, n_nodes):
+                    edge_weight = w[epoch, i, j]
+                    if edge_weight:
+                        edge_entry = {"source": str(i), "target": str(j), "value": float("{:.3f}".format(edge_weight)),
+                                      "epoch": epoch}
+                        graph["links"].append(edge_entry)
+
+        return graph, n_epochs
 
     def get_weights(self, layer):
         weight_series = []

@@ -7,31 +7,15 @@
 {% block content %}
 <link rel="stylesheet" href="{{ url_for('static', filename='autocomplete.css') }}">
 <div id="lrparent">
-    <div id="left">
+    <div id="center">
         <h4>Load a model</h4>
         <form method="post" autocomplete="off">
             <div class="autocomplete" style="width:300px;">
                 <input class="stylform"  type="text" name="model" id="model" placeholder="Trained model" required>
             </div>
-            <label for="qvalue">With Q (in %)</label>
-            <!--<div class="stylform">-->
-            <input type="range" min="0" max="100" value="50" name="qvalue" class="slider" id="qvalue" 
-                oninput="qvalue_output.value = qvalue.value + ' %'" required>
-            <output name="qvalue_output" id="qvalue_output_id">50 %</output>
-            <input class="stylform"  type="submit" name="btn" value="Training graph">
+            <input class="stylform"  type="submit" name="btn" value="Select model">
         </form>
-        <i>Warning: nothing</i>
     </div>
-    <!-- <div id="right">
-        <h4>Look at stats</h4>
-        <form method="post" autocomplete="off">           
-            <div class="autocomplete" style="width:300px;">
-                <input class="stylform"  type="text" name="model" id="model" placeholder="Trained model" required>
-            </div>
-            <input class="stylform"  type="submit" name="btn" value="Visualize">            
-        </form>
-        <i>Warning:It will take some time to compute before redirecting</i>
-    </div> -->
 </div>
 
 <script src="{{url_for('static', filename='autocomplete.js')}}"></script>

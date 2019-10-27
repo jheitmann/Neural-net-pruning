@@ -32,14 +32,30 @@ body {
     border: solid 2px gray;
 }
 
+#center {
+    display: inline-block;
+    margin:0 auto;
+    padding: 2cm;
+    width:50%;
+    height:100%;
+    min-height:100%;
+}
+
 #left {
     padding: 2cm;
     width:50%;
     height:100%;
     min-height:100%;
 }
+
 #right {
     padding: 2cm;
+    width:50%;
+    height:100%;
+    min-height:100%;
+}
+
+#center_res {
     width:50%;
     height:100%;
     min-height:100%;
@@ -50,6 +66,7 @@ body {
     height:100%;
     min-height:100%;
 }
+
 #right_res {
     width:50%;
     height:100%;

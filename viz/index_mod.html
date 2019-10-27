@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 
-<link rel="stylesheet" href="{{ url_for('static', filename='vizstyle.css') }}">
+<link rel="stylesheet" href="vizstyle.css"/>
 
 <svg width="1700" height="820"></svg> 
 <script src="https://d3js.org/d3.v4.min.js"></script>
@@ -83,9 +83,9 @@
 
 
     /////// GRAPH ////////      d3.json("nn_graph.json", 
-    var myGraph = {{ data.graph_data | safe }}
+    var graphData = {{ data.graph_data | safe }}
     
-    function showGraph(graph) {
+    function drawGraph(data) {
        //if (error) throw error;
 
        //user-defined parameters
@@ -212,8 +212,6 @@
 
     }
 
-    showGraph(myGraph);
-
     //this function calculates properties of network
     //(i.e., max connection between nodes, max norm value of node)
     function getnetworkProp(graph){
@@ -231,5 +229,7 @@
        }
        return [maxConnect, maxNorm];
     }
+
+    drawGraph(graphData);
 
 </script>

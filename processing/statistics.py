@@ -7,17 +7,8 @@ import os
 import common
 
 
-def weight_dist(inner_products):
-    # Transform inner-products to distances between 0 and 1
-    ips_mod = -0.5 * (inner_products - 1)
-    kernel_width = ips_mod.mean()
-    adjacency = np.exp(-ips_mod ** 2 / (kernel_width ** 2))
-    thresh = np.exp(-0.5 ** 2 / (kernel_width ** 2))
-
-    # No self-loops
-    for time in range(inner_products.shape[0]):
-        for node_idx in range(inner_products.shape[1]):
-            adjacency[time, node_idx, node_idx] = 0.
+def weight_dist(adjacency, kernel_width):
+    thresh = np.exp(-0.5**2 / (kernel_width**2))
 
     # Plot weight distribution of generated adjacency matrix
     data = adjacency.flatten()
@@ -42,7 +33,6 @@ def weight_dist(inner_products):
     ax2.legend()
 
     plt.show()
-    return adjacency, kernel_width
 
 
 def plot_connected_components(adjacency, thresholds):
@@ -90,32 +80,3 @@ def cc_max_norm(adjacency, weight_norms, thresholds):
         plot_data.append((sizes, magnitudes))
 
     return plot_data
-
-
-def training_graph(adjacency, weight_norms, *, graph_name=""):
-    graph = {}
-    n_epochs = adjacency.shape[0]
-    n_nodes = adjacency.shape[1]
-
-    graph["nodes"] = []
-    for node_id in range(n_nodes):
-        norms = {str(epoch): float("{:.3f}".format(weight_norms[epoch, node_id])) for epoch in range(n_epochs)}
-        node_entry = {"id": str(node_id), "fraction": norms}
-        graph["nodes"].append(node_entry)
-
-    graph["links"] = []
-    for epoch in range(n_epochs):
-        for i in range(n_nodes):
-            for j in range(i + 1, n_nodes):
-                edge_weight = adjacency[epoch, i, j]
-                if edge_weight:
-                    edge_entry = {"source": str(i), "target": str(j), "value": float("{:.3f}".format(edge_weight)),
-                                  "year": epoch}
-                    graph["links"].append(edge_entry)
-
-    if graph_name:
-        graph_fname = os.path.join(common.VIZ_DIR, graph_name)
-        with open(graph_fname, 'w') as fp:
-            json.dump(graph, fp, indent=4)
-
-    return graph

@@ -1,7 +1,11 @@
+import json
 import pickle
 from flask import Flask, request, redirect, url_for, render_template, send_file
 
 import common
+
+from processing.snapshots import Snapshots
+
 
 app = Flask(__name__)
 
@@ -9,29 +13,53 @@ app = Flask(__name__)
 @app.route('/', methods=["GET", "POST"])
 def root():
     """ Flask method of the root page with the forms """
-    with open(common.MODEL_LIST_PATH, 'rb') as fp:
+    with open(common.MODEL_SPECS_PATH, 'rb') as fp:
         models = pickle.load(fp)
 
     if request.method == "GET":
-        return render_template("form.html", model_list=models)
+        return render_template("form.html", model_list=list(models.keys()))
     elif request.method == "POST":
-        if request.form.get("btn") == "Compute route":
-            stn_from, stn_to, qvalue, date, time = (request.form.get(k) for k in ("from", "to", "qvalue", "date", "time"))
-            return redirect(url_for('result', stn_from=stn_from, stn_to=stn_to, qvalue=qvalue, date=date, time=time))
-        elif request.form.get("btn") == "Compute isochrones":
-            stn_origin = request.form.get("origin")
-            return redirect(url_for('iso', stn_origin=stn_origin))
+        if request.form.get("btn") == "Select model":
+            base_dir = request.form.get("model")
+            return redirect(url_for('params', base_dir=base_dir))
+
+
+@app.route('/params', methods=["GET", "POST"])
+def params():
+    """ Flask method of the root page with the forms """
+    with open(common.MODEL_SPECS_PATH, 'rb') as fp:
+        models = pickle.load(fp)
+
+    base_dir = request.args.get("base_dir")
+    if request.method == "GET":
+        layers = models[base_dir]
+        layers.sort()
+        return render_template("params.html", model_list=list(models.keys()), layers=layers)
+    elif request.method == "POST":
+        if request.form.get("btn") == "Training graph":
+            layer = request.form.get("layer")
+            var_base_dir = request.form.get("model_variant", "")
+            cut_off = request.form.get("cut_off")
+
+            return redirect(url_for('result', base_dir=base_dir, layer=layer,
+                                    var_base_dir=var_base_dir, cut_off=cut_off))
 
 
 @app.route("/result", methods=["GET"])
 def result():
-    """ Flask method of the route planning results page """
+    """ Flask method of the training results page """
     if request.method == "GET":
-        tolerance = int(request.args.get("qvalue"))*.01
+        base_dir = request.args.get("base_dir")
+        layer = request.args.get("layer")
+        # var_base_dir = request.args.get("var_base_dir")
+        cut_off = float(request.args.get("cut_off"))
 
-        # Returns the HTML file and renders the localy saved file
-        steps = None
-        return render_template("result.html", steps=steps)
+        # Returns the HTML file and renders the locally saved file
+        s = Snapshots(base_dir)
+        graph, epochs = s.training_graph(layer, cut_off)
+        graph_data = json.dumps(graph, indent=4)
+        data = {"graph_data": graph_data, "epochs": epochs}
+        return render_template("graph.html", data=data)
 
 
 def start(**kwargs):

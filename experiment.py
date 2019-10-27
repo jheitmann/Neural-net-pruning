@@ -106,13 +106,14 @@ class Experiment:
             acc_path = os.path.join(training_dir, common.ACCURACY_FNAME)
             np.save(acc_path, test_accuracies)
             print("Saved validation accuracies to:", acc_path)
-            if os.path.exists(common.MODEL_LIST_PATH):
-                with open(common.MODEL_LIST_PATH, 'rb') as rfp:
+            if os.path.exists(common.MODEL_SPECS_PATH):
+                with open(common.MODEL_SPECS_PATH, 'rb') as rfp:
                     models = pickle.load(rfp)
             else:
-                models = []
-            models.append(base_dir)
-            with open(common.MODEL_LIST_PATH, "wb") as wfp:
+                models = {}
+            layers = {name.split('.')[0] for name, _ in self.model.named_parameters()}
+            models[base_dir] = list(layers)
+            with open(common.MODEL_SPECS_PATH, "wb") as wfp:
                 pickle.dump(models, wfp)
 
         return test_accuracies
