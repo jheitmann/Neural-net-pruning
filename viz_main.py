@@ -1,5 +1,4 @@
 import json
-import pickle
 from flask import Flask, request, redirect, url_for, render_template, send_file
 
 import common
@@ -13,8 +12,8 @@ app = Flask(__name__)
 @app.route('/', methods=["GET", "POST"])
 def root():
     """ Flask method of the root page with the forms """
-    with open(common.MODEL_SPECS_PATH, 'rb') as fp:
-        models = pickle.load(fp)
+    with open(common.MODEL_SPECS_PATH, 'r') as fp:
+        models = json.load(fp)
 
     if request.method == "GET":
         return render_template("form.html", model_list=list(models.keys()))
@@ -27,8 +26,8 @@ def root():
 @app.route('/params', methods=["GET", "POST"])
 def params():
     """ Flask method of the root page with the forms """
-    with open(common.MODEL_SPECS_PATH, 'rb') as fp:
-        models = pickle.load(fp)
+    with open(common.MODEL_SPECS_PATH, 'r') as fp:
+        models = json.load(fp)
 
     base_dir = request.args.get("base_dir")
     if request.method == "GET":

@@ -35,9 +35,12 @@ def weight_dist(adjacency, kernel_width):
     plt.show()
 
 
-def plot_connected_components(adjacency, thresholds):
+def plot_connected_components(adjacency, min_cut_off, *, step=0.005, n_obs=55):
+    max_cut_off = min_cut_off + (n_obs-1)*step
+    cut_offs = np.linspace(min_cut_off, max_cut_off, n_obs)
+
     cc_numbers = []
-    for cut_off in thresholds:
+    for cut_off in cut_offs:
         w = adjacency.copy()
         w[w < cut_off] = 0.
         n_models = w.shape[0]
@@ -46,11 +49,13 @@ def plot_connected_components(adjacency, thresholds):
         cc_numbers.append(n_connected)
 
     fig = plt.figure(figsize=(12, 7))
-    plt.scatter(thresholds, cc_numbers, s=10)
+    plt.scatter(cut_offs, cc_numbers, s=10)
     plt.title("Number of connected components in graph with weights below cut-off removed")
     plt.xlabel("Cut-off value")
     plt.ylabel("Number of connected components")
     plt.show()
+
+    return cut_offs
 
 
 def cc_max_norm(adjacency, weight_norms, thresholds):
@@ -80,3 +85,12 @@ def cc_max_norm(adjacency, weight_norms, thresholds):
         plot_data.append((sizes, magnitudes))
 
     return plot_data
+
+
+def cc_specs_plot(plot_data, cut_offs, idx):
+    fig = plt.figure(figsize=(12, 7))
+    sizes, magnitudes = plot_data[idx]
+    plt.scatter(sizes, magnitudes)
+    plt.title("Size vs max magnitude for cut-off {:.3f} ({} connected components)".format(cut_offs[idx], len(sizes)))
+    plt.xlabel("Connected component size")
+    plt.ylabel("Max magnitude of node in connected component")

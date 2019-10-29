@@ -46,6 +46,16 @@ def prune_results_path(model_id, layer, pruning_method, pruning_ratio, metric):
     return os.path.join(common.PRUNE_METRICS_PATH, results_fname)
 
 
+def plot_test_acc(base_dir):
+    acc_path = os.path.join(base_dir, common.METRICS_DIR, common.TRAINING_DIR, common.ACCURACY_FNAME)
+    test_accuracies = np.load(acc_path)
+    plt.plot(test_accuracies)
+    plt.title('Testset accuracy')
+    plt.xlabel('Epoch')
+    plt.ylabel('Accuracy (%)')
+    plt.show()
+
+
 def plot_train_fps(fp_paths, layers):
     n_plots = len(layers)
     fig, axes = plt.subplots(1, n_plots, sharex=True, figsize=(20, 5))

@@ -1,6 +1,6 @@
+import json
 import numpy as np
 import os
-import pickle
 import torch
 
 import common
@@ -107,13 +107,13 @@ class Experiment:
             np.save(acc_path, test_accuracies)
             print("Saved validation accuracies to:", acc_path)
             if os.path.exists(common.MODEL_SPECS_PATH):
-                with open(common.MODEL_SPECS_PATH, 'rb') as rfp:
-                    models = pickle.load(rfp)
+                with open(common.MODEL_SPECS_PATH, 'r') as rfp:
+                    models = json.load(rfp)
             else:
                 models = {}
             layers = {name.split('.')[0] for name, _ in self.model.named_parameters()}
             models[base_dir] = list(layers)
-            with open(common.MODEL_SPECS_PATH, "wb") as wfp:
-                pickle.dump(models, wfp)
+            with open(common.MODEL_SPECS_PATH, 'w') as wfp:
+                json.dump(models, wfp, sort_keys=True, indent=4)
 
         return test_accuracies

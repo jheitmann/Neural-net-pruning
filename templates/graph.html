@@ -82,12 +82,10 @@
     }
 
 
-    /////// GRAPH ////////      d3.json("nn_graph.json", 
+    /////// GRAPH ////////
     var myGraph = {{ data.graph_data | safe }}
     
     function showGraph(graph) {
-       //if (error) throw error;
-
        //user-defined parameters
        var maxDistance = 60, //max distance between two nodes
            minDistance = 10, //min distance betwween two nodes
