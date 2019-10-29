@@ -14,6 +14,9 @@ def model_file_path(model_id):
 
 
 def model_results_path(model_id):
+    if not os.path.exists(common.OUT_DIR):
+        os.mkdir(common.OUT_DIR)
+
     date = datetime.now()
     ts = date.strftime("%d_%m_%Y-%H:%M:%S")
     base_dir_name = '-'.join((model_id, ts))
