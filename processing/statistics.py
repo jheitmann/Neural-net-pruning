@@ -15,7 +15,7 @@ def weight_dist(adjacency, kernel_width):
     fig, (ax1, ax2) = plt.subplots(1, 2, sharex=True, figsize=(20, 7))
     ax1.hist(data, bins=50)
     ax1.axvline(x=thresh, color='r', linestyle='dashed', linewidth=1.4, label="Orthogonal weight vectors")
-    ax1.set_title('Distribution of entries of adjacency matrix')
+    ax1.set_title('Distribution of entries of adjacency tensor')
     ax1.set_xlabel('Entry value')
     ax1.set_ylabel('Number of occurrences')
     ax1.legend()
@@ -50,7 +50,7 @@ def plot_connected_components(adjacency, min_cut_off, *, step=0.005, n_obs=55):
 
     fig = plt.figure(figsize=(12, 7))
     plt.scatter(cut_offs, cc_numbers, s=10)
-    plt.title("Number of connected components in graph with weights below cut-off removed")
+    plt.title("Number of connected components at last epoch with entries below cut-off removed")
     plt.xlabel("Cut-off value")
     plt.ylabel("Number of connected components")
     plt.show()
