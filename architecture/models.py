@@ -1,3 +1,4 @@
+import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
@@ -89,4 +90,35 @@ class Conv2_30(PruningModule):
         x = F.relu(self.fc1(x))
         x = F.relu(self.fc2(x))
         x = self.fc3(x)
+        return x
+
+
+class AlexNet(PruningModule):
+    def __init__(self, bias=True):
+        super(AlexNet, self).__init__(bias)
+        self.conv1 = MaskedConv2d(3, 64, kernel_size=3, stride=2, padding=1)
+        self.conv2 = MaskedConv2d(64, 192, kernel_size=3, padding=1)
+        self.conv3 = MaskedConv2d(192, 384, kernel_size=3, padding=1)
+        self.conv4 = MaskedConv2d(384, 256, kernel_size=3, padding=1)
+        self.conv5 = MaskedConv2d(256, 256, kernel_size=3, padding=1)
+        self.pool = nn.MaxPool2d(kernel_size=2)
+
+        self.fc1 = MaskedLinear(256 * 2 * 2, 4096)
+        self.fc2 = MaskedLinear(4096, 4096)
+        self.fc3 = MaskedLinear(4096, 10)
+        self.drop= nn.Dropout()
+
+    def forward(self, x):
+        x = self.pool(F.relu(self.conv1(x)))
+        x = self.pool(F.relu(self.conv2(x)))
+        x = F.relu(self.conv3(x))
+        x = F.relu(self.conv4(x))
+        x = self.pool(F.relu(self.conv5(x)))
+        
+        x = self.drop(x)
+        x = x.view(x.size(0), 256 * 2 * 2)
+        x = self.drop(F.relu(self.fc1(x)))
+        x = F.relu(self.fc2(x))
+        x = self.fc3(x)
+
         return x

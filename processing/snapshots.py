@@ -6,6 +6,7 @@ import torch.nn.functional as F
 import architecture.models as models
 import common
 import helpers
+from architecture.pruning_module import inner_products
 
 
 class Snapshots:  # add option to save all results
@@ -16,14 +17,14 @@ class Snapshots:  # add option to save all results
         snapshots_path = os.path.join(base_dir, common.SNAPSHOTS_DIR)
         snapshot_fnames = [_ for _ in os.listdir(snapshots_path)]
         self.epochs = len(snapshot_fnames)
-        bias = (base_dir.split('-')[1] != "unbiased")
+        self.bias = (base_dir.split('-')[1] != "unbiased")
+        self.device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
 
         self.models = []
         for epoch in range(self.epochs):
             snapshot_path = os.path.join(snapshots_path, str(epoch))
-            model = self.model_class(bias=bias)
-            device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
-            model_state = torch.load(snapshot_path, map_location=device)
+            model = self.model_class(bias=self.bias)
+            model_state = torch.load(snapshot_path, map_location=self.device)
             model.load_state_dict(model_state)
             self.models.append(model)
 
@@ -35,11 +36,11 @@ class Snapshots:  # add option to save all results
         return frame_potentials
 
     def compute_ips(self, layer):  # 3-D tensor
-        inner_products = []
+        ips = []
         for model in self.models:
             layer_ips = model.compute_ips([layer])
-            inner_products.append(layer_ips[layer])
-        return torch.stack(inner_products)
+            ips.append(layer_ips[layer])
+        return torch.stack(ips)
 
     def compute_weight_norms(self, layer):  # matrix
         norm_series = []
@@ -53,9 +54,9 @@ class Snapshots:  # add option to save all results
         fp_path = helpers.train_results_path(self.base_dir, common.FP_PREFIX, layer)
         np.save(fp_path, frame_potentials)
         print("Saved frame potentials to:", fp_path)
-        inner_products = self.compute_ips(layer).numpy()
+        ips = self.compute_ips(layer).numpy()
         ip_path = helpers.train_results_path(self.base_dir, common.IP_PREFIX, layer)
-        np.save(ip_path, inner_products)
+        np.save(ip_path, ips)
         print("Saved inner products to:", ip_path)
         weight_norms = self.compute_weight_norms(layer).numpy()
         norms_path = helpers.train_results_path(self.base_dir, common.NORM_PREFIX, layer)
@@ -63,29 +64,31 @@ class Snapshots:  # add option to save all results
         print("Saved weight vector norms to:", norms_path)
         return fp_path, ip_path, norms_path
 
-    def create_adjacency(self, layer):  # 3-D tensor
-        ip_path = helpers.train_results_path(self.base_dir, common.IP_PREFIX, layer)
-        inner_products = np.load(ip_path)
+    def create_adjacency(self, layer, merged=False):  # 3-D tensor
+        result_path = helpers.prune_results_path if merged else helpers.train_results_path
+        ip_path = result_path(self.base_dir, common.IP_PREFIX, layer)
+        ips = np.load(ip_path)
 
         # Transform inner-products to distances between 0 and 1
-        ips_mod = -0.5 * (inner_products - 1)
+        ips_mod = -0.5 * (ips - 1)
         kernel_width = ips_mod.mean()
         adjacency = np.exp(-ips_mod**2 / (kernel_width**2))
 
         # No self-loops
-        for time in range(inner_products.shape[0]):
-            for node_idx in range(inner_products.shape[1]):
+        for time in range(ips.shape[0]):
+            for node_idx in range(ips.shape[1]):
                 adjacency[time, node_idx, node_idx] = 0.
 
-        adjacency_path = helpers.train_results_path(self.base_dir, common.ADJACENCY_PREFIX, layer)
+        adjacency_path = result_path(self.base_dir, common.ADJACENCY_PREFIX, layer)
         np.save(adjacency_path, adjacency)
         print("Saved adjacency matrix to:", adjacency_path)
 
         return adjacency, kernel_width
 
-    def training_graph(self, layer, cut_off):
-        adjacency_path = helpers.train_results_path(self.base_dir, common.ADJACENCY_PREFIX, layer)
-        norms_path = helpers.train_results_path(self.base_dir, common.NORM_PREFIX, layer)
+    def training_graph(self, layer, cut_off, merged=False):
+        result_path = helpers.prune_results_path if merged else helpers.train_results_path
+        adjacency_path = result_path(self.base_dir, common.ADJACENCY_PREFIX, layer)
+        norms_path = result_path(self.base_dir, common.NORM_PREFIX, layer)
         adjacency = np.load(adjacency_path)
         weight_norms = np.load(norms_path)
         n_epochs = adjacency.shape[0]
@@ -95,9 +98,10 @@ class Snapshots:  # add option to save all results
 
         graph = {"nodes": [], "links": []}
         for node_id in range(n_nodes):
-            norms = {str(epoch): float("{:.3f}".format(weight_norms[epoch, node_id])) for epoch in range(n_epochs)}
-            node_entry = {"id": str(node_id), "norm": norms}
-            graph["nodes"].append(node_entry)
+            if weight_norms[n_epochs-1, node_id]:  # remove pruned nodes
+                norms = {str(epoch): float("{:.3f}".format(weight_norms[epoch, node_id])) for epoch in range(n_epochs)}
+                node_entry = {"id": str(node_id), "norm": norms}
+                graph["nodes"].append(node_entry)
 
         for epoch in range(n_epochs):
             for i in range(n_nodes):
@@ -109,6 +113,25 @@ class Snapshots:  # add option to save all results
                         graph["links"].append(edge_entry)
 
         return graph, n_epochs
+
+    def compare_with(self, s, layer):
+        w1 = s.get_weights(layer)
+        w2 = self.get_weights(layer)
+        merged = torch.cat((w1, w2), dim=1)
+        ips = [inner_products(merged[epoch]) for epoch in range(merged.shape[0])]
+        ips = torch.stack(ips).numpy()
+        ip_path = helpers.prune_results_path(self.base_dir, common.IP_PREFIX, layer)
+        np.save(ip_path, ips)
+        print("Saved combined inner products to:", ip_path)
+
+        weight_norms1 = s.compute_weight_norms(layer)
+        weight_norms2 = self.compute_weight_norms(layer)
+        weight_norms = torch.cat((weight_norms1, weight_norms2), dim=1).numpy()
+        norms_path = helpers.prune_results_path(self.base_dir, common.NORM_PREFIX, layer)
+        np.save(norms_path, weight_norms)
+        print("Saved combined weight norms to:", norms_path)
+
+        return ips, weight_norms
 
     def get_weights(self, layer):
         weight_series = []
@@ -129,5 +152,14 @@ class Snapshots:  # add option to save all results
         w = model.layer_weights(layer)
         w = F.normalize(w, p=2, dim=1)
         w_mod = F.normalize(w_mod, p=2, dim=1)
-        inner_products = w_mod.matmul(w.t())
-        return inner_products
+        ips = w_mod.matmul(w.t())
+        return ips
+
+    def sub_network(self, layer, pruned_indices):  # set initial mask only -> take into account when plotting
+        snapshot_path = os.path.join(self.base_dir, common.SNAPSHOTS_DIR, '0')
+        model = self.model_class(bias=self.bias)
+        model_state = torch.load(snapshot_path, map_location=self.device)
+        model.load_state_dict(model_state)
+        for idx in pruned_indices:
+            model.prune_element(layer, idx)
+        return model

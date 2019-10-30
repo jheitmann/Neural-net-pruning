@@ -50,12 +50,16 @@ def result():
     if request.method == "GET":
         base_dir = request.args.get("base_dir")
         layer = request.args.get("layer")
-        # var_base_dir = request.args.get("var_base_dir")
+        var_base_dir = request.args.get("var_base_dir")
         cut_off = float(request.args.get("cut_off"))
 
         # Returns the HTML file and renders the locally saved file
-        s = Snapshots(base_dir)
-        graph, epochs = s.training_graph(layer, cut_off)
+        if var_base_dir:
+            s = Snapshots(var_base_dir)
+            graph, epochs = s.training_graph(layer, cut_off, merged=True)
+        else:
+            s = Snapshots(base_dir)
+            graph, epochs = s.training_graph(layer, cut_off)
         graph_data = json.dumps(graph, indent=4)
         data = {"graph_data": graph_data, "epochs": epochs}
         return render_template("graph.html", data=data)

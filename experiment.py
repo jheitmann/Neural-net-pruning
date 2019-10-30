@@ -85,6 +85,7 @@ class Experiment:
     def fit(self, trainloader, testloader, epochs, *, monitored=[], save_results=False, log_interval=100):
         initial_acc, initial_fps = self.test(testloader, monitored)
         test_accuracies = [initial_acc]
+        base_dir = ""
 
         if save_results:
             base_dir, dir_paths = helpers.model_results_path(self.model.model_id())
@@ -116,4 +117,4 @@ class Experiment:
             with open(common.MODEL_SPECS_PATH, 'w') as wfp:
                 json.dump(models, wfp, sort_keys=True, indent=4)
 
-        return test_accuracies
+        return test_accuracies, base_dir

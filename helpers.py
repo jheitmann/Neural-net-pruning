@@ -42,11 +42,17 @@ def train_results_path(base_dir, prefix, layer):
     return os.path.join(base_dir, common.METRICS_DIR, common.TRAINING_DIR, results_fname)
 
 
+def prune_results_path(base_dir, prefix, layer):
+    results_fname = "{}-{}.npy".format(prefix, layer)
+    return os.path.join(base_dir, common.METRICS_DIR, common.PRUNING_DIR, results_fname)
+
+"""
 def prune_results_path(model_id, layer, pruning_method, pruning_ratio, metric):
     date = datetime.now()
     ts = date.strftime("%d_%m_%Y-%H:%M:%S")
     results_fname = '-'.join((model_id, layer, pruning_method, pruning_ratio, metric, ts))
     return os.path.join(common.PRUNE_METRICS_PATH, results_fname)
+"""
 
 
 def plot_test_acc(base_dir):
