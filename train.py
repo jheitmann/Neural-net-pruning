@@ -43,6 +43,7 @@ def fit(train_batch_size, test_batch_size, epochs, model_class, criterion_class,
 if __name__=="__main__":
     # Defines all parser arguments when launching the script directly in terminal
     parser = argparse.ArgumentParser()
+    parser.add_argument("-cif", "--cifar", help="use cifar dataset", action="store_true")
     parser.add_argument("train_batch_size", type=int, help="training batch size")
     parser.add_argument("test_batch_size", type=int, help="testing batch size")
     parser.add_argument("epochs", type=int, help="number of training epochs")
@@ -50,7 +51,6 @@ if __name__=="__main__":
     parser.add_argument("criterion_class", type=str, help="criterion class")
     parser.add_argument("optimizer_class", type=str, help="optimizer class")
     parser.add_argument("optim_args", nargs='*')
-    parser.add_argument("-cif", "--cifar", help="use cifar dataset", action="store_true")
     args = parser.parse_args()
 
     exec(f"from architecture.models import {args.model_class}")

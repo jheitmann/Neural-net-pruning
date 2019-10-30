@@ -7,7 +7,7 @@ Create a conda environment and activate it:
 
 Run the training script and launch the web-server:
 
-        python train.py -cif 64 1000 1 AlexNet nn.CrossEntropyLoss optim.Adam lr=0.001
+        python train.py -cif 64 1000 10 AlexNet nn.CrossEntropyLoss optim.Adam lr=0.001
         python viz_main.py
 
 `train.py` has the following arguments:
