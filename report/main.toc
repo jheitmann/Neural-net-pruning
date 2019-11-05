@@ -1,30 +1,21 @@
 \boolfalse {citerequest}\boolfalse {citetracker}\boolfalse {pagetracker}\boolfalse {backtracker}\relax 
-\babel@toc {french}{}
 \defcounter {refsection}{0}\relax 
 \contentsline {section}{\numberline {1}Introduction}{2}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {2}Contexte historique}{2}
+\contentsline {section}{\numberline {2}Related work}{3}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.1}De la r\IeC {\'e}volution culturelle au lancement du premier satellite}{2}
+\contentsline {subsection}{\numberline {2.1}The lottery ticket hypothesis}{4}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.2}R\IeC {\'e}formes et modernisation du programme spatial chinois}{2}
+\contentsline {subsection}{\numberline {2.2}Pruning networks}{4}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.3}La Chine s'affirme comme puissance spatiale majeure}{2}
+\contentsline {subsection}{\numberline {2.3}Alignment of weight vectors during training}{4}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {3}Objectifs et enjeux du programme spatial}{2}
+\contentsline {section}{\numberline {3}Approach}{4}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.1}\IeC {\'E}conomie}{2}
+\contentsline {subsection}{\numberline {3.1}Formal background}{4}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.2}La conqu\IeC {\^e}te spatiale, au service de l'image de la Chine}{2}
+\contentsline {subsection}{\numberline {3.2}Visualisation}{4}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.3}Enjeux militaires - R\IeC {\'e}tablir l'\IeC {\'e}quilibre}{2}
+\contentsline {section}{\numberline {4}Experiments}{5}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {4}Sc\IeC {\'e}narios sur l'\IeC {\'e}volution du programme spatial chinois}{2}
-\defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {4.1}Sc\IeC {\'e}nario 1: Course aux \IeC {\'e}toiles}{2}
-\defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {4.2}Sc\IeC {\'e}nario 3: Statu quo}{2}
-\defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {5}Conclusion}{2}
-\defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {6}Bibliographie}{2}
+\contentsline {section}{\numberline {5}Discussion}{5}

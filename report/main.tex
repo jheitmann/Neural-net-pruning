@@ -30,26 +30,25 @@
 %	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
 %----------------------------------------------------------------------------------------
 
-\documentclass[12pt, french]{article}
+\documentclass[12pt]{article}
 \usepackage[utf8]{inputenc} % remove x to make it compatible to biblography
 \usepackage[T1]{fontenc} % added instead of utf8x
 \usepackage{textcomp} % added instead of utf8x
-\usepackage{babel}
 
 \usepackage{amsmath}
 \usepackage{graphicx}
-%\usepackage{hyperref} % commented and use fix below instead
 \usepackage[colorinlistoftodos]{todonotes}
 \usepackage{caption}
 \usepackage{verbatim}
 \usepackage{ragged2e}
 \usepackage[hyphens]{url} % quick and dirty fix to the overflowing url problem
-%\usepackage{biblatex}
 \usepackage{csquotes}
-\usepackage[backend=biber,style=alphabetic,sorting=nyt]{biblatex}
+
+\usepackage[backend=biber]{biblatex}
 \addbibresource{sources.bib}
+
 \justifying
-\renewcommand*\contentsname{Table des matières}
+\renewcommand*\contentsname{Content}
 \begin{document}
 
 \begin{titlepage}
@@ -69,8 +68,10 @@
 %	TITLE SECTION
 %----------------------------------------------------------------------------------------
 
+% Neural network pruning and weight geometry
+
 \HRule \\[0.6cm]
-{ \huge \bfseries Neural network pruning and weight geometry}\\[0.5cm] % Title of your document
+{ \huge \bfseries Understanding neural network training dynamics via pruning}\\[0.5cm] % Title of your document
 \HRule \\[1.5cm]
  
 %----------------------------------------------------------------------------------------
@@ -86,7 +87,7 @@
 %	DATE SECTION
 %----------------------------------------------------------------------------------------
 \begin{figure}[!h] 
-        \centering \includegraphics[width=1\columnwidth]{images/EPFL_Logo_Digital_RGB_PROD.jpg}
+        \centering \includegraphics[width=0.6\columnwidth]{images/EPFL_Logo_Digital_RGB_PROD.jpg}
 \end{figure}
 
 \vfill % Fill the rest of the page with whitespace
@@ -96,87 +97,44 @@
 \justify
 
 \section{Introduction}
+One of the suprising results of training deep neural networks with many more parameters than training samples is that one can achieve zero-training loss but still get good generalisation \cite{neyshabur2018towards}. While statistical learning theory suggests that such heavily over-parametrised networks generalise poorly without further regularisation, experiments show that in most cases, increasing the number of parameters does not worsen the capability to generalise. This paradox is one of the big unresolved questions of deep learning, and understanding the phenomena behind it would deliver a lot of insights about why neural networks work so well. The question arises why the network doesn't exploit its full expressive power to overfit the training dataset. Modern network architectures, which can have up to 100x more trainable parameters than training samples \cite{zagoruyko2016wide}, most certainly are capable of learning the entire dataset, independently of the labels. It has been shown that zero training loss can even be achieved when the training labels are randomly shuffled \cite{zhang2016understanding}, thus preventing the learning of underlying features of the data that are sufficient to solve the classification task at hand. \\
 
-\section{Contexte historique}
+Surely one must look at the interplay between the dataset properties, the network architecture and the optimization algorithm, but the latter in particular seems to play a crucial role, as it somehow consistently favors solutions in the optimization landscape that generalise, over solutions that overfit the data and in some cases do not learn a representation of the data. Is it a property of the optimization algorithm, does stochastic gradient descent optimization lead to sparse solutions? If yes, how do these sparse solutions look like? Do trained neural networks rely on single components (nodes or filters), even with a growing number of parameters? Or does each of the components contribute equally to the estimated function, thus reducing the contribution when there are more parameters? \\
 
-\subsection{De la révolution culturelle au lancement du premier satellite}
+An interesting way to measure the importance of a trained network's individual components is pruning. When single components are removed from a network's architecture, i. e. they do not contribute anymore to the output of the network, the difference in validation accuracy can be measured, which is a good indicator of the network's performance. Pruning can therefore be used as a means to get a better understanding of what is happening in a trained network, to identify important parts and not so important ones. But pruning can also be seen as an end, if done properly it might yield smaller architectures, which result in computation speed-ups and smaller memory footprints at evaluation. Assuming that overparametrisation is necessary to achieve good performance, and that some components of an overparametrised network are obsolete after training or can be removed without a negative impact on validation accuracy if the network is retrained, then pruning might even be necessary to get efficient architectures that scale. \\
 
-\subsection{Réformes et modernisation du programme spatial chinois}
-
-\subsection{La Chine s'affirme comme puissance spatiale majeure}
-
-\section{Objectifs et enjeux du programme spatial}
-
-\subsection{Économie}
-
-\subsection{La conquête spatiale, au service de l'image de la Chine}
-
-\subsection{Enjeux militaires - Rétablir l'équilibre}
-
-\section{Scénarios sur l'évolution du programme spatial chinois}
-
-\subsection{Scénario 1: Course aux étoiles}
-
-\subsection{Scénario 3: Statu quo}
-
-\section{Conclusion}
-
-\section{Bibliographie}
+This project aims to explore different hypotheses about neural network training dynamics, with a particular focus on pruning. The goal is to identify both similarities and differences in the theories, and provide evidence in favor or against them in a series of experiments. Moreover, some visualisation tools will be introduced that will help getting a better intuition for the complex process that is neural network training.
 
 
-% TODO YANN: https://www.overleaf.com/learn/latex/Bibliography_management_in_LaTeX
-\nocite{*} % displays even unused sources
-\printbibliography[keyword={livre}, title={Livres}]
-\printbibliography[keyword={monographie}, title={Monographies}]
-\printbibliography[keyword={article}, title={Articles}]
-\printbibliography[keyword={source}, title={Sources}]
-\printbibliography[keyword={internet}, title={Internet}]
-\printbibliography[keyword={illustration}, title={Illustrations}]
-%\printbibliography[keyword={yann}, title={Yann}]
-%\printbibliography[keyword={tiago}, title={Tiago}]
-%\printbibliography[keyword={benno}, title={Benno}]
-%\printbibliography[keyword={julien}, title={Julien}]
+\section{Related work}
+% improve this part, deconstruct classification subspace
+If good generalisation can be achieved by an overparametrised network, there must be some mechanism that prevents the model to overfit the dataset, and learn for instance features that would be considered as noise when it comes to the classification task, because they do not provide any information about a sample's affiliation to a certain class. With an increasing number of parameters, more complex decision boundaries can be represented, so in order to generalise, the solutions obtained by the optimization algorithm of choice must be "sparse" in a way, which is yet to be defined. We can ask specific questions when reasoning about sparsity: within an overparametrised network, is it just a subnetwork that is trained, particularly receptive to training and with an inductive bias that makes it "trainable"? Or is there a collapse of the weight vectors around just a few directions, relevant to the classification task at hand? These questions correspond to different explanations of the underlying mechanisms of neural network training, and have been studied in the past. The first one, more formaly known as the "Lottery ticket hypothesis" \cite{frankle2018lottery}, emphasises the importance of weight initialisation, which leads to the formation of subnetworks that can be trained efficiently. The second one states that overparametrisation works well because of better feature exploration and weight clustering \cite{brutzkus2019larger}.
 
-%\newpage
-%Salut yanjboy :)
-
-%\section*{6. Autres idées à proposer aux profs}
-%\begin{enumerate}
-%    \item Pourquoi tout le monde veut aller sur la Lune / Mars ?
-%    \item Extraire matières premières des astéroïdes, rêve ou bientôt une réalité?
-%    \item Parler des capacité hardware? Détails de programmes spatiaux, fusées, manned spaceflight, satellites ?
-%\end{enumerate}
-
-%Autres sous-sections qu'on peut ajouter:
-%\begin{enumerate}
-%    \item Définition d'une space race -> est-ce véritablement si négatif? (Martian -> Chine sauve astronaute américain) définir en opposant à une coopération %comme actuellement le cas (ESA, US - Russie)
-%    \item Quels seraient les objets d'intérêts dans une space race (buts concrets de la missions) ? Lune, Mars, asteroids, orbit terre, soleil etc?
-%    \item Aspect juridique, quels sont les lois en place en ce moment? Est-ce probable que de nouvelles traités soient ratifiés? Faut-il déjà ce poser les %questions à qui appartient la Lune par exemple?
-%    \item Ou en est la Chine en ce moment ? Pleins de nouvelles impressionnantes, mais véritablement autant de capacités que les US et la Russie ? Article le %temps: les US font peur pour avoir plus de budget ! (mentionner!)
-%    \item (déjà planifié) Comment vont réagir les grands aux avancés de la Chine? NASA semble être heureux, la politique pas trop. Course pour la Lune ou% coopération?
-%    \item Mentionner que même au travers de crises diplomatiques, les relations dans l'espace n'ont pas vraiment souffert entre US - Russie
-%    \item 
-%\end{enumerate}
+\subsection{The lottery ticket hypothesis}
+The hypothesis, improvements such as late resetting. Why it matters, how it could be used to design better initialization methods, that lead to faster convergence, and maybe a higher test accuracy. Note that this mainly applies to unstructured pruning, which doesn't come with computational speed-ups. 
 
 
-%\section*{Questions pour meeting}
-%begin{enumerate}
- %   \item Définition d'une course à l'espace, chapitre tel quel ?
- %   \item 3 scénarios dans partie 4, comparer leur probabilité dans la conclusion ou dans une sous conclusions de chapitre ? (aka conclusions doit elle redire %des choses déjà dites ou pas?)
- %   \item Sources en notes de bas de page, ou référant à la fin ?
-  %  \item Scénarios, combien? Trois scénarios assez précis, comparer leur probabilité dans la conclusion?
-%\end{enumerate}
-%coopération chine (uniquement si profite à la chine)
-%2049 objectifs centenaire
-%opacité
-%enjeux réels de la chine (affirmés publiquement ou supposés ?)
-%critique de nos sources (US vs Chine)%
+\subsection{Pruning networks}
+Structured vs unstructured pruning, suprisingly leads to better generalisation, pruning as a noise signal. Speed-up, memory foot-print. Need over-parametrised network for better exploration of hidden layer space (give examples), once the model converges / during training, remove useless components. Suprising results: prune components with highest magnitude, can lead to better test accuracy after re-training the pruned network. 
 
-% 
-% TODO add oa picture of a chinese rocket.
+\subsection{Alignment of weight vectors during training}
+Coming back to the second question: XOR-problem, sparse subspace spanned by trained vectors. Question arises: will optimization algorithms such as SGD enforce this aligment, therefore preventing overfitting? Interplay between vector aligment and "trainable" vectors. Goal is to explore and go beyond, understanding this mechanism will help us design better optimization algorithms, pruning methods, architectures, initialization methods, etc. Collapse at last layer?
 
-% notes yann: domaine privée, a toujours été important pour usa (rockwell -> boing), ils ont pas de retard?, ASAT metnionné 3 fois, course à l'espace mentionné trop de fois, inconsistance dates, course espace fin/départ, début station spatiale ?
-% - Partie historique dans Economie -> est-ce que on répète trop la partie historique?
+\section{Approach}
 
+\subsection{Formal background}
+
+Formally define frame potential, generalization error, network architecture, optimization algorithms. 
+
+\subsection{Visualisation}
+What we expect to observe, how the visualisation works, which parameters can be set.
+
+\section{Experiments}
+
+\section{Discussion}
+
+
+\nocite{*}
+\printbibliography
 
 \end{document}
