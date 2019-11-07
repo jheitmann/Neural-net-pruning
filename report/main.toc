@@ -1,21 +1,21 @@
 \boolfalse {citerequest}\boolfalse {citetracker}\boolfalse {pagetracker}\boolfalse {backtracker}\relax 
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {1}Introduction}{2}
+\contentsline {section}{\numberline {1}Introduction}{2}{section.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {2}Related work}{3}
+\contentsline {section}{\numberline {2}Related work}{3}{section.2}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.1}The lottery ticket hypothesis}{4}
+\contentsline {subsection}{\numberline {2.1}Pruning networks}{4}{subsection.2.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.2}Pruning networks}{4}
+\contentsline {subsection}{\numberline {2.2}The lottery ticket hypothesis}{4}{subsection.2.2}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.3}Alignment of weight vectors during training}{4}
+\contentsline {subsection}{\numberline {2.3}Alignment of weight vectors during training}{6}{subsection.2.3}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {3}Approach}{4}
+\contentsline {section}{\numberline {3}Approach}{6}{section.3}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.1}Formal background}{4}
+\contentsline {subsection}{\numberline {3.1}Formal background}{6}{subsection.3.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.2}Visualisation}{4}
+\contentsline {subsection}{\numberline {3.2}Visualisation}{6}{subsection.3.2}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {4}Experiments}{5}
+\contentsline {section}{\numberline {4}Experiments}{6}{section.4}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {5}Discussion}{5}
+\contentsline {section}{\numberline {5}Discussion}{6}{section.5}
