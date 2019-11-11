@@ -10,12 +10,12 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {subsection}{\numberline {2.3}Alignment of weight vectors during training}{6}{subsection.2.3}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {3}Approach}{6}{section.3}
+\contentsline {section}{\numberline {3}Approach}{7}{section.3}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.1}Formal background}{6}{subsection.3.1}
+\contentsline {subsection}{\numberline {3.1}Formal background}{7}{subsection.3.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.2}Visualisation}{6}{subsection.3.2}
+\contentsline {subsection}{\numberline {3.2}Visualisation}{7}{subsection.3.2}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {4}Experiments}{6}{section.4}
+\contentsline {section}{\numberline {4}Experiments}{7}{section.4}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {5}Discussion}{6}{section.5}
+\contentsline {section}{\numberline {5}Discussion}{7}{section.5}
