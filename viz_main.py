@@ -62,7 +62,7 @@ def result():
             graph, epochs = s.training_graph(layer, cut_off)
         graph_data = json.dumps(graph, indent=4)
         data = {"graph_data": graph_data, "epochs": epochs}
-        return render_template("graph.html", data=data)
+        return render_template("merged.html", data=data)  # debug
 
 
 def start(**kwargs):
