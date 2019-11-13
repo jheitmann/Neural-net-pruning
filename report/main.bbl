@@ -1,0 +1,447 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 2.9 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nyt/global//global/global}
+    \entry{brutzkus2019larger}{inproceedings}{}
+      \name{author}{2}{}{%
+        {{uniquename=0,uniquepart=base,hash=b73d179cb38c337fca11643785220aac}{%
+           family={Brutzkus},
+           familyi={B\bibinitperiod},
+           given={Alon},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=e8b604d0a7af5ee88043f8e31a4c6871}{%
+           family={Globerson},
+           familyi={G\bibinitperiod},
+           given={Amir},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{7c947ffc04535a24035beab5a32bf9d9}
+      \strng{fullhash}{7c947ffc04535a24035beab5a32bf9d9}
+      \strng{bibnamehash}{7c947ffc04535a24035beab5a32bf9d9}
+      \strng{authorbibnamehash}{7c947ffc04535a24035beab5a32bf9d9}
+      \strng{authornamehash}{7c947ffc04535a24035beab5a32bf9d9}
+      \strng{authorfullhash}{7c947ffc04535a24035beab5a32bf9d9}
+      \field{sortinit}{B}
+      \field{sortinithash}{276475738cc058478c1677046f857703}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{International Conference on Machine Learning}
+      \field{title}{Why do Larger Models Generalize Better? A Theoretical Perspective via the XOR Problem}
+      \field{year}{2019}
+      \field{pages}{822\bibrangedash 830}
+      \range{pages}{9}
+    \endentry
+    \entry{frankle2018lottery}{article}{}
+      \name{author}{2}{}{%
+        {{uniquename=0,uniquepart=base,hash=8f891d6f89678d7c987fed1e7090426b}{%
+           family={Frankle},
+           familyi={F\bibinitperiod},
+           given={Jonathan},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=7cc7d0487fdba682edd06e917656b031}{%
+           family={Carbin},
+           familyi={C\bibinitperiod},
+           given={Michael},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{3258326f745480cc40d5d784a5209d9b}
+      \strng{fullhash}{3258326f745480cc40d5d784a5209d9b}
+      \strng{bibnamehash}{3258326f745480cc40d5d784a5209d9b}
+      \strng{authorbibnamehash}{3258326f745480cc40d5d784a5209d9b}
+      \strng{authornamehash}{3258326f745480cc40d5d784a5209d9b}
+      \strng{authorfullhash}{3258326f745480cc40d5d784a5209d9b}
+      \field{sortinit}{F}
+      \field{sortinithash}{669c706c6f1fbf3b5a83d26f1d9e9e72}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{arXiv preprint arXiv:1803.03635}
+      \field{title}{The lottery ticket hypothesis: Finding sparse, trainable neural networks}
+      \field{year}{2018}
+    \endentry
+    \entry{frankle2019lottery}{article}{}
+      \name{author}{4}{uniquelist=2}{%
+        {{uniquename=0,uniquepart=base,hash=8f891d6f89678d7c987fed1e7090426b}{%
+           family={Frankle},
+           familyi={F\bibinitperiod},
+           given={Jonathan},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=eec82e8b4f157c070a21b9282c4014dd}{%
+           family={Dziugaite},
+           familyi={D\bibinitperiod},
+           given={Gintare\bibnamedelima Karolina},
+           giveni={G\bibinitperiod\bibinitdelim K\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=8b24b666ad881d8943d30c12a3660fa6}{%
+           family={Roy},
+           familyi={R\bibinitperiod},
+           given={Daniel\bibnamedelima M},
+           giveni={D\bibinitperiod\bibinitdelim M\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=7cc7d0487fdba682edd06e917656b031}{%
+           family={Carbin},
+           familyi={C\bibinitperiod},
+           given={Michael},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{4ff4a0d9f1296e5d9afeb44a8ca4fbc6}
+      \strng{fullhash}{6c221aae4d0996c6608e11a957c68ea0}
+      \strng{bibnamehash}{4ff4a0d9f1296e5d9afeb44a8ca4fbc6}
+      \strng{authorbibnamehash}{4ff4a0d9f1296e5d9afeb44a8ca4fbc6}
+      \strng{authornamehash}{4ff4a0d9f1296e5d9afeb44a8ca4fbc6}
+      \strng{authorfullhash}{6c221aae4d0996c6608e11a957c68ea0}
+      \field{sortinit}{F}
+      \field{sortinithash}{669c706c6f1fbf3b5a83d26f1d9e9e72}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{arXiv preprint arXiv:1903.01611}
+      \field{title}{The Lottery Ticket Hypothesis at Scale}
+      \field{year}{2019}
+    \endentry
+    \entry{han2015learning}{inproceedings}{}
+      \name{author}{4}{}{%
+        {{uniquename=0,uniquepart=base,hash=873e4e07ff73d563d2651d20ffaf99e0}{%
+           family={Han},
+           familyi={H\bibinitperiod},
+           given={Song},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=f1e61530c8d771a37b8b13c165706035}{%
+           family={Pool},
+           familyi={P\bibinitperiod},
+           given={Jeff},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=d6d4c0e514b570e5795955f653db50db}{%
+           family={Tran},
+           familyi={T\bibinitperiod},
+           given={John},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=f352f442da245469318ee7648224df0f}{%
+           family={Dally},
+           familyi={D\bibinitperiod},
+           given={William},
+           giveni={W\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{679f17a3dd7dd4d334b350329c3674bb}
+      \strng{fullhash}{6b489f4d5c196aa730a2022685e378c0}
+      \strng{bibnamehash}{679f17a3dd7dd4d334b350329c3674bb}
+      \strng{authorbibnamehash}{679f17a3dd7dd4d334b350329c3674bb}
+      \strng{authornamehash}{679f17a3dd7dd4d334b350329c3674bb}
+      \strng{authorfullhash}{6b489f4d5c196aa730a2022685e378c0}
+      \field{sortinit}{H}
+      \field{sortinithash}{5f15a7bc777ad49ff15aa4d2831b1681}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Advances in neural information processing systems}
+      \field{title}{Learning both weights and connections for efficient neural network}
+      \field{year}{2015}
+      \field{pages}{1135\bibrangedash 1143}
+      \range{pages}{9}
+    \endentry
+    \entry{li2016pruning}{article}{}
+      \name{author}{5}{}{%
+        {{uniquename=0,uniquepart=base,hash=2620b9afd37cca5b9b7354f67c036d4d}{%
+           family={Li},
+           familyi={L\bibinitperiod},
+           given={Hao},
+           giveni={H\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=9072c83312a0266b2ddf4f1ff0207b02}{%
+           family={Kadav},
+           familyi={K\bibinitperiod},
+           given={Asim},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=6816c625a61dd36a4b713634013c200e}{%
+           family={Durdanovic},
+           familyi={D\bibinitperiod},
+           given={Igor},
+           giveni={I\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=78da52600a4b819c3df311320ebf2a24}{%
+           family={Samet},
+           familyi={S\bibinitperiod},
+           given={Hanan},
+           giveni={H\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=6cee5bb61d82e685c3ba8eda0a68c8ab}{%
+           family={Graf},
+           familyi={G\bibinitperiod},
+           given={Hans\bibnamedelima Peter},
+           giveni={H\bibinitperiod\bibinitdelim P\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{daaeb7670772db8a47b015a37e6672bc}
+      \strng{fullhash}{8420417d64f1235dac02562da9d863b5}
+      \strng{bibnamehash}{daaeb7670772db8a47b015a37e6672bc}
+      \strng{authorbibnamehash}{daaeb7670772db8a47b015a37e6672bc}
+      \strng{authornamehash}{daaeb7670772db8a47b015a37e6672bc}
+      \strng{authorfullhash}{8420417d64f1235dac02562da9d863b5}
+      \field{sortinit}{L}
+      \field{sortinithash}{2c7981aaabc885868aba60f0c09ee20f}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{arXiv preprint arXiv:1608.08710}
+      \field{title}{Pruning filters for efficient convnets}
+      \field{year}{2016}
+    \endentry
+    \entry{liu2018rethinking}{article}{}
+      \name{author}{5}{}{%
+        {{uniquename=0,uniquepart=base,hash=f7eda249dc15ce9f452344ec95bbcc67}{%
+           family={Liu},
+           familyi={L\bibinitperiod},
+           given={Zhuang},
+           giveni={Z\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=9279d295e99390a720420d4c23368f5c}{%
+           family={Sun},
+           familyi={S\bibinitperiod},
+           given={Mingjie},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=fbb5fac74ecd20c0f90a3884d6a93cdf}{%
+           family={Zhou},
+           familyi={Z\bibinitperiod},
+           given={Tinghui},
+           giveni={T\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=0d12f90a1d1945cb1b98f583c9dc9572}{%
+           family={Huang},
+           familyi={H\bibinitperiod},
+           given={Gao},
+           giveni={G\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=90180e1a30742e0d15328bfe637c2ef4}{%
+           family={Darrell},
+           familyi={D\bibinitperiod},
+           given={Trevor},
+           giveni={T\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{5ab1c4b39b70b003d37ce0d046ed1c0e}
+      \strng{fullhash}{aca8e1973302c00d615bac0a58b89831}
+      \strng{bibnamehash}{5ab1c4b39b70b003d37ce0d046ed1c0e}
+      \strng{authorbibnamehash}{5ab1c4b39b70b003d37ce0d046ed1c0e}
+      \strng{authornamehash}{5ab1c4b39b70b003d37ce0d046ed1c0e}
+      \strng{authorfullhash}{aca8e1973302c00d615bac0a58b89831}
+      \field{sortinit}{L}
+      \field{sortinithash}{2c7981aaabc885868aba60f0c09ee20f}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{arXiv preprint arXiv:1810.05270}
+      \field{title}{Rethinking the value of network pruning}
+      \field{year}{2018}
+    \endentry
+    \entry{morcos2019one}{article}{}
+      \name{author}{4}{}{%
+        {{uniquename=0,uniquepart=base,hash=4f81a3fa41b643b5c3f26ebe87dd0919}{%
+           family={Morcos},
+           familyi={M\bibinitperiod},
+           given={Ari\bibnamedelima S},
+           giveni={A\bibinitperiod\bibinitdelim S\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=a2758999045ba18a17161e93cd7525ae}{%
+           family={Yu},
+           familyi={Y\bibinitperiod},
+           given={Haonan},
+           giveni={H\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=48d8d9fa9696998b721eb896751345ce}{%
+           family={Paganini},
+           familyi={P\bibinitperiod},
+           given={Michela},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=074caf23cc82a3b80220324f240e9327}{%
+           family={Tian},
+           familyi={T\bibinitperiod},
+           given={Yuandong},
+           giveni={Y\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{807b3e8c9015d0fc2fe1aaf446c88098}
+      \strng{fullhash}{4ff85d7fdcc3b11f7f4758959137319a}
+      \strng{bibnamehash}{807b3e8c9015d0fc2fe1aaf446c88098}
+      \strng{authorbibnamehash}{807b3e8c9015d0fc2fe1aaf446c88098}
+      \strng{authornamehash}{807b3e8c9015d0fc2fe1aaf446c88098}
+      \strng{authorfullhash}{4ff85d7fdcc3b11f7f4758959137319a}
+      \field{sortinit}{M}
+      \field{sortinithash}{cfd219b90152c06204fab207bc6c7cab}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{arXiv preprint arXiv:1906.02773}
+      \field{title}{One ticket to win them all: generalizing lottery ticket initializations across datasets and optimizers}
+      \field{year}{2019}
+    \endentry
+    \entry{neyshabur2018towards}{article}{}
+      \name{author}{5}{}{%
+        {{uniquename=0,uniquepart=base,hash=e5f9e207dc41c0bc364d3e1d7be37cf1}{%
+           family={Neyshabur},
+           familyi={N\bibinitperiod},
+           given={Behnam},
+           giveni={B\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=35069ab0f2565b95f02723d645a36cbd}{%
+           family={Li},
+           familyi={L\bibinitperiod},
+           given={Zhiyuan},
+           giveni={Z\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=666205762228d3cb67197dabe1b1f6e6}{%
+           family={Bhojanapalli},
+           familyi={B\bibinitperiod},
+           given={Srinadh},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=6a1aa6b7eab12b931ca7c7e3f927231d}{%
+           family={LeCun},
+           familyi={L\bibinitperiod},
+           given={Yann},
+           giveni={Y\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=4a4fc057d8331655775a21a8994f3339}{%
+           family={Srebro},
+           familyi={S\bibinitperiod},
+           given={Nathan},
+           giveni={N\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{74b1355b2778d7ef09e52798d8dbe5c4}
+      \strng{fullhash}{d24f3e1ef1ec838724302b111729409a}
+      \strng{bibnamehash}{74b1355b2778d7ef09e52798d8dbe5c4}
+      \strng{authorbibnamehash}{74b1355b2778d7ef09e52798d8dbe5c4}
+      \strng{authornamehash}{74b1355b2778d7ef09e52798d8dbe5c4}
+      \strng{authorfullhash}{d24f3e1ef1ec838724302b111729409a}
+      \field{sortinit}{N}
+      \field{sortinithash}{f7242c3ed3dc50029fca1be76c497c7c}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{arXiv preprint arXiv:1805.12076}
+      \field{title}{Towards understanding the role of over-parametrization in generalization of neural networks}
+      \field{year}{2018}
+    \endentry
+    \entry{zagoruyko2016wide}{article}{}
+      \name{author}{2}{}{%
+        {{uniquename=0,uniquepart=base,hash=23bcbde34947ed4fd04cc55ff956c83e}{%
+           family={Zagoruyko},
+           familyi={Z\bibinitperiod},
+           given={Sergey},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=1b19df6325edc9e76749ac30a9d962c7}{%
+           family={Komodakis},
+           familyi={K\bibinitperiod},
+           given={Nikos},
+           giveni={N\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{d6318237b805b7959eba1465dd40cf0a}
+      \strng{fullhash}{d6318237b805b7959eba1465dd40cf0a}
+      \strng{bibnamehash}{d6318237b805b7959eba1465dd40cf0a}
+      \strng{authorbibnamehash}{d6318237b805b7959eba1465dd40cf0a}
+      \strng{authornamehash}{d6318237b805b7959eba1465dd40cf0a}
+      \strng{authorfullhash}{d6318237b805b7959eba1465dd40cf0a}
+      \field{sortinit}{Z}
+      \field{sortinithash}{156173bd08b075d7295bc3e0f4735a04}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{arXiv preprint arXiv:1605.07146}
+      \field{title}{Wide residual networks}
+      \field{year}{2016}
+    \endentry
+    \entry{zhang2016understanding}{article}{}
+      \name{author}{5}{}{%
+        {{uniquename=0,uniquepart=base,hash=02582b039d752b000c75f8d7d38a36f4}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={Chiyuan},
+           giveni={C\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=02404a92b0be3f52ec5ac08e41c13445}{%
+           family={Bengio},
+           familyi={B\bibinitperiod},
+           given={Samy},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=e771760b6d0d33f8b4dfd907d8d57ac2}{%
+           family={Hardt},
+           familyi={H\bibinitperiod},
+           given={Moritz},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=3503059e1c0c778913607c87d8c5173a}{%
+           family={Recht},
+           familyi={R\bibinitperiod},
+           given={Benjamin},
+           giveni={B\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=494b568c5dc85ba8f3f409635f9c5f25}{%
+           family={Vinyals},
+           familyi={V\bibinitperiod},
+           given={Oriol},
+           giveni={O\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{aefa5e3824e928a3f030ca71f5599336}
+      \strng{fullhash}{5f9fd616ce70a721a8ba93854c0c517e}
+      \strng{bibnamehash}{aefa5e3824e928a3f030ca71f5599336}
+      \strng{authorbibnamehash}{aefa5e3824e928a3f030ca71f5599336}
+      \strng{authornamehash}{aefa5e3824e928a3f030ca71f5599336}
+      \strng{authorfullhash}{5f9fd616ce70a721a8ba93854c0c517e}
+      \field{sortinit}{Z}
+      \field{sortinithash}{156173bd08b075d7295bc3e0f4735a04}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{arXiv preprint arXiv:1611.03530}
+      \field{title}{Understanding deep learning requires rethinking generalization}
+      \field{year}{2016}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+
