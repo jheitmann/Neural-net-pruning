@@ -16,7 +16,7 @@ def root():
         models = json.load(fp)
 
     if request.method == "GET":
-        return render_template("form.html", model_list=list(models.keys()))
+        return render_template("test.html", model_list=list(models.keys()))  # debug
     elif request.method == "POST":
         if request.form.get("btn") == "Select model":
             base_dir = request.form.get("model")
@@ -62,7 +62,7 @@ def result():
             graph, epochs = s.training_graph(layer, cut_off)
         graph_data = json.dumps(graph, indent=4)
         data = {"graph_data": graph_data, "epochs": epochs}
-        return render_template("merged.html", data=data)  # debug
+        return render_template("graph.html", data=data)  # debug
 
 
 def start(**kwargs):
