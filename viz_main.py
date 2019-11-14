@@ -38,10 +38,8 @@ def params():
         if request.form.get("btn") == "Training graph":
             layer = request.form.get("layer")
             var_base_dir = request.form.get("model_variant", "")
-            cut_off = request.form.get("cut_off")
 
-            return redirect(url_for('result', base_dir=base_dir, layer=layer,
-                                    var_base_dir=var_base_dir, cut_off=cut_off))
+            return redirect(url_for('result', base_dir=base_dir, layer=layer, var_base_dir=var_base_dir))
 
 
 @app.route("/result", methods=["GET"])
@@ -51,17 +49,16 @@ def result():
         base_dir = request.args.get("base_dir")
         layer = request.args.get("layer")
         var_base_dir = request.args.get("var_base_dir")
-        cut_off = float(request.args.get("cut_off"))
 
         # Returns the HTML file and renders the locally saved file
         if var_base_dir:
             s = Snapshots(var_base_dir)
-            graph, epochs = s.training_graph(layer, cut_off, merged=True)
+            graph, epochs = s.training_graph(layer, merged=True)
         else:
             s = Snapshots(base_dir)
-            graph, epochs = s.training_graph(layer, cut_off)
+            graph, epochs = s.training_graph(layer)
         graph_data = json.dumps(graph, indent=4)
-        data = {"graph_data": graph_data, "epochs": epochs}
+        data = {"graph_data": graph_data, "max_epoch": epochs-1}
         return render_template("merged.html", data=data)  # debug
 
 

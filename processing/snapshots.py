@@ -85,7 +85,7 @@ class Snapshots:  # add option to save all results
 
         return adjacency, kernel_width
 
-    def training_graph(self, layer, cut_off, merged=False):
+    def training_graph(self, layer, merged=False):
         result_path = helpers.prune_results_path if merged else helpers.train_results_path
         adjacency_path = result_path(self.base_dir, common.ADJACENCY_PREFIX, layer)
         norms_path = result_path(self.base_dir, common.NORM_PREFIX, layer)
@@ -94,7 +94,6 @@ class Snapshots:  # add option to save all results
         n_epochs = adjacency.shape[0]
         n_nodes = adjacency.shape[1]
         w = adjacency.copy()
-        w[w < cut_off] = 0.
 
         graph = {"nodes": [], "links": []}
         for node_id in range(n_nodes):

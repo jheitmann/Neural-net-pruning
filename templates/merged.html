@@ -61,7 +61,7 @@ svg {
     <label>
       epoch
       <output id="graph_EpochSliderOutput">0</output>
-      <input type="range" min="0" max="10" value="0" step="1" oninput="d3.select('#graph_EpochSliderOutput').text(value); forceProperties.graph.epoch=value; updateAll();">
+      <input type="range" min="0" max="{{ data.max_epoch }}" value="0" step="1" oninput="d3.select('#graph_EpochSliderOutput').text(value); forceProperties.graph.epoch=value; updateAll();">
     </label>
   </div>
 
@@ -121,8 +121,8 @@ svg {
     <p><label><input type="checkbox" checked onchange="forceProperties.forceX.enabled = this.checked; updateAll();"> forceX</label> Acts like gravity. Pulls all points towards an X location.</p>
     <label>
       strength
-      <output id="forceX_StrengthSliderOutput">.1</output>
-      <input type="range" min="0" max="1" value=".1" step="0.01" oninput="d3.select('#forceX_StrengthSliderOutput').text(value); forceProperties.forceX.strength=value; updateAll();">
+      <output id="forceX_StrengthSliderOutput">.03</output>
+      <input type="range" min="0" max="1" value=".03" step="0.01" oninput="d3.select('#forceX_StrengthSliderOutput').text(value); forceProperties.forceX.strength=value; updateAll();">
     </label>
     <label title="The X location that the force will push the nodes to (NOTE: This demo multiplies by the svg width)">
       x
@@ -135,8 +135,8 @@ svg {
     <p><label><input type="checkbox" checked onchange="forceProperties.forceY.enabled = this.checked; updateAll();"> forceY</label> Acts like gravity. Pulls all points towards a Y location.</p>
     <label>
       strength
-      <output id="forceY_StrengthSliderOutput">.1</output>
-      <input type="range" min="0" max="1" value=".1" step="0.01" oninput="d3.select('#forceY_StrengthSliderOutput').text(value); forceProperties.forceY.strength=value; updateAll();">
+      <output id="forceY_StrengthSliderOutput">.03</output>
+      <input type="range" min="0" max="1" value=".03" step="0.01" oninput="d3.select('#forceY_StrengthSliderOutput').text(value); forceProperties.forceY.strength=value; updateAll();">
     </label>
     <label title="The Y location that the force will push the nodes to (NOTE: This demo multiplies by the svg height)">
       y
@@ -215,12 +215,12 @@ svg {
       },
       forceX: {
           enabled: true,
-          strength: .1,
+          strength: .03,
           x: .5
       },
       forceY: {
           enabled: true,
-          strength: .1,
+          strength: .03,
           y: .5
       },
       graph: {
@@ -301,7 +301,7 @@ svg {
   function updateGraph() {
     current_epoch = forceProperties.graph.epoch;
 
-    links_filtered = links.filter(function(d) {return d.epoch==current_epoch;});
+    links_filtered = links.filter(function(d) {return (d.value>forceProperties.graph.cutoff && d.epoch==current_epoch);});
     link = link.data(links_filtered);
     link.exit().remove();
     link = link.enter()
@@ -350,10 +350,11 @@ svg {
     updateDisplay();
   }
 
+  // .attr("r", forceProperties.collide.radius)
   // update the display based on the forces (but not positions)
   function updateDisplay() {
       node
-          .attr("r", forceProperties.collide.radius)
+          .attr("r", function(d) {return Math.max(minRadius, d.norm[current_epoch.toString()]/maxNorm * maxRadius);})
           .attr("stroke", forceProperties.charge.strength > 0 ? "blue" : "red")
           .attr("stroke-width", forceProperties.charge.enabled==false ? 0 : Math.abs(forceProperties.charge.strength)/15);
 

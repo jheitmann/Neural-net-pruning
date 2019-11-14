@@ -19,9 +19,6 @@
             <div class="autocomplete" style="width:300px;">
                 <input class="stylform"  type="text" name="model_variant" id="model_variant" placeholder="Model variant">
             </div>
-            <input type="range" min="0.4" max="0.8" value="0.4" name="cut_off" class="slider" 
-                id="cut_off" step="0.005" oninput="cut_off_output.value = 'Cut-off: ' + cut_off.value" required>
-            <output name="cut_off_output" id="cut_off_output">Cut-off: 0.4</output>
             <input class="stylform"  type="submit" name="btn" value="Training graph">
         </form>
         <i>Info: 'Model Variant' is not supported yet and should be left empty</i>
