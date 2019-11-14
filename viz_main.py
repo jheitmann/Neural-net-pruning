@@ -58,7 +58,8 @@ def result():
             s = Snapshots(base_dir)
             graph, epochs = s.training_graph(layer)
         graph_data = json.dumps(graph, indent=4)
-        data = {"graph_data": graph_data, "max_epoch": epochs-1}
+        n_nodes = s.get_weights(layer).shape[1]
+        data = {"graph_data": graph_data, "max_epoch": epochs-1, "n_nodes": n_nodes}
         return render_template("merged.html", data=data)  # debug
 
 
