@@ -94,7 +94,7 @@ class Snapshots:  # add option to save all results
         n_epochs = adjacency.shape[0]
         n_nodes = adjacency.shape[1]
         w = adjacency.copy()
-        w[w < 0.6] = 0.  # For visualisation
+        #w[w < 0.6] = 0.  # For visualisation
 
         graph = {"nodes": [], "links": []}
         for node_id in range(n_nodes):
