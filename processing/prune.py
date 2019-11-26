@@ -79,7 +79,7 @@ def random_pruning(model, layer, pruning_iters):
 
 
 def prune_layer(model, layer, pruning, pruning_ratio):
-    n_elem = getattr(model, layer).weight.shape[0]
+    n_elem = len(getattr(model, layer).unpruned_parameters())
     pruning_iters = int(pruning_ratio * n_elem)
     for pruning_iter, pruning_idx in enumerate(pruning(model, layer, pruning_iters)):
         model.prune_element(layer, pruning_idx)
@@ -169,3 +169,43 @@ def pruning_schedule(experiment, trainloader, testloader, epochs, test_interval,
                           pruning_ratio, accuracies, frame_potentials)
 
     return accuracies, frame_potentials
+
+
+def iterative_pruning(experiment, trainloader, testloader, epochs, test_interval,
+                      pruning, pruning_args, *, save_results=False):
+    pruning_start = pruning_args["start"]  # dict with layer keys
+    pruning_end = pruning_args["end"]  # dict with layer keys
+    inter_pruning_iters = pruning_args["inter_pruning"]  # dict with layer keys
+    pruning_ratio = pruning_args["ratio"]
+
+    iterative_ratio = {}
+    for layer, start in pruning_start.items():
+        end = pruning_end[layer]
+        r = inter_pruning_iters[layer]
+        ratio = pruning_ratio[layer]
+        k = 1 + (end - start) // r
+        iterative_ratio[layer] = 1 - (1-ratio)**(1 / k)
+
+    accuracies = []
+    max_t = 1 + epochs * (len(trainloader) // test_interval)  # probably ceil
+    time = 0
+
+    for epoch in range(epochs):
+        for batch_idx, (data, target) in enumerate(trainloader):
+            if batch_idx % test_interval == 0:  # (test_interval - 1)
+                for layer, start in pruning_start.items():
+                    end = pruning_end[layer]
+                    r = inter_pruning_iters[layer]
+                    if start <= time <= end and (time-start) % r == 0:
+                        print("Pruning layer", layer)
+                        ratio = iterative_ratio[layer]
+                        prune_layer(experiment.model, layer, pruning, ratio)
+                # Test
+                print("Evaluating model accuracy [{:3d}/{:3d}]".format(time, max_t))
+                accuracy, _ = experiment.test(testloader, [])
+                accuracies.append(accuracy)
+                time += 1
+            # Train
+            experiment.batch_train(data, target)
+
+    return accuracies
