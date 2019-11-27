@@ -1,5 +1,6 @@
 import numpy as np
 from copy import deepcopy
+from math import ceil
 
 import common
 import helpers
@@ -79,7 +80,7 @@ def random_pruning(model, layer, pruning_iters):
 
 
 def prune_layer(model, layer, pruning, pruning_ratio):
-    n_elem = len(getattr(model, layer).unpruned_parameters())
+    n_elem = getattr(model, layer).get_weights.shape[0]
     pruning_iters = int(pruning_ratio * n_elem)
     for pruning_iter, pruning_idx in enumerate(pruning(model, layer, pruning_iters)):
         model.prune_element(layer, pruning_idx)
@@ -184,10 +185,10 @@ def iterative_pruning(experiment, trainloader, testloader, epochs, test_interval
         r = inter_pruning_iters[layer]
         ratio = pruning_ratio[layer]
         k = 1 + (end - start) // r
-        iterative_ratio[layer] = 1 - (1-ratio)**(1 / k)
+        iterative_ratio[layer] = ratio / k
 
     accuracies = []
-    max_t = 1 + epochs * (len(trainloader) // test_interval)  # probably ceil
+    max_t = epochs * ceil(len(trainloader) / test_interval)
     time = 0
 
     for epoch in range(epochs):

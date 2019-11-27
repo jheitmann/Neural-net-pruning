@@ -171,17 +171,25 @@ svg {
   // svg objects
   var link, node;
   // graph static
-  var links, maxConnect, maxNorm, nodes;
+  var links, nodes;
+  var maxConnect = {{ data.max_connect }},
+      maxNorm = {{ data.max_norm }};
   // graph dynamic
   var current_epoch, links_filtered;
   // user-defined parameters
-  var maxDistance = 60, //max distance between two nodes
-      minDistance = 10, //min distance betwween two nodes
-      maxRadius = 12, //max radius of circle
+  var maxRadius = 12, //max radius of circle
       minRadius = 2; //min radius of circle
 
   // the data - an object with nodes and links
-  var graph = {{ data.graph_data | safe }};
+  var graph;
+
+  d3.json("/get-graph", function(error, _graph) {
+    if (error) throw error;
+    graph = _graph;
+    initializeGraph();
+    initializeDisplay();
+    initializeSimulation();
+  });
 
   //////////// FORCE SIMULATION //////////// 
 
@@ -284,11 +292,6 @@ svg {
     nodes = graph.nodes;
     links = graph.links;
 
-    var [_maxConnect, _maxNorm] = getNetworkProp(graph);
-
-    maxConnect = _maxConnect;
-    maxNorm = _maxNorm;
-
     // set the properties of link lines
     link = svg.append("g")
               .attr("class", "links")
@@ -307,24 +310,6 @@ svg {
     link = link.enter()
         .append("line")
         .merge(link);
-  }
-
-  // this function calculates properties of network
-  // (i.e., max connection between nodes, max norm value of node)
-  function getNetworkProp(graph) {
-    //1) max connection between nodes
-    var maxConnect = Math.max.apply(Math,graph.links.map(function(d) {return d.value;}));
-
-    //2) max norm value (used to draw nodes radii)
-    var maxNorm = 0;
-    var arr, obj, maxf;
-    for (i=0;i<graph.nodes.length;i++){
-      obj = graph.nodes[i].norm;
-      arr = Object.keys( obj ).map(function (key) { return obj[key]; });
-      maxf = Math.max.apply( null, arr );
-      maxNorm = Math.max(maxNorm,maxf);
-    }
-    return [maxConnect, maxNorm];
   }
 
   //////////// DISPLAY ////////////
@@ -411,10 +396,6 @@ svg {
       updateDisplay();
       updateForces();
   }
-
-  initializeGraph();
-  initializeDisplay();
-  initializeSimulation();
   
 </script>
 </body>

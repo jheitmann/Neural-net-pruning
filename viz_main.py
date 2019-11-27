@@ -1,5 +1,5 @@
 import json
-from flask import Flask, request, redirect, url_for, render_template, send_file
+from flask import Flask, jsonify, request, redirect, render_template, url_for
 
 import common
 
@@ -7,6 +7,8 @@ from processing.snapshots import Snapshots
 
 
 app = Flask(__name__)
+
+graph_data = None
 
 
 @app.route('/', methods=["GET", "POST"])
@@ -57,10 +59,25 @@ def result():
         else:
             s = Snapshots(base_dir)
             graph, epochs = s.training_graph(layer)
-        graph_data = json.dumps(graph, indent=4)
+
+        global graph_data
+        graph_data = graph
+
         n_nodes = s.get_weights(layer).shape[1]
-        data = {"graph_data": graph_data, "max_epoch": epochs-1, "n_nodes": n_nodes}
-        return render_template("merged.html", data=data)  # debug
+
+        max_connect = max(map(lambda l: l["value"], graph["links"]))
+        all_norms = []
+        for node in graph["nodes"]:
+            all_norms += node["norm"].values()
+        max_norm = max(all_norms)
+
+        data = {"max_epoch": epochs - 1, "n_nodes": n_nodes, "max_connect": max_connect, "max_norm": max_norm}
+        return render_template("merged.html", data=data)
+
+
+@app.route("/get-graph", methods=["GET"])
+def get_graph():
+    return jsonify(graph_data)
 
 
 def start(**kwargs):
