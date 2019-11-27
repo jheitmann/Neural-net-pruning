@@ -55,10 +55,12 @@ def result():
         # Returns the HTML file and renders the locally saved file
         if var_base_dir:
             s = Snapshots(var_base_dir)
-            graph, epochs = s.training_graph(layer, merged=True)
+            adjacency, kernel_width = s.create_adjacency(layer, merged=True)
+            graph, epochs = s.training_graph(layer, adjacency, merged=True)
         else:
             s = Snapshots(base_dir)
-            graph, epochs = s.training_graph(layer)
+            adjacency, kernel_width = s.create_adjacency(layer)
+            graph, epochs = s.training_graph(layer, adjacency)
 
         global graph_data
         graph_data = graph
@@ -71,7 +73,8 @@ def result():
             all_norms += node["norm"].values()
         max_norm = max(all_norms)
 
-        data = {"max_epoch": epochs - 1, "n_nodes": n_nodes, "max_connect": max_connect, "max_norm": max_norm}
+        data = {"max_epoch": epochs - 1, "n_nodes": n_nodes, "max_connect": max_connect,
+                "max_norm": max_norm, "kernel_width": kernel_width}
         return render_template("merged.html", data=data)
 
 

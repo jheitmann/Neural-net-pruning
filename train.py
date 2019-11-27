@@ -12,15 +12,14 @@ def save_results(output_dir, layers):
     fp_paths = {}
     ip_paths = {}
     norms_paths = {}
-    graph_specs = {}
     for layer in layers:
         fp_path, ip_path, norms_path = s.save_computed_metrics(layer)
         fp_paths[layer] = fp_path
         ip_paths[layer] = ip_path
         norms_paths[layer] = norms_path
-        graph_specs[layer] = s.create_adjacency(layer)
+        #graph_specs[layer] = s.create_adjacency(layer)
 
-    return fp_paths, ip_paths, norms_paths, graph_specs
+    return fp_paths, ip_paths, norms_paths
 
 
 def fit(train_batch_size, test_batch_size, epochs, model_class, criterion_class,
@@ -37,7 +36,7 @@ def fit(train_batch_size, test_batch_size, epochs, model_class, criterion_class,
 
     e = Experiment(model, criterion, optimizer, optim_kwargs)
     test_accuracies, base_dir = e.fit(trainloader, testloader, epochs, save_results=True)
-    fp_paths, ip_paths, norms_paths, graph_specs = save_results(base_dir, layers)
+    fp_paths, ip_paths, norms_paths = save_results(base_dir, layers)
 
 
 if __name__=="__main__":

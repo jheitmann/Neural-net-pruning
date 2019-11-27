@@ -85,15 +85,12 @@ class Snapshots:  # add option to save all results
 
         return adjacency, kernel_width
 
-    def training_graph(self, layer, merged=False):
+    def training_graph(self, layer, adjacency, merged=False):
         result_path = helpers.prune_results_path if merged else helpers.train_results_path
-        adjacency_path = result_path(self.base_dir, common.ADJACENCY_PREFIX, layer)
         norms_path = result_path(self.base_dir, common.NORM_PREFIX, layer)
-        adjacency = np.load(adjacency_path)
         weight_norms = np.load(norms_path)
         n_epochs = adjacency.shape[0]
         n_nodes = adjacency.shape[1]
-        w = adjacency.copy()
 
         graph = {"nodes": [], "links": []}
         for node_id in range(n_nodes):
@@ -105,7 +102,7 @@ class Snapshots:  # add option to save all results
         for epoch in range(n_epochs):
             for i in range(n_nodes):
                 for j in range(i + 1, n_nodes):
-                    edge_weight = w[epoch, i, j]
+                    edge_weight = adjacency[epoch, i, j]
                     if edge_weight:
                         edge_entry = {"source": str(i), "target": str(j), "value": float("{:.3f}".format(edge_weight)),
                                       "epoch": epoch}

@@ -54,14 +54,18 @@ svg {
   <div class="force">
     <p><label>graph</label> Training graph</p>
     <label>
-      cutoff
-      <output id="graph_CutoffSliderOutput">.5</output>
-      <input type="range" min="0" max="1" value=".5" step="0.005" oninput="d3.select('#graph_CutoffSliderOutput').text(value); forceProperties.graph.cutoff=value; updateAll();">
-    </label>
-    <label>
       epoch
       <output id="graph_EpochSliderOutput">0</output>
       <input type="range" min="0" max="{{ data.max_epoch }}" value="0" step="1" oninput="d3.select('#graph_EpochSliderOutput').text(value); forceProperties.graph.epoch=value; updateAll();">
+    </label>
+    <label>
+      cutoff
+      <output id="graph_CutoffSliderOutput">.5</output>
+      <input type="range" min="0" max="1" value=".5" step="0.005" oninput="d3.select('#graph_CutoffSliderOutput').text(value); d3.select('#graph_CutoffToInnerProduct').text(getInnerProduct(value)); forceProperties.graph.cutoff=value; updateAll();">
+    </label>
+    <label>
+      Inner Product
+      <output id="graph_CutoffToInnerProduct"></output>
     </label>
   </div>
 
@@ -173,7 +177,8 @@ svg {
   // graph static
   var links, nodes;
   var maxConnect = {{ data.max_connect }},
-      maxNorm = {{ data.max_norm }};
+      maxNorm = {{ data.max_norm }}, 
+      kernelWidth = {{ data.kernel_width }};
   // graph dynamic
   var current_epoch, links_filtered;
   // user-defined parameters
@@ -360,6 +365,11 @@ svg {
           .attr("cx", function(d) { return d.x; })
           .attr("cy", function(d) { return d.y; });
       d3.select('#alpha_value').style('flex-basis', (simulation.alpha()*100) + '%');
+  }
+
+  // update the value of the inner-product corresponding to the current cut-off
+  function getInnerProduct(cutOff) {
+    return 1 - 2 * kernelWidth * Math.sqrt(Math.log(1 / cutOff))
   }
 
 
