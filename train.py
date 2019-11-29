@@ -17,7 +17,6 @@ def save_results(output_dir, layers):
         fp_paths[layer] = fp_path
         ip_paths[layer] = ip_path
         norms_paths[layer] = norms_path
-        #graph_specs[layer] = s.create_adjacency(layer)
 
     return fp_paths, ip_paths, norms_paths
 

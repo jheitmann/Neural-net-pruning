@@ -56,11 +56,11 @@ def result():
         if var_base_dir:
             s = Snapshots(var_base_dir)
             adjacency, kernel_width = s.create_adjacency(layer, merged=True)
-            graph, epochs = s.training_graph(layer, adjacency, merged=True)
+            graph, epochs = s.training_graph(layer, adjacency, kernel_width, merged=True)
         else:
             s = Snapshots(base_dir)
             adjacency, kernel_width = s.create_adjacency(layer)
-            graph, epochs = s.training_graph(layer, adjacency)
+            graph, epochs = s.training_graph(layer, adjacency, kernel_width)
 
         global graph_data
         graph_data = graph

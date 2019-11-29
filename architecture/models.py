@@ -24,18 +24,18 @@ class LeNet_300_100(PruningModule):
 class Conv2(PruningModule):
     def __init__(self, bias=True):
         super(Conv2, self).__init__(bias)
-        self.conv1 = MaskedConv2d(3, 64, 3, bias=bias)
-        self.conv2 = MaskedConv2d(64, 64, 3, bias=bias)
+        self.conv1 = MaskedConv2d(3, 64, 3, padding=1, bias=bias)  # modified
+        self.conv2 = MaskedConv2d(64, 64, 3, padding=1, bias=bias)  # modified
         self.pool = nn.MaxPool2d(2, 2)
 
-        self.fc1 = MaskedLinear(64 * 14 * 14, 256, bias=bias)
+        self.fc1 = MaskedLinear(64 * 16 * 16, 256, bias=bias)  # modified
         self.fc2 = MaskedLinear(256, 256, bias=bias)
         self.fc3 = MaskedLinear(256, 10, bias=bias)
 
     def forward(self, x):
         x = F.relu(self.conv1(x))
         x = self.pool(F.relu(self.conv2(x)))
-        x = x.view(-1, 64 * 14 * 14)
+        x = x.view(-1, 64 * 16 * 16)  # modified
         x = F.relu(self.fc1(x))
         x = F.relu(self.fc2(x))
         x = self.fc3(x)
@@ -45,13 +45,13 @@ class Conv2(PruningModule):
 class Conv4(PruningModule):
     def __init__(self, bias=True):
         super(Conv4, self).__init__(bias)
-        self.conv1 = MaskedConv2d(3, 64, 3, bias=bias)
-        self.conv2 = MaskedConv2d(64, 64, 3, bias=bias)
-        self.conv3 = MaskedConv2d(64, 128, 3, bias=bias)
-        self.conv4 = MaskedConv2d(128, 128, 3, bias=bias)
+        self.conv1 = MaskedConv2d(3, 64, 3, padding=1, bias=bias)  # modified
+        self.conv2 = MaskedConv2d(64, 64, 3, padding=1, bias=bias)  # modified
+        self.conv3 = MaskedConv2d(64, 128, 3, padding=1, bias=bias)  # modified
+        self.conv4 = MaskedConv2d(128, 128, 3, padding=1, bias=bias)  # modified
         self.pool = nn.MaxPool2d(2, 2)
 
-        self.fc1 = MaskedLinear(128 * 5 * 5, 256, bias=bias)
+        self.fc1 = MaskedLinear(128 * 8 * 8, 256, bias=bias)
         self.fc2 = MaskedLinear(256, 256, bias=bias)
         self.fc3 = MaskedLinear(256, 10, bias=bias)
 
@@ -60,7 +60,7 @@ class Conv4(PruningModule):
         x = self.pool(F.relu(self.conv2(x)))
         x = F.relu(self.conv3(x))
         x = self.pool(F.relu(self.conv4(x)))
-        x = x.view(-1, 128 * 5 * 5)
+        x = x.view(-1, 128 * 8 * 8)
         x = F.relu(self.fc1(x))
         x = F.relu(self.fc2(x))
         x = self.fc3(x)
@@ -125,3 +125,62 @@ class AlexNet(PruningModule):
         x = self.fc3(x)
 
         return x
+
+
+class VGG11(PruningModule):
+
+    def __init__(self, bias=True, init_weights=True):
+        super(VGG11, self).__init__(bias)
+
+        self.conv1 = MaskedConv2d(3, 64, kernel_size=3, padding=1, bias=bias)
+        self.conv2 = MaskedConv2d(64, 128, kernel_size=3, padding=1, bias=bias)
+        self.conv3 = MaskedConv2d(128, 256, kernel_size=3, padding=1, bias=bias)
+        self.conv4 = MaskedConv2d(256, 256, kernel_size=3, padding=1, bias=bias)
+        self.conv5 = MaskedConv2d(256, 512, kernel_size=3, padding=1, bias=bias)
+        self.conv6 = MaskedConv2d(512, 512, kernel_size=3, padding=1, bias=bias)
+        self.conv7 = MaskedConv2d(512, 512, kernel_size=3, padding=1, bias=bias)
+        self.conv8 = MaskedConv2d(512, 512, kernel_size=3, padding=1, bias=bias)
+
+        self.pool = nn.MaxPool2d(kernel_size=2, stride=2)
+
+        self.avgpool = nn.AdaptiveAvgPool2d((7, 7))
+
+        self.fc1 = MaskedLinear(512 * 7 * 7, 4096, bias=bias)
+        self.fc2 = MaskedLinear(4096, 4096, bias=bias)
+        self.fc3 = MaskedLinear(4096, 10, bias=bias)
+        self.drop = nn.Dropout()
+
+        if init_weights:
+            self._initialize_weights()
+
+    def forward(self, x):
+        x = self.pool(F.relu(self.conv1(x)))
+        x = self.pool(F.relu(self.conv2(x)))
+        x = F.relu(self.conv3(x))
+        x = self.pool(F.relu(self.conv4(x)))
+        x = F.relu(self.conv5(x))
+        x = self.pool(F.relu(self.conv6(x)))
+        x = F.relu(self.conv7(x))
+        x = self.pool(F.relu(self.conv8(x)))
+
+        x = self.avgpool(x)
+
+        x = torch.flatten(x, 1)
+        x = self.drop(F.relu(self.fc1(x)))
+        x = self.drop(F.relu(self.fc2(x)))
+        x = self.fc3(x)
+
+        return x
+
+    def _initialize_weights(self):
+        for m in self.modules():
+            if isinstance(m, MaskedConv2d):
+                nn.init.kaiming_normal_(m.weight, mode='fan_out', nonlinearity='relu')
+                if m.bias is not None:
+                    nn.init.constant_(m.bias, 0)
+            elif isinstance(m, nn.BatchNorm2d):
+                nn.init.constant_(m.weight, 1)
+                nn.init.constant_(m.bias, 0)
+            elif isinstance(m, MaskedLinear):
+                nn.init.normal_(m.weight, 0, 0.01)
+                nn.init.constant_(m.bias, 0)

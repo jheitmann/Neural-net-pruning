@@ -75,13 +75,14 @@ class Experiment:
         test_loss /= len(testloader)
         test_accuracy = 100. * correct / len(testloader.dataset)
 
-        layer_fp = self.model.compute_fp(monitored)
+        layer_fp = {}  # self.model.compute_fp(monitored)
 
         print("\nTest set: Average loss: {:.4f}, Accuracy: {:6d}/{:6d} ({:.0f}%)\n".format(
             test_loss, correct, len(testloader.dataset), test_accuracy))
 
         return test_accuracy, layer_fp
 
+    # Might add learning-rate schedule
     def fit(self, trainloader, testloader, epochs, *, monitored=[], save_results=False, log_interval=100):
         initial_acc, initial_fps = self.test(testloader, monitored)
         test_accuracies = [initial_acc]
