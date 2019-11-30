@@ -7,6 +7,7 @@ import architecture.models as models
 import common
 import helpers
 from architecture.pruning_module import inner_products
+from experiment import Experiment
 
 
 class Snapshots:  # add option to save all results
@@ -152,11 +153,17 @@ class Snapshots:  # add option to save all results
         ips = w_mod.matmul(w.t())
         return ips
 
-    def sub_network(self, layer, pruned_indices):  # set initial mask only -> take into account when plotting
-        snapshot_path = os.path.join(self.base_dir, common.SNAPSHOTS_DIR, '0')
+    def sub_network(self, epoch, layer, pruned_indices):  # set initial mask only -> take into account when plotting
         model = self.model_class(bias=self.bias)
-        model_state = torch.load(snapshot_path, map_location=self.device)
+        model_state = self.models[epoch].state_dict()
         model.load_state_dict(model_state)
+        model.to(self.device)
         for idx in pruned_indices:
             model.prune_element(layer, idx)
         return model
+
+    def evaluate_model(self, testloader, criterion, epoch):
+        model = self.models[epoch]
+        e = Experiment(model, criterion, None, {})
+        test_accuracy, _ = e.test(testloader, [])
+        return test_accuracy
