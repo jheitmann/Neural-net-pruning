@@ -101,3 +101,8 @@ class PruningModule(nn.Module):
             mask = param.get_mask()
             mask[pruning_idx] = torch.zeros(cols)
             param.set_mask(mask)
+
+    def set_weights(self, layer, weights):
+        with torch.no_grad():
+            param = getattr(self, layer)
+            param.set_weights(weights)

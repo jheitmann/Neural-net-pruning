@@ -30,8 +30,11 @@ class Experiment:
         new_model_state = self.model.state_dict()
         new_model.load_state_dict(new_model_state)
 
-        optimizer_class = self.optimizer.__class__
-        new_optimizer = optimizer_class(new_model.parameters(), **self.optim_kwargs)
+        if self.optimizer:
+            optimizer_class = self.optimizer.__class__
+            new_optimizer = optimizer_class(new_model.parameters(), **self.optim_kwargs)
+        else:
+            new_optimizer = None
 
         return Experiment(new_model, self.criterion, new_optimizer,
                           model_state=new_model_state, optim_kwargs=self.optim_kwargs)

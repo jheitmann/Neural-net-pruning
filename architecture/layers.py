@@ -22,6 +22,9 @@ class MaskedLinear(nn.Linear):
         w = w * self.mask
         return w
 
+    def set_weights(self, weights):
+        self.weight = nn.Parameter(self.weight.new_tensor(weights))
+
     def get_biases(self):
         b = self.bias.clone().detach()
         return b
@@ -53,6 +56,9 @@ class MaskedConv2d(nn.Conv2d):
         w = self.weight.detach()
         w = w * self.mask
         return w.view(w.shape[0], -1)
+
+    def set_weights(self, weights):
+        self.weight = nn.Parameter(self.weight.new_tensor(weights).view(self.weight.shape))
 
     def get_biases(self):
         b = self.bias.clone().detach()
