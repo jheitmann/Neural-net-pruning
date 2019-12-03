@@ -67,12 +67,15 @@ def plot_test_acc(base_dir):
 
 def plot_train_fps(fp_paths, layers):
     n_plots = len(layers)
-    fig, axes = plt.subplots(1, n_plots, sharex=True, figsize=(20, 5))
+    fig, axs = plt.subplots(n_plots, 1, figsize=(8, 20), sharex=True)
     for i, layer in enumerate(layers):
         layer_fp = np.load(fp_paths[layer])
-        axes[i].plot(layer_fp)
-        axes[i].set_title(f"Frame potential of {layer}")
-        axes[i].set(xlabel="epoch", ylabel="FP")
+        axs[i].plot(layer_fp)
+        axs[i].set_title(f"Frame potential of {layer}")
+
+    fig.suptitle("Frame potential (FP) during training", fontsize=16)
+    fig.text(0.5, 0.04, 'Epoch', ha='center')
+    fig.text(0.04, 0.5, 'FP', va='center', rotation='vertical')
 
 
 def draw_acc_plot(layer, exp_acc_fname, pruning_acc_fname, *, figsize=(25, 12), fig_name=""):
