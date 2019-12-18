@@ -111,8 +111,8 @@ svg {
     </label>
     <label title="Size of nodes">
       radius
-      <output id="collide_radiusSliderOutput">5</output>
-      <input type="range" min="0" max="100" value="5" step="1" oninput="d3.select('#collide_radiusSliderOutput').text(value); forceProperties.collide.radius=value; updateAll();">
+      <output id="collide_radiusSliderOutput">12</output>
+      <input type="range" min="0" max="100" value="12" step="1" oninput="d3.select('#collide_radiusSliderOutput').text(value); forceProperties.collide.radius=value; updateAll();">
     </label>
     <label title="Higher values increase rigidity of the nodes (WARNING: high values are computationally expensive)">
       iterations
@@ -224,7 +224,7 @@ svg {
           enabled: true,
           strength: .7,
           iterations: 1,
-          radius: 5
+          radius: 12
       },
       forceX: {
           enabled: true,
@@ -340,11 +340,12 @@ svg {
     updateDisplay();
   }
 
+  // return Math.max(minRadius, d.norm[current_epoch.toString()]/maxNorm * maxRadius)
   // .attr("r", forceProperties.collide.radius)
   // update the display based on the forces (but not positions)
   function updateDisplay() {
       node
-          .attr("r", function(d) {return Math.max(minRadius, d.norm[current_epoch.toString()]/maxNorm * maxRadius);})
+          .attr("r", function(d) {return d.norm[current_epoch.toString()]/maxNorm * forceProperties.collide.radius;})
           .attr("stroke", function(d) {return parseInt(d.id) < {{ data.n_nodes }} ? "red" : "blue";})
           .attr("stroke-width", forceProperties.charge.enabled==false ? 0 : Math.abs(forceProperties.charge.strength)/15);
 

@@ -3,7 +3,7 @@ import torchvision
 import torchvision.transforms as transforms
 
 
-def get_mnist(train_batch_size, test_batch_size):
+def get_mnist(train_batch_size, test_batch_size, *, shuffle=False):
     transform = transforms.Compose(
         [transforms.ToTensor(),
          transforms.Normalize((0.1307,), (0.3081,))])
@@ -17,7 +17,7 @@ def get_mnist(train_batch_size, test_batch_size):
     kwargs = {'num_workers': 1, 'pin_memory': True} if torch.cuda.is_available() else {}
 
     trainloader = torch.utils.data.DataLoader(trainset, batch_size=train_batch_size,
-                                              shuffle=False, **kwargs)
+                                              shuffle=shuffle, **kwargs)
     testloader = torch.utils.data.DataLoader(testset, batch_size=test_batch_size,
                                              shuffle=False, **kwargs)
 
@@ -26,7 +26,7 @@ def get_mnist(train_batch_size, test_batch_size):
     return trainloader, testloader, classes
 
 
-def get_cifar(train_batch_size, test_batch_size):
+def get_cifar(train_batch_size, test_batch_size, *, shuffle=False):
     transform = transforms.Compose(
         [transforms.ToTensor(),
          transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010))])
@@ -39,7 +39,7 @@ def get_cifar(train_batch_size, test_batch_size):
     kwargs = {'num_workers': 1, 'pin_memory': True} if torch.cuda.is_available() else {}
 
     trainloader = torch.utils.data.DataLoader(trainset, batch_size=train_batch_size,
-                                              shuffle=False, **kwargs)
+                                              shuffle=shuffle, **kwargs)
 
     testloader = torch.utils.data.DataLoader(testset, batch_size=test_batch_size,
                                              shuffle=False, **kwargs)

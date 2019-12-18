@@ -1,3 +1,5 @@
+import numpy as np
+import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
@@ -6,10 +8,16 @@ import torch.nn.functional as F
 
 
 class MaskedLinear(nn.Linear):
-    def __init__(self, in_features, out_features, bias=True):
+    def __init__(self, in_features, out_features, in_channels=0, bias=True, track_corr=True):
         super(MaskedLinear, self).__init__(in_features, out_features, bias)
         w = self.weight.detach()
         self.register_buffer("mask", w.new_full(w.shape, 1.))
+        self.track_corr = track_corr
+        self.n_inputs = 0
+        self.in_channels = in_channels
+        input_params = in_channels if in_channels else in_features
+        self.input_sum = torch.zeros(input_params)
+        self.input_dot = torch.zeros(input_params, input_params)
 
     def get_mask(self):
         return self.mask.clone()
@@ -33,18 +41,57 @@ class MaskedLinear(nn.Linear):
         first_col = self.mask[:, 0]
         return first_col.nonzero().flatten().tolist()
 
+    def input_correlation(self):
+        N = self.n_inputs
+        if self.in_channels:
+            feature_map_size = self.in_features // self.in_channels
+            N *= feature_map_size
+
+        input_mean = (self.input_sum[:, None] / N).numpy()
+        input_dot_mean = (self.input_dot / N).numpy()
+        input_squared_mean = np.diag(input_dot_mean)
+
+        mean_prod = input_mean @ input_mean.T
+        variances = (input_squared_mean - np.diag(mean_prod))[:, np.newaxis]
+        var_prod = variances @ variances.T
+
+        corr = (input_dot_mean - mean_prod) / np.sqrt(var_prod)
+
+        return corr
+
     def forward(self, x):
+        print("Linear layer: shape", x.shape)
+        if self.track_corr:
+            print(x[0][:30])
+            batch_size, in_features = x.shape[0], x.shape[1]
+            if self.in_channels:
+                x_flattened = x.view(batch_size, self.in_channels, -1)
+            else:
+                x_flattened = x.view(batch_size, in_features, -1)
+            for i in range(batch_size):
+                input_i = x_flattened[i]
+                input_i_sum = input_i.sum(axis=1)
+                self.input_sum += input_i_sum
+                input_i_dot = torch.mm(x_flattened[i], x_flattened[i].t())
+                self.input_dot += input_i_dot
+            self.n_inputs += batch_size
+
         w = self.weight * self.mask
         return F.linear(x, w, self.bias)
 
 
 class MaskedConv2d(nn.Conv2d):
     def __init__(self, in_channels, out_channels, kernel_size, stride=1,
-                 padding=0, dilation=1, groups=1, bias=True):
+                 padding=0, dilation=1, groups=1, bias=True, track_corr=True):
         super(MaskedConv2d, self).__init__(in_channels, out_channels,
                                            kernel_size, stride, padding, dilation, groups, bias)
         w = self.weight.detach()
         self.register_buffer("mask", w.new_full(w.shape, 1.))
+        self.track_corr = track_corr
+        self.n_inputs = 0
+        self.input_sum = torch.zeros(in_channels)
+        self.input_dot = torch.zeros(in_channels, in_channels)
+        self.feature_map_size = 0
 
     def get_mask(self):
         return self.mask.clone().view(self.mask.shape[0], -1)
@@ -68,7 +115,36 @@ class MaskedConv2d(nn.Conv2d):
         first_col = self.mask[:, 0, 0, 0]
         return first_col.nonzero().flatten().tolist()
 
+    def input_correlation(self):
+        N = self.n_inputs * self.feature_map_size
+
+        input_mean = (self.input_sum[:, None] / N).numpy()
+        input_dot_mean = (self.input_dot / N).numpy()
+        input_squared_mean = np.diag(input_dot_mean)
+
+        mean_prod = input_mean @ input_mean.T
+        variances = (input_squared_mean - np.diag(mean_prod))[:, np.newaxis]
+        var_prod = variances @ variances.T
+
+        corr = (input_dot_mean - mean_prod) / np.sqrt(var_prod)
+
+        return corr
+
     def forward(self, x):
+        print("Convolutional layer: shape", x.shape)
+        if self.track_corr:
+            batch_size, in_channels = x.shape[0], x.shape[1]
+            x_flattened = x.view(batch_size, in_channels, -1)
+            if not self.feature_map_size:
+                self.feature_map_size = x_flattened.shape[-1]
+            for i in range(batch_size):
+                input_i = x_flattened[i]
+                input_i_sum = input_i.sum(axis=1)
+                self.input_sum += input_i_sum
+                input_i_dot = torch.mm(x_flattened[i], x_flattened[i].t())
+                self.input_dot += input_i_dot
+            self.n_inputs += batch_size
+
         w = self.weight * self.mask
         return F.conv2d(x, w, self.bias, self.stride,
                         self.padding, self.dilation, self.groups)

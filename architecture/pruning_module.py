@@ -99,7 +99,7 @@ class PruningModule(nn.Module):
             w = param.get_weights()
             rows, cols = w.shape
             mask = param.get_mask()
-            mask[pruning_idx] = torch.zeros(cols)
+            mask[pruning_idx] = mask.new_zeros(cols)
             param.set_mask(mask)
 
     def set_weights(self, layer, weights):

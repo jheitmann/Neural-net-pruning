@@ -86,7 +86,9 @@ class Experiment:
         return test_accuracy, layer_fp
 
     # Might add learning-rate schedule
-    def fit(self, trainloader, testloader, epochs, *, monitored=[], save_results=False, log_interval=100):
+    def fit(self, trainloader, testloader, epochs, *, monitored=[],
+            log_interval=100, save_results=False, save_interval=1):
+
         initial_acc, initial_fps = self.test(testloader, monitored)
         test_accuracies = [initial_acc]
         base_dir = ""
@@ -101,8 +103,8 @@ class Experiment:
             self.train(trainloader, epoch, log_interval)
             accuracy, layer_fp = self.test(testloader, monitored)
             test_accuracies.append(accuracy)
-            if save_results:
-                snapshot_fname = os.path.join(snapshot_dir, str(epoch))
+            if (epoch % save_interval == 0) and save_results:
+                snapshot_fname = os.path.join(snapshot_dir, str(epoch // save_interval))
                 torch.save(self.model.state_dict(), snapshot_fname)
 
         if save_results:

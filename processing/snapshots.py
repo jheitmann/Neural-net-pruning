@@ -50,6 +50,14 @@ class Snapshots:  # add option to save all results
             norm_series.append(weight_norms)
         return torch.stack(norm_series)
 
+    def compute_input_correlations(self, layer):
+        correlations = []
+        for model in self.models:
+            param = getattr(model, layer)
+            corr = np.nan_to_num(param.input_correlation())  # careful with layer (next layer)
+            correlations.append(corr)
+        return np.stack(correlations)
+
     def save_computed_metrics(self, layer):
         frame_potentials = self.compute_fps(layer)
         fp_path = helpers.train_results_path(self.base_dir, common.FP_PREFIX, layer)
@@ -63,6 +71,9 @@ class Snapshots:  # add option to save all results
         norms_path = helpers.train_results_path(self.base_dir, common.NORM_PREFIX, layer)
         np.save(norms_path, weight_norms)
         print("Saved weight vector norms to:", norms_path)
+        correlations = self.compute_input_correlations(layer)
+        ip_path = helpers.train_results_path(self.base_dir, common.IP_PREFIX, layer)  # changeme
+        np.save(ip_path, correlations)
         return fp_path, ip_path, norms_path
 
     def create_adjacency(self, layer, merged=False):  # 3-D tensor
@@ -86,10 +97,16 @@ class Snapshots:  # add option to save all results
 
         return adjacency, kernel_width
 
-    def training_graph(self, layer, adjacency, kernel_width, merged=False):
+    def training_graph(self, layer, adjacency, kernel_width, merged=False, subsample=True):
         result_path = helpers.prune_results_path if merged else helpers.train_results_path
         norms_path = result_path(self.base_dir, common.NORM_PREFIX, layer)
         weight_norms = np.load(norms_path)
+
+        if subsample and adjacency.shape[1] > 512:
+            selection = list(range(512))
+            adjacency = adjacency[:, selection, :][:, :, selection]
+            weight_norms = weight_norms[:, selection]
+
         n_epochs = adjacency.shape[0]
         n_nodes = adjacency.shape[1]
         adjacency[adjacency < 0.37] = 0  # For visualisation, approximately e^-1

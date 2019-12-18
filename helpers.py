@@ -17,10 +17,14 @@ def model_results_path(model_id):
     if not os.path.exists(common.OUT_DIR):
         os.mkdir(common.OUT_DIR)
 
+    model_dir = os.path.join(common.OUT_DIR, model_id)
+    if not os.path.exists(model_dir):
+        os.mkdir(model_dir)
+
     date = datetime.now()
     ts = date.strftime("%d_%m_%Y-%H:%M:%S")
     base_dir_name = '-'.join((model_id, ts))
-    base_dir = os.path.join(common.OUT_DIR, base_dir_name)
+    base_dir = os.path.join(model_dir, base_dir_name)
     os.mkdir(base_dir)
     print("Created model directory:", base_dir)
 
