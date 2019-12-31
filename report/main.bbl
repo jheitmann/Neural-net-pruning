@@ -52,6 +52,61 @@
       \field{pages}{822\bibrangedash 830}
       \range{pages}{9}
     \endentry
+    \entry{casper2019removable}{article}{}
+      \name{author}{6}{}{%
+        {{uniquename=0,uniquepart=base,hash=31a3ebcfa3711e610ed4f8054ab7a5da}{%
+           family={Casper},
+           familyi={C\bibinitperiod},
+           given={Stephen},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=e355dacc925cb013636de08328d70439}{%
+           family={Boix},
+           familyi={B\bibinitperiod},
+           given={Xavier},
+           giveni={X\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=e596fa0411d114ad7e8f6878d8dd93c5}{%
+           family={D'Amario},
+           familyi={D\bibinitperiod},
+           given={Vanessa},
+           giveni={V\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=7b608ab6df747e78365e5a69d96d4f37}{%
+           family={Guo},
+           familyi={G\bibinitperiod},
+           given={Ling},
+           giveni={L\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=271d3c401f902dd15869e28391940055}{%
+           family={Vinken},
+           familyi={V\bibinitperiod},
+           given={Kasper},
+           giveni={K\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=a905903239951ba35e2b7c301d71fc23}{%
+           family={Kreiman},
+           familyi={K\bibinitperiod},
+           given={Gabriel},
+           giveni={G\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{89408ad05c06594fd17e0d9dc1ec62e8}
+      \strng{fullhash}{d88fc5bb4871a80a741f7f202cd0ffda}
+      \strng{bibnamehash}{89408ad05c06594fd17e0d9dc1ec62e8}
+      \strng{authorbibnamehash}{89408ad05c06594fd17e0d9dc1ec62e8}
+      \strng{authornamehash}{89408ad05c06594fd17e0d9dc1ec62e8}
+      \strng{authorfullhash}{d88fc5bb4871a80a741f7f202cd0ffda}
+      \field{sortinit}{C}
+      \field{sortinithash}{963e9d84a3da2344e8833203de5aed05}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{arXiv preprint arXiv:1912.04783}
+      \field{title}{Removable and/or Repeated Units Emerge in Overparametrized Deep Neural Networks}
+      \field{year}{2019}
+    \endentry
     \entry{frankle2018lottery}{article}{}
       \name{author}{2}{}{%
         {{uniquename=0,uniquepart=base,hash=8f891d6f89678d7c987fed1e7090426b}{%
@@ -124,6 +179,55 @@
       \field{labeltitlesource}{title}
       \field{journaltitle}{arXiv preprint arXiv:1903.01611}
       \field{title}{The Lottery Ticket Hypothesis at Scale}
+      \field{year}{2019}
+    \endentry
+    \entry{goldt2019dynamics}{article}{}
+      \name{author}{5}{}{%
+        {{uniquename=0,uniquepart=base,hash=ea04adf284afb4578bfd45d13af18cd6}{%
+           family={Goldt},
+           familyi={G\bibinitperiod},
+           given={Sebastian},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=bbada2cdba25cbb3e74f7814425e8d86}{%
+           family={Advani},
+           familyi={A\bibinitperiod},
+           given={Madhu\bibnamedelima S},
+           giveni={M\bibinitperiod\bibinitdelim S\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=a0f49d5bdcc9e6d4f07f303b2c366b25}{%
+           family={Saxe},
+           familyi={S\bibinitperiod},
+           given={Andrew\bibnamedelima M},
+           giveni={A\bibinitperiod\bibinitdelim M\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=cca9de0730a112186fce13057c1c6f07}{%
+           family={Krzakala},
+           familyi={K\bibinitperiod},
+           given={Florent},
+           giveni={F\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=90398d070efb53fbc4808ef6d7d6183d}{%
+           family={Zdeborov{á}},
+           familyi={Z\bibinitperiod},
+           given={Lenka},
+           giveni={L\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{7ac2d5776f702e4c2e322371285ba108}
+      \strng{fullhash}{00246d2af3d19effabe83ba50582aebe}
+      \strng{bibnamehash}{7ac2d5776f702e4c2e322371285ba108}
+      \strng{authorbibnamehash}{7ac2d5776f702e4c2e322371285ba108}
+      \strng{authornamehash}{7ac2d5776f702e4c2e322371285ba108}
+      \strng{authorfullhash}{00246d2af3d19effabe83ba50582aebe}
+      \field{sortinit}{G}
+      \field{sortinithash}{5e8d2bf9d38de41b1528bd307546008f}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{arXiv preprint arXiv:1906.08632}
+      \field{title}{Dynamics of stochastic gradient descent for two-layer neural networks in the teacher-student setup}
       \field{year}{2019}
     \endentry
     \entry{han2015learning}{inproceedings}{}
@@ -360,6 +464,49 @@
       \field{journaltitle}{arXiv preprint arXiv:1805.12076}
       \field{title}{Towards understanding the role of over-parametrization in generalization of neural networks}
       \field{year}{2018}
+    \endentry
+    \entry{rolnick2017deep}{article}{}
+      \name{author}{4}{}{%
+        {{uniquename=0,uniquepart=base,hash=148ce343efcf9f02663d801b4860811c}{%
+           family={Rolnick},
+           familyi={R\bibinitperiod},
+           given={David},
+           giveni={D\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=fef2684833146eb1bd778cddca8caf2e}{%
+           family={Veit},
+           familyi={V\bibinitperiod},
+           given={Andreas},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=044d1db5259b74e4975282f599d8e767}{%
+           family={Belongie},
+           familyi={B\bibinitperiod},
+           given={Serge},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=3e2aee6574e3dcbdbc582166218008cb}{%
+           family={Shavit},
+           familyi={S\bibinitperiod},
+           given={Nir},
+           giveni={N\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{e897dcfd553c4976146a12a6ebb021ce}
+      \strng{fullhash}{97b386996a759be9037acbe0087d070e}
+      \strng{bibnamehash}{e897dcfd553c4976146a12a6ebb021ce}
+      \strng{authorbibnamehash}{e897dcfd553c4976146a12a6ebb021ce}
+      \strng{authornamehash}{e897dcfd553c4976146a12a6ebb021ce}
+      \strng{authorfullhash}{97b386996a759be9037acbe0087d070e}
+      \field{sortinit}{R}
+      \field{sortinithash}{da6b42bd3ab22fee61abed031ee405f7}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{arXiv preprint arXiv:1705.10694}
+      \field{title}{Deep learning is robust to massive label noise}
+      \field{year}{2017}
     \endentry
     \entry{zagoruyko2016wide}{article}{}
       \name{author}{2}{}{%

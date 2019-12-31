@@ -1927,16 +1927,21 @@
     <bcf:citekey order="1">neyshabur2018towards</bcf:citekey>
     <bcf:citekey order="2">zagoruyko2016wide</bcf:citekey>
     <bcf:citekey order="3">zhang2016understanding</bcf:citekey>
-    <bcf:citekey order="4">frankle2018lottery</bcf:citekey>
-    <bcf:citekey order="5">brutzkus2019larger</bcf:citekey>
-    <bcf:citekey order="6">han2015learning</bcf:citekey>
-    <bcf:citekey order="7">li2016pruning</bcf:citekey>
-    <bcf:citekey order="8">frankle2018lottery</bcf:citekey>
-    <bcf:citekey order="9">liu2018rethinking</bcf:citekey>
-    <bcf:citekey order="10">frankle2019lottery</bcf:citekey>
-    <bcf:citekey order="11">morcos2019one</bcf:citekey>
-    <bcf:citekey order="12">brutzkus2019larger</bcf:citekey>
-    <bcf:citekey order="13">liu2018rethinking</bcf:citekey>
+    <bcf:citekey order="4">rolnick2017deep</bcf:citekey>
+    <bcf:citekey order="5">neyshabur2018towards</bcf:citekey>
+    <bcf:citekey order="6">neyshabur2018towards</bcf:citekey>
+    <bcf:citekey order="7">goldt2019dynamics</bcf:citekey>
+    <bcf:citekey order="8">casper2019removable</bcf:citekey>
+    <bcf:citekey order="9">frankle2018lottery</bcf:citekey>
+    <bcf:citekey order="10">brutzkus2019larger</bcf:citekey>
+    <bcf:citekey order="11">han2015learning</bcf:citekey>
+    <bcf:citekey order="12">li2016pruning</bcf:citekey>
+    <bcf:citekey order="13">frankle2018lottery</bcf:citekey>
+    <bcf:citekey order="14">liu2018rethinking</bcf:citekey>
+    <bcf:citekey order="15">frankle2019lottery</bcf:citekey>
+    <bcf:citekey order="16">morcos2019one</bcf:citekey>
+    <bcf:citekey order="17">brutzkus2019larger</bcf:citekey>
+    <bcf:citekey order="18">liu2018rethinking</bcf:citekey>
     <bcf:citekey order="0">*</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
