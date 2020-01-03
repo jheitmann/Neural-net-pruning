@@ -373,6 +373,37 @@
       \field{title}{Rethinking the value of network pruning}
       \field{year}{2018}
     \endentry
+    \entry{martin2018implicit}{article}{}
+      \name{author}{2}{}{%
+        {{uniquename=0,uniquepart=base,hash=c3a79bafd7d800c0d7275b257e7e450b}{%
+           family={Martin},
+           familyi={M\bibinitperiod},
+           given={Charles\bibnamedelima H},
+           giveni={C\bibinitperiod\bibinitdelim H\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=bd17186143779d2f0eae6b5198fdc8db}{%
+           family={Mahoney},
+           familyi={M\bibinitperiod},
+           given={Michael\bibnamedelima W},
+           giveni={M\bibinitperiod\bibinitdelim W\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{1fd821a1d1dbee3601e3baf4ffb3a4a9}
+      \strng{fullhash}{1fd821a1d1dbee3601e3baf4ffb3a4a9}
+      \strng{bibnamehash}{1fd821a1d1dbee3601e3baf4ffb3a4a9}
+      \strng{authorbibnamehash}{1fd821a1d1dbee3601e3baf4ffb3a4a9}
+      \strng{authornamehash}{1fd821a1d1dbee3601e3baf4ffb3a4a9}
+      \strng{authorfullhash}{1fd821a1d1dbee3601e3baf4ffb3a4a9}
+      \field{sortinit}{M}
+      \field{sortinithash}{cfd219b90152c06204fab207bc6c7cab}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{arXiv preprint arXiv:1810.01075}
+      \field{title}{Implicit self-regularization in deep neural networks: Evidence from random matrix theory and implications for learning}
+      \field{year}{2018}
+    \endentry
     \entry{morcos2019one}{article}{}
       \name{author}{4}{}{%
         {{uniquename=0,uniquepart=base,hash=4f81a3fa41b643b5c3f26ebe87dd0919}{%
@@ -415,6 +446,39 @@
       \field{journaltitle}{arXiv preprint arXiv:1906.02773}
       \field{title}{One ticket to win them all: generalizing lottery ticket initializations across datasets and optimizers}
       \field{year}{2019}
+    \endentry
+    \entry{nagarajan2019uniform}{inproceedings}{}
+      \name{author}{2}{}{%
+        {{uniquename=0,uniquepart=base,hash=2c4bfa412368683cfee711dae88635b4}{%
+           family={Nagarajan},
+           familyi={N\bibinitperiod},
+           given={Vaishnavh},
+           giveni={V\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=5d0e75c425779f96d0a0e8f6d5a6e996}{%
+           family={Kolter},
+           familyi={K\bibinitperiod},
+           given={J\bibnamedelima Zico},
+           giveni={J\bibinitperiod\bibinitdelim Z\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{2eae69bad8e1f37d25b87c9d6ae487dd}
+      \strng{fullhash}{2eae69bad8e1f37d25b87c9d6ae487dd}
+      \strng{bibnamehash}{2eae69bad8e1f37d25b87c9d6ae487dd}
+      \strng{authorbibnamehash}{2eae69bad8e1f37d25b87c9d6ae487dd}
+      \strng{authornamehash}{2eae69bad8e1f37d25b87c9d6ae487dd}
+      \strng{authorfullhash}{2eae69bad8e1f37d25b87c9d6ae487dd}
+      \field{sortinit}{N}
+      \field{sortinithash}{f7242c3ed3dc50029fca1be76c497c7c}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Advances in Neural Information Processing Systems}
+      \field{title}{Uniform convergence may be unable to explain generalization in deep learning}
+      \field{year}{2019}
+      \field{pages}{11611\bibrangedash 11622}
+      \range{pages}{12}
     \endentry
     \entry{neyshabur2018towards}{article}{}
       \name{author}{5}{}{%
@@ -507,6 +571,49 @@
       \field{journaltitle}{arXiv preprint arXiv:1705.10694}
       \field{title}{Deep learning is robust to massive label noise}
       \field{year}{2017}
+    \endentry
+    \entry{tian2019luck}{article}{}
+      \name{author}{4}{}{%
+        {{uniquename=0,uniquepart=base,hash=074caf23cc82a3b80220324f240e9327}{%
+           family={Tian},
+           familyi={T\bibinitperiod},
+           given={Yuandong},
+           giveni={Y\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=77b5592cfd73a4fbf5cdad5304af029b}{%
+           family={Jiang},
+           familyi={J\bibinitperiod},
+           given={Tina},
+           giveni={T\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=cb75d7c634241fc476745c140e224450}{%
+           family={Gong},
+           familyi={G\bibinitperiod},
+           given={Qucheng},
+           giveni={Q\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=fa47f3d92d8080c3c467efe3e27fcedf}{%
+           family={Morcos},
+           familyi={M\bibinitperiod},
+           given={Ari},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{7f3d0ce87c605145b1b50878915017b4}
+      \strng{fullhash}{a0bc3c6b72b2310952c92cf2b5319fba}
+      \strng{bibnamehash}{7f3d0ce87c605145b1b50878915017b4}
+      \strng{authorbibnamehash}{7f3d0ce87c605145b1b50878915017b4}
+      \strng{authornamehash}{7f3d0ce87c605145b1b50878915017b4}
+      \strng{authorfullhash}{a0bc3c6b72b2310952c92cf2b5319fba}
+      \field{sortinit}{T}
+      \field{sortinithash}{6f7aff9db9dcfeb7f95fd5bbd2f78df9}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{arXiv preprint arXiv:1905.13405}
+      \field{title}{Luck Matters: Understanding Training Dynamics of Deep ReLU Networks}
+      \field{year}{2019}
     \endentry
     \entry{zagoruyko2016wide}{article}{}
       \name{author}{2}{}{%

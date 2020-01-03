@@ -1,17 +1,17 @@
 [0] Config.pm:302> INFO - This is Biber 2.9
 [0] Config.pm:305> INFO - Logfile is 'main.blg'
-[22] biber:313> INFO - === Di Dez 31, 2019, 18:10:11
-[40] Biber.pm:371> INFO - Reading 'main.bcf'
-[90] Biber.pm:854> INFO - Using all citekeys in bib section 0
-[101] Biber.pm:3981> INFO - Processing section 0
-[110] Biber.pm:4154> INFO - Looking for bibtex format file 'sources.bib' for section 0
-[111] bibtex.pm:1468> INFO - LaTeX decoding ...
-[122] bibtex.pm:1294> INFO - Found BibTeX data source 'sources.bib'
-[123] Utils.pm:169> WARN - Duplicate entry key: 'brutzkus2019larger' in file 'sources.bib', skipping ...
-[226] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
-[227] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
-[227] Biber.pm:3809> INFO - Sorting list 'nyt/global//global/global' of type 'entry' with template 'nyt' and locale 'en-US'
-[227] Biber.pm:3815> INFO - No sort tailoring available for locale 'en-US'
-[239] bbl.pm:617> INFO - Writing 'main.bbl' with encoding 'UTF-8'
-[251] bbl.pm:720> INFO - Output to main.bbl
-[251] Biber.pm:110> INFO - WARNINGS: 1
+[22] biber:313> INFO - === Fr Jan  3, 2020, 19:21:20
+[41] Biber.pm:371> INFO - Reading 'main.bcf'
+[92] Biber.pm:854> INFO - Using all citekeys in bib section 0
+[103] Biber.pm:3981> INFO - Processing section 0
+[111] Biber.pm:4154> INFO - Looking for bibtex format file 'sources.bib' for section 0
+[112] bibtex.pm:1468> INFO - LaTeX decoding ...
+[126] bibtex.pm:1294> INFO - Found BibTeX data source 'sources.bib'
+[127] Utils.pm:169> WARN - Duplicate entry key: 'brutzkus2019larger' in file 'sources.bib', skipping ...
+[249] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[249] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[249] Biber.pm:3809> INFO - Sorting list 'nyt/global//global/global' of type 'entry' with template 'nyt' and locale 'en-US'
+[249] Biber.pm:3815> INFO - No sort tailoring available for locale 'en-US'
+[266] bbl.pm:617> INFO - Writing 'main.bbl' with encoding 'UTF-8'
+[280] bbl.pm:720> INFO - Output to main.bbl
+[280] Biber.pm:110> INFO - WARNINGS: 1

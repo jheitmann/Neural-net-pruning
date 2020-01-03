@@ -6,16 +6,16 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {subsection}{\numberline {2.1}Self-regularization of overparameterized models}{4}{subsection.2.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.2}Advantageous properties of overparameterized models}{5}{subsection.2.2}
+\contentsline {subsection}{\numberline {2.2}Advantageous properties of overparameterized models}{6}{subsection.2.2}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.3}Leveraging model simplicity: Compression and Pruning}{8}{subsection.2.3}
+\contentsline {subsection}{\numberline {2.3}Leveraging model simplicity: Compression and Pruning}{9}{subsection.2.3}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {3}Approach}{8}{section.3}
+\contentsline {section}{\numberline {3}Approach}{9}{section.3}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.1}Formal background}{9}{subsection.3.1}
+\contentsline {subsection}{\numberline {3.1}Formal background}{11}{subsection.3.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.2}Visualisation}{10}{subsection.3.2}
+\contentsline {subsection}{\numberline {3.2}Visualisation}{11}{subsection.3.2}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {4}Experiments}{10}{section.4}
+\contentsline {section}{\numberline {4}Experiments}{11}{section.4}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {5}Discussion}{10}{section.5}
+\contentsline {section}{\numberline {5}Discussion}{11}{section.5}
