@@ -1945,6 +1945,14 @@
     <bcf:citekey order="19">morcos2019one</bcf:citekey>
     <bcf:citekey order="20">brutzkus2019larger</bcf:citekey>
     <bcf:citekey order="21">liu2018rethinking</bcf:citekey>
+    <bcf:citekey order="22">lecun1998gradient</bcf:citekey>
+    <bcf:citekey order="23">simonyan2014very</bcf:citekey>
+    <bcf:citekey order="24">glorot2010understanding</bcf:citekey>
+    <bcf:citekey order="25">lecun1998gradient</bcf:citekey>
+    <bcf:citekey order="26">simonyan2014very</bcf:citekey>
+    <bcf:citekey order="27">glorot2010understanding</bcf:citekey>
+    <bcf:citekey order="28">nagarajan2019uniform</bcf:citekey>
+    <bcf:citekey order="29">brutzkus2019larger</bcf:citekey>
     <bcf:citekey order="0">*</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
