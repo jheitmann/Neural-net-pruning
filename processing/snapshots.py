@@ -71,9 +71,9 @@ class Snapshots:  # add option to save all results
         norms_path = helpers.train_results_path(self.base_dir, common.NORM_PREFIX, layer)
         np.save(norms_path, weight_norms)
         print("Saved weight vector norms to:", norms_path)
-        correlations = self.compute_input_correlations(layer)
-        ip_path = helpers.train_results_path(self.base_dir, common.IP_PREFIX, layer)  # changeme
-        np.save(ip_path, correlations)
+        #correlations = self.compute_input_correlations(layer)
+        #ip_path = helpers.train_results_path(self.base_dir, common.IP_PREFIX, layer)  # changeme
+        #np.save(ip_path, correlations)
         return fp_path, ip_path, norms_path
 
     def create_adjacency(self, layer, merged=False):  # 3-D tensor

@@ -134,7 +134,7 @@ Furthermore one should keep in mind, when examining a model's capacity, that the
 
 This property seems to extend to more practical problems than the artificial teacher-student setup, there has been empirical evidence that supports that repeated units emerge when increasing a network's width, as a way to adjust the capacity of the model ~\autocite{casper2019removable}. Those repeated units have highly correlated outputs, implying that similar activation regions were learned. Additionally, removable units appear, which can be dropped out of the network without significantly hurting the validation accuracy. This kind of self-regularization enforces capacity constraints, as the function modeled by a network with either of these units could me modeled by a simpler one. \\
  
-The emergence of repeated or removable units during the training process of large models indicates that the self-regularizing mechanism that allow overparameterized networks to generalize after training opperate at least partly at the level of individual units. There has been work that makes use of recent advances in Random Matrix Theory (RMT) to describe the different phases of that implicit self-regularization of the weight matrices ~\autocite{martin2018implicit}. More specifically, the Empirical Spectral Density (ESD) of the correlation matrix $X = \mathbf{W}\mathbf{W}^T$ associated with the layer weight matrix $\mathbf{W}$ is analysed over the course of training. RMT is used to identify different phases of training using models to describe the shape of each ESD. In each phase the layer weight matrix $\mathbf{W}$ is modeled as "noise plus signal", where the noise is modeled by a random matrix $\mathbf{W}^{rand}$, which entries are drawn from a normal distribution, and the signal is a correction $\Delta^{sig}$, $\mathbf{W} \simeq \mathbf{W}^{rand} + \Delta^{sig}$. The empirically verified models suggest that during training, $\mathbf{W}^{rand}$ decreases, and $\Delta^{sig}$, a low-rank matrix, increases in magnitude. The hypothesis that, when training an overparameterized network, only a low-rank subspace of the weight matrices is relevant for the learning target has also been put forward by \cite{nagarajan2019uniform}. To support their claims they analyze the singular value distribution of the update matrix $\mathbf{W} - \mathbf{Z}$, which is the difference between the final weight matrix $\mathbf{W}$ and the weight matrix at initialization $\mathbf{Z}$. They show that the validation accuracy is able to endure the heavy pruning process of projecting the update matrix onto its top 16 left-singular vectors (out of 1024), and conclude that all but a few top singular directions can be considered as noise. They also notice that the spectral norm of the matrix (the residuals) that is removed when projecting onto the top singular vectors can have quite a high spectral norm. These results highlight the fact that low-complexity solutions are found when training networks that have a high representational power and, that even in the presence of noise introduced by SGD, the low-complexity component of the solution dominates the output of the network. \\
+The emergence of repeated or removable units during the training process of large models indicates that the self-regularizing mechanism that allow overparameterized networks to generalize after training opperate at least partly at the level of individual units. There has been work that makes use of recent advances in Random Matrix Theory (RMT) to describe the different phases of that implicit self-regularization of the weight matrices ~\autocite{martin2018implicit}. More specifically, the Empirical Spectral Density (ESD) of the correlation matrix $\mathbf{X} = \mathbf{W}\mathbf{W}^T$ associated with the layer weight matrix $\mathbf{W}$ is analysed over the course of training. RMT is used to identify different phases of training using models to describe the shape of each ESD. In each phase the layer weight matrix $\mathbf{W}$ is modeled as "noise plus signal", where the noise is modeled by a random matrix $\mathbf{W}^{rand}$, which entries are drawn from a normal distribution, and the signal is a correction $\Delta^{sig}$, $\mathbf{W} \simeq \mathbf{W}^{rand} + \Delta^{sig}$. The empirically verified models suggest that during training, $\mathbf{W}^{rand}$ decreases, and $\Delta^{sig}$, a low-rank matrix, increases in magnitude. The hypothesis that, when training an overparameterized network, only a low-rank subspace of the weight matrices is relevant for the learning target has also been put forward by \cite{nagarajan2019uniform}. To support their claims they analyze the singular value distribution of the update matrix $\mathbf{W} - \mathbf{Z}$, which is the difference between the final weight matrix $\mathbf{W}$ and the weight matrix at initialization $\mathbf{Z}$. They show that the validation accuracy is able to endure the heavy pruning process of projecting the update matrix onto its top 16 left-singular vectors (out of 1024), and conclude that all but a few top singular directions can be considered as noise. They also notice that the spectral norm of the matrix (the residuals) that is removed when projecting onto the top singular vectors can have quite a high spectral norm. These results highlight the fact that low-complexity solutions are found when training networks that have a high representational power and, that even in the presence of noise introduced by SGD, the low-complexity component of the solution dominates the output of the network. \\
 
 
 \subsection{Advantageous properties of over-parameterized models}
@@ -230,7 +230,7 @@ The effects of pruning without retraining were only studied for the smaller mode
 The results are summarized in figures \ref{fig:lenet-fc1} and \ref{fig:conv2-fc1}.
 
 \subsubsection*{Observations}
-TODO
+\textit{Magnitude pruning} performs better than \textit{Frame-potential pruning}, for both fully connected and convolutional layers (plots for convolutional layers not shown, they tell a similar story). Nonetheless, pruning strategies that maximize or minimize frame-potential of the pruned matrix show that angle with respect to other weight vectors is correlated with a unit's importance, which is measured through the observed difference in test accuracy. \texttt{max\_fp\_pruning} performs better than random pruning (much better in some cases as fig. \ref{fig:conv2-fc1} shows), and \texttt{min\_fp\_pruning} can significantly damage a network. This leads us to the next section, at this point it seemed necessary to further investigate the relationship between angle and magnitude of a unit, and a visualization that encodes both angle and magnitude allows us to better understand the dynamics between the two.
 
 \begin{figure}[H]
 \centering
@@ -245,16 +245,51 @@ TODO
    \caption{Pruning the first fully connected layer of Conv-2}
    \label{fig:conv2-fc1}
 \end{subfigure}
-\caption{Comparison of different pruning metrics. For random pruning, averages were taken over 5 random experiments. Error bars were added with a width equal to the standard deviation, computed over the 5 random experiments, of the test accuracy obtained after pruning $i$ units.}
+\caption{Comparison of different pruning metrics. \texttt{max\_mag\_pruning} (\texttt{min\_mag\_pruning}) corresponds to \textit{Magnitude pruning} that maximizes (minimizes) the Frobenius norm of the pruned matrix. \texttt{max\_fp\_pruning} (\texttt{min\_fp\_pruning}) corresponds to \textit{Frame-potential pruning}, it maximizes (minimizes) the frame-potential of the pruned matrix. For random pruning, averages were taken over 5 random experiments. Error bars were added with a width equal to the standard deviation, computed over the 5 random experiments, of the test accuracy obtained after pruning $i$ units.}
 \end{figure}
 
 \subsection{Visualizing training dynamics}
 
 \subsubsection*{Method}
-What we expect to observe, how the visualization works, which parameters can be set.
+For a given weight matrix $\mathbf{W} \in \mathbb{R}^{n \times m}$, we would like to embed the norms of the rows of $\mathbf{W}$, $\|\mathbf{w}_1\|, \ldots, \|\mathbf{w}_n\|$, and the cosine similarities between the rows in a visualization. The cosine similarities can be obtained from the correlation matrix $\mathbf{X} = \hat{\mathbf{W}}\hat{\mathbf{W}}^T$, where $\hat{\mathbf{W}}$ is the matrix we get when normalizing the rows of $\textbf{W}$. A direct visualization of the weight vectors in an $m$-dimensional space is impractical, as $m$ can be very high (e. g. $m = 16384$ for the first fully connected layer of Conv-2). \\
+
+Since we mainly care about magnitude and angle, the former being a feature of a weight vector, and the latter a property between weight vectors, an undirected weighted graph seems to be an appropriate choice of visualization. More specifically, we can construct a time-varying graph, with nodes representing individual weight vectors (single units), and weights between nodes (edges) representing the closeness between weight vectors as a function of the cosine similarity. Because edge weights must be positive and the entries of the correlation matrix $\mathbf{X}$ take values in $[-1, 1]$, we first transform the cosine similarity matrix to a cosine distance matrix, i. e. we compute $\mathbf{1} - \mathbf{X}$, whose entries lie in $[0, 2]$ (0 if colinear, 1 if orthogonal, 2 if opposed direction). Next we use a Gaussian function in order to turn these cosine distances into weights:
+
+\begin{align*}
+W(\textbf{w}_i, \textbf{w}_j) = \exp(-\frac{\text{dist}^2(\textbf{w}_i, \textbf{w}_j)}{\sigma^2}),
+\end{align*}
+
+where $\text{dist}^2(\textbf{w}_i, \textbf{w}_j) = (\mathbf{1} - \mathbf{X})_{ij}$ and $\sigma$ is a parameter which controls the width of the Gaussian. We have obtained an adjacency matrix which we can sparsify by removing the values below a certain threshold. \\
+
+To summarize, we have a time-varying graph with nodes that can increase in size (corresponding to an increase in magnitude of the weight vector) and edge weights that can increase or decrease (reflecting a higher or smaller cosine similarity). The time-steps of the graph are training epochs, thus we observe how the weight vectors in a layer of a network evolve as the network gets trained. \\
+
+To visualize the graph, we apply a Force Layout that models the nodes as charges and edges as links keeping them together. In addition to a repulsive charge force, a pseudo-gravity force keeps nodes centered in the visible area and avoids expulsion of disconnected subgraphs, while links are fixed-distance geometric constraints.
+
 
 \subsubsection*{Observations}
-TODO
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[b]{0.62\textwidth}
+   \includegraphics[width=\linewidth]{images/conv2-fc1-init.png}
+   \caption{At initialization}
+   \label{fig:conv2-fc1-init} 
+\end{subfigure}
+
+\begin{subfigure}[b]{0.62\textwidth}
+   \includegraphics[width=\linewidth]{images/conv2-fc1-final.png}
+   \caption{After convergence}
+   \label{fig:conv2-fc1-final}
+\end{subfigure}
+\caption{Visualizing the training dynamics of the first fully connected layer of Conv-2}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+	\includegraphics[scale=0.3]{images/vgg-conv16-final.png}
+    \label{fig:vgg-conv16-final} 
+\caption{Cluster formation in the last convolutional layer of VGG19 during training}
+\end{figure}
 
 \subsection{Subspace analysis}
 TODO
