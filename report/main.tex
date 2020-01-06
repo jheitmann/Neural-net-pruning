@@ -123,6 +123,7 @@ This project aims to explore different hypotheses about neural network training 
 Formally define frame potential, generalization error, network architecture, optimization algorithms. 
 
 \section{Related work}
+\label{section:prior}
 % improve this part, deconstruct classification subspace
 If good generalization can be achieved by an overparameterized network, there must be some mechanism that prevents the model to overfit the dataset, and learn for instance features that would be considered as noise when it comes to the classification task, because they do not provide any information about a sample's affiliation to a certain class. With an increasing number of parameters, more complex decision boundaries can be represented, so in order to generalize, the solutions obtained by the optimization algorithm of choice must be "simple" in a way, which is yet to be defined. While it is curious that large neural networks do not overfit the dataset, even in the presence of massive label noise ~\autocite{rolnick2017deep}, it is even more surprising that increasing the number of parameters can decrease the generalization gap ~\autocite{neyshabur2018towards}. In other words, given a classification task and a certain model architecture with a fixed number of layers but adjustable layer widths, a certain degree of layer-wise over-parameterization might be both sufficient and necessary to achieve good performance after training. 
 
@@ -267,6 +268,13 @@ To visualize the graph, we apply a Force Layout that models the nodes as charges
 
 
 \subsubsection*{Observations}
+Based on the self-regularization mechanism discussed in section \ref{section:prior} and the results of the pruning experiments in the previous section, some basic assumptions could be made on what the visualization would show. \cite{martin2018implicit} and \cite{nagarajan2019uniform} argue that after convergence, only a low-rank subspace of the space spanned by the rows of $\mathbf{W}$ is relevant to the output of the network. This low-complexity component is particularly receptive to training by SGD and dominates the output of the network, compared to the noisy component. This phenomenon would push weight vectors closer together and we would observe the emergence of edges with stronger weights. Moreover, using the results of \cite{brutzkus2019larger} and the fact that \textit{Frame-potential pruning} has proven to work better than random pruning, we would maybe expect to see the formation of clusters, but in particular outliers that don't fall into a cluster or aren't close to any other weight vector in the weight matrix. \\
+
+The observations confirm our initial assumptions. In general, weight vectors move closer to each other, and often we see one big cluster, with some outliers that are not part of this big connected component (see fig. \ref{fig:conv2-fc1-final}). The emergence of the cluster probably indicates the presence of a low-rank subspace, that corresponds to the low-complexity component. Figure \ref{fig:conv2-fc1-final}, showing the graph we get for the first fully connected layer of Conv-2, is particularly interesting, because it highlights multiple phenomena discussed in section \ref{section:prior}. First, the aforementioned main big cluster, and the outliers around it, that in addition to not being part of the cluster are not close either to other weight vectors. Second, the emergence of removable units, which are units that do not experience a significant change during the training process and can be dropped out of the network without hurting the validation accuracy much. Note that in this case, since these removable units are not affected much by training, they are also not pushed towards the main cluster (most likely the low-rank subspace). This explains why in our pruning experiment for the same layer (fig. \ref{fig:conv2-fc1}), \textit{Magnitude pruning} and \textit{Frame-potential pruning} perform equally well, up to quite a high value of pruned units. In this particular example it becomes clear why magnitude is a good estimate of a unit's saliency. \\
+
+A surprising result was that in some cases, even for larger networks, the weight vectors actually get clustered, as figure \ref{fig:vgg-conv16-final} shows. The threshold below which edges are removed was set to a value close to 1 for this graph. This means that if there is an edge between two nodes, the corresponding weight vectors almost overlap. The distinct clusters are clearly visible. The question was whether overlapping weight vectors would also produce similar outputs. Because bias-term, different magnitudes of the weight vectors and non-linearity of the activation function. has been added as a feature to the visualization. Reveal more repeated units. Indeed repeated units, corresponding to clustered weight vectors. \textbf{TODO: add viz result.} \\
+
+The next section is motivated by the wish to examine more precisely the nature of the big cluster.
 
 \begin{figure}[H]
 \centering
@@ -287,8 +295,8 @@ To visualize the graph, we apply a Force Layout that models the nodes as charges
 \begin{figure}[H]
 \centering
 	\includegraphics[scale=0.3]{images/vgg-conv16-final.png}
-    \label{fig:vgg-conv16-final} 
 \caption{Cluster formation in the last convolutional layer of VGG19 during training}
+\label{fig:vgg-conv16-final} 
 \end{figure}
 
 \subsection{Subspace analysis}
@@ -300,7 +308,7 @@ TODO
 \section{Discussion}
 
 Write Conclusion and discuss future work.
-
+Even though emergence of removable and repeated units, implicit self-regularization operates at a different level. Subspace, study more in detail what they mean (singular vectors) in terms of the previous layer, to design better pruning methods.
 
 \nocite{*}
 \printbibliography

@@ -8,6 +8,6 @@
 \contentsline {section}{\numberline {3}Results}{9}{section.3}
 \contentsline {subsection}{\numberline {3.1}Comparison of pruning criteria}{11}{subsection.3.1}
 \contentsline {subsection}{\numberline {3.2}Visualizing training dynamics}{15}{subsection.3.2}
-\contentsline {subsection}{\numberline {3.3}Subspace analysis}{18}{subsection.3.3}
-\contentsline {subsection}{\numberline {3.4}Additional results}{18}{subsection.3.4}
-\contentsline {section}{\numberline {4}Discussion}{18}{section.4}
+\contentsline {subsection}{\numberline {3.3}Subspace analysis}{19}{subsection.3.3}
+\contentsline {subsection}{\numberline {3.4}Additional results}{19}{subsection.3.4}
+\contentsline {section}{\numberline {4}Discussion}{19}{section.4}
