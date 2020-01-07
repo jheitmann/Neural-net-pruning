@@ -308,6 +308,55 @@
       \field{pages}{1135\bibrangedash 1143}
       \range{pages}{9}
     \endentry
+    \entry{lebedev2014speeding}{article}{}
+      \name{author}{5}{}{%
+        {{uniquename=0,uniquepart=base,hash=fa1a5ac60e32e44bf8ee9f723bd9ed41}{%
+           family={Lebedev},
+           familyi={L\bibinitperiod},
+           given={Vadim},
+           giveni={V\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=08ddf7ec3c94815436149213b48c1dc1}{%
+           family={Ganin},
+           familyi={G\bibinitperiod},
+           given={Yaroslav},
+           giveni={Y\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=3188aaa6506c835d1a6eab56c8791674}{%
+           family={Rakhuba},
+           familyi={R\bibinitperiod},
+           given={Maksim},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=9854b5eb0ee156689ff45d80042f6c12}{%
+           family={Oseledets},
+           familyi={O\bibinitperiod},
+           given={Ivan},
+           giveni={I\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=a48f60762c88685a899455e12615e1df}{%
+           family={Lempitsky},
+           familyi={L\bibinitperiod},
+           given={Victor},
+           giveni={V\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{db0f3ae4a985965d26fb64f0c9200372}
+      \strng{fullhash}{0e02b2e367658b2b89eb255612f3d9b6}
+      \strng{bibnamehash}{db0f3ae4a985965d26fb64f0c9200372}
+      \strng{authorbibnamehash}{db0f3ae4a985965d26fb64f0c9200372}
+      \strng{authornamehash}{db0f3ae4a985965d26fb64f0c9200372}
+      \strng{authorfullhash}{0e02b2e367658b2b89eb255612f3d9b6}
+      \field{sortinit}{L}
+      \field{sortinithash}{2c7981aaabc885868aba60f0c09ee20f}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{arXiv preprint arXiv:1412.6553}
+      \field{title}{Speeding-up convolutional neural networks using fine-tuned cp-decomposition}
+      \field{year}{2014}
+    \endentry
     \entry{lecun1998gradient}{article}{}
       \true{moreauthor}
       \true{morelabelname}

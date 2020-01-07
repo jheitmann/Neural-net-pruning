@@ -187,6 +187,8 @@ Marginal distribution? Given that the node contains at least one weight that is 
 
 \subsubsection*{Models}
 
+\textbf{Add accuracy after convergence.}
+
 \begin{figure}[H]
 \centering
 \scalebox{.65}
@@ -299,11 +301,51 @@ The next section is motivated by the wish to examine more precisely the nature o
 \label{fig:vgg-conv16-final} 
 \end{figure}
 
-\subsection{Subspace analysis}
+\subsubsection*{Additional observations}
 TODO
 
-\subsection{Additional results}
-TODO
+\subsection{Subspace analysis}
+
+\subsubsection*{Purpose}
+In light of the findings of the previous sections and based on results in model compression that make use of matrix factorization ~\autocite{lebedev2014speeding} to compress deep neural networks, we propose a subspace analysis of chosen layer weight matrices, as a way to confirm the intuition we got from the visualization, and to learn more about the properties of models of different sizes. Inspired from the use of Random Matrix Theory in \cite{martin2018implicit} to study implicit self-regularization of neural networks, we analyze the Empirical Spectral Density (ESD) of layer correlation matrices. For a given weight matrix $\mathbf{W} \in \mathbb{R}^{n \times m}$, the ESD of the correlation matrix $\mathbf{X} = \mathbf{W}\mathbf{W}^T, \mathbf{X} \in \mathbb{R}^{n \times n}$ is the density of eigenvalues $\rho(\lambda)$. When the entries of $\mathbf{W}$ are drawn from a Gaussian distribution \textbf{--} in our case Gaussian Glorot, $w_{ij} \sim \mathcal{N}(0, \sigma^2 = 2 / (m+n))$ \textbf{--} then Marchenko-Pastur (MP) theory states that the ESD of the correlation matrix $\mathbf{X}$ has the limiting density given by the MP distribution $\rho(\lambda)$, which is parametrized by the variance $\sigma^2$ and the aspect ratio $Q$ of the matrix $\mathbf{W}$, $Q = m/n \geq 1$, $n$ being the number of units and $m$ the length of the weight vectors.
+
+\subsubsection*{Observations}
+
+\begin{figure}[H]
+\centering
+	\includegraphics[scale=0.36]{images/conv2-fc1-svd-comp.png}
+\caption{Empirical spectral densities of Conv-2 first fully connected layer correlation matrix. $Q = 64, \sigma^2 = 1.20$e-4.}
+\label{fig:conv2-fc1-svd-comp} 
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[b]{\textwidth}
+   \includegraphics[width=1\linewidth]{images/vgg-fc1-svd-comp.png}
+   \caption{First fully connected layer. $Q = 1, \sigma^2 = 1.95$e-3.}
+   \label{fig:vgg-conv16-svd-comp}
+\end{subfigure}
+
+\begin{subfigure}[b]{\textwidth}
+   \includegraphics[width=1\linewidth]{images/vgg-conv16-svd-comp.png}
+   \caption{Last convolutional layer. $Q = 4, \sigma^2 = 3.47$e-4.}
+   \label{fig:vgg-conv16-svd-comp} 
+\end{subfigure}
+\caption{Empirical spectral densities of VGG19 layer correlation matrices}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\scalebox{0.9}
+{\begin{tabular}{SSSS} \toprule
+    {\textit{Network}} & {Conv-2} & {Conv-6} & {VGG19} \\ \midrule
+    {\textit{Elbow}} & {10} & {10} & {10} \\
+    {$100 \cdot \frac{ \| \textbf{W}_{\text{proj}} \|_F }{ \| \textbf{W} \|_F }$}  & {70} & {80} & {99} \\
+    {$a - a_{\text{proj}}$}  & {3} & {2} & {0.1} \\
+    {\textit{Standard deviation}} & {0.2} & {0.2} & {\textbf{--}}\\ \bottomrule
+\end{tabular}}
+\caption{Low-rank approximation of first fully connected layer, tested with different architectures. For Conv-2 and Conv-6, values are averages taken over 10 random experiments.}
+\end{figure}
 
 \section{Discussion}
 
