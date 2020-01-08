@@ -221,13 +221,13 @@ where $\mathbf{w}_i$ are the normalized rows of $\hat{\mathbf{W}}$. Note that if
 \end{align*}
 
 \subsubsection*{Problem setup}
-Consider a dense feed-forward neural network $f(x; \theta)$ with initial parameters $\theta = \theta_0 \sim \mathcal{D}_{\theta}$, corresponding to the weights of one input layer, $N$ hidden layers, and one output layer. When optimizing with Stochastic Gradient Descent (SGD) on a training set, $f$ reaches minimum validation loss $l$ at iteration $j$ with test accuracy $a$. The network has arrived at parameters $\theta_j$. Let $\mathbf{W}^L \in \mathbb{R}^{n \times m}$ be the weight matrix associated to the $L^{\text{th}}$ layer (input, hidden or output), at iteration $j$. Out of the $n$ units, we would like to remove $p < n$ of them such that, given the newly obtained test accuracy $a_p$ when dropping these units, the difference in accuracy $\Delta = a - a_p$ is minimized. Due to the combinatorial nature of the problem, we focus on greedy methods that iteratively remove units based on a certain criterion.  \\
+Consider a dense feed-forward neural network $f(x; \theta)$ with initial parameters $\theta = \theta_0 \sim \mathcal{D}_{\theta}$, corresponding to the weights of one input layer, $N$ hidden layers, and one output layer. When optimizing with Stochastic Gradient Descent (SGD) on a training set, $f$ reaches minimum validation loss $l$ at iteration $j$ with test accuracy $a$. The network has arrived at parameters $\theta_j$. Let $\mathbf{W}^L \in \mathbb{R}^{m \times n}$ be the weight matrix associated to the $L^{\text{th}}$ layer (input, hidden or output), at iteration $j$. Out of the $m$ units, we would like to remove $p < m$ of them such that, given the newly obtained test accuracy $a_p$ when dropping these units, the difference in accuracy $\Delta = a - a_p$ is minimized. Due to the combinatorial nature of the problem, we focus on greedy methods that iteratively remove units based on a certain criterion.  \\
 
-\textit{Magnitude pruning}: Sort the weight vectors by their norm $\|\mathbf{w}_i\|, 1 \leq i \leq n$. Remove the weight vector with the smallest norm. Repeat the procedure $p$ times, updating the weight matrix accordingly. \\
+\textit{Magnitude pruning}: Sort the weight vectors by their norm $\|\mathbf{w}_i\|, 1 \leq i \leq m$. Remove the weight vector with the smallest norm. Repeat the procedure $p$ times, updating the weight matrix accordingly. \\
 
-\textit{Frame-potential pruning}: Sort the weight vectors by their contribution to the frame-potential, which for a weight vector $\mathbf{w}_i, 1 \leq i \leq n$, is $\sum\limits_{j=1}^n | \langle \hat{\mathbf{w}}_i, \hat{\mathbf{w}}_j \rangle |^2$, where $\hat{\mathbf{w}}_i, \hat{\mathbf{w}}_j$ are the normalized vectors. Remove the weight vector with the smallest contribution to the frame-potential. Repeat the procedure $p$ times, updating the weight matrix accordingly. \\
+\textit{Frame-potential pruning}: Sort the weight vectors by their contribution to the frame-potential, which for a weight vector $\mathbf{w}_i, 1 \leq i \leq m$, is $\sum\limits_{j=1}^m | \langle \hat{\mathbf{w}}_i, \hat{\mathbf{w}}_j \rangle |^2$, where $\hat{\mathbf{w}}_i, \hat{\mathbf{w}}_j$ are the normalized vectors. Remove the weight vector with the smallest contribution to the frame-potential. Repeat the procedure $p$ times, updating the weight matrix accordingly. \\
 
-For the sake of comparison, we might want to remove $p < n$ units such that the difference in accuracy $\Delta = a - a_p$ is maximized, to study how much harm can be done to the trained network. Again, using magnitude or contribution to frame-potential as a metric to measure a unit's saliency, we can adapt \textit{Magnitude pruning} and \textit{Frame-potential pruning} such that the weight vector with the highest norm or the highest contribution to the frame-potential is removed, and repeat this procedure multiple times. \\
+For the sake of comparison, we might want to remove $p < m$ units such that the difference in accuracy $\Delta = a - a_p$ is maximized, to study how much harm can be done to the trained network. Again, using magnitude or contribution to frame-potential as a metric to measure a unit's saliency, we can adapt \textit{Magnitude pruning} and \textit{Frame-potential pruning} such that the weight vector with the highest norm or the highest contribution to the frame-potential is removed, and repeat this procedure multiple times. \\
 
 The effects of pruning without retraining were only studied for the smaller models LeNet and Conv-2. Random pruning, which removes individual units at random, has been added as a baseline. Other pruning metrics, that were not discussed in this report, have also been tested and should be disregarded.
 The results are summarized in figures \ref{fig:lenet-fc1} and \ref{fig:conv2-fc1}.
@@ -254,7 +254,7 @@ The results are summarized in figures \ref{fig:lenet-fc1} and \ref{fig:conv2-fc1
 \subsection{Visualizing training dynamics}
 
 \subsubsection*{Method}
-For a given weight matrix $\mathbf{W} \in \mathbb{R}^{n \times m}$, we would like to embed the norms of the rows of $\mathbf{W}$, $\|\mathbf{w}_1\|, \ldots, \|\mathbf{w}_n\|$, and the cosine similarities between the rows in a visualization. The cosine similarities can be obtained from the correlation matrix $\mathbf{X} = \hat{\mathbf{W}}\hat{\mathbf{W}}^T$, where $\hat{\mathbf{W}}$ is the matrix we get when normalizing the rows of $\textbf{W}$. A direct visualization of the weight vectors in an $m$-dimensional space is impractical, as $m$ can be very high (e. g. $m = 16384$ for the first fully connected layer of Conv-2). \\
+For a given weight matrix $\mathbf{W} \in \mathbb{R}^{m \times n}$, we would like to embed the norms of the rows of $\mathbf{W}$, $\|\mathbf{w}_1\|, \ldots, \|\mathbf{w}_m\|$, and the cosine similarities between the rows in a visualization. The cosine similarities can be obtained from the correlation matrix $\mathbf{X} = \hat{\mathbf{W}}\hat{\mathbf{W}}^T$, where $\hat{\mathbf{W}}$ is the matrix we get when normalizing the rows of $\textbf{W}$. A direct visualization of the weight vectors in an $n$-dimensional space is impractical, as $n$ can be very high (e. g. $n = 16384$ for the first fully connected layer of Conv-2). \\
 
 Since we mainly care about magnitude and angle, the former being a feature of a weight vector, and the latter a property between weight vectors, an undirected weighted graph seems to be an appropriate choice of visualization. More specifically, we can construct a time-varying graph, with nodes representing individual weight vectors (single units), and weights between nodes (edges) representing the closeness between weight vectors as a function of the cosine similarity. Because edge weights must be positive and the entries of the correlation matrix $\mathbf{X}$ take values in $[-1, 1]$, we first transform the cosine similarity matrix to a cosine distance matrix, i. e. we compute $\mathbf{1} - \mathbf{X}$, whose entries lie in $[0, 2]$ (0 if colinear, 1 if orthogonal, 2 if opposed direction). Next we use a Gaussian function in order to turn these cosine distances into weights:
 
@@ -306,15 +306,41 @@ TODO
 
 \subsection{Subspace analysis}
 
-\subsubsection*{Purpose}
-In light of the findings of the previous sections and based on results in model compression that make use of matrix factorization ~\autocite{lebedev2014speeding} to compress deep neural networks, we propose a subspace analysis of chosen layer weight matrices, as a way to confirm the intuition we got from the visualization, and to learn more about the properties of models of different sizes. Inspired from the use of Random Matrix Theory in \cite{martin2018implicit} to study implicit self-regularization of neural networks, we analyze the Empirical Spectral Density (ESD) of layer correlation matrices. For a given weight matrix $\mathbf{W} \in \mathbb{R}^{n \times m}$, the ESD of the correlation matrix $\mathbf{X} = \mathbf{W}\mathbf{W}^T, \mathbf{X} \in \mathbb{R}^{n \times n}$ is the density of eigenvalues $\rho(\lambda)$. When the entries of $\mathbf{W}$ are drawn from a Gaussian distribution \textbf{--} in our case Gaussian Glorot, $w_{ij} \sim \mathcal{N}(0, \sigma^2 = 2 / (m+n))$ \textbf{--} then Marchenko-Pastur (MP) theory states that the ESD of the correlation matrix $\mathbf{X}$ has the limiting density given by the MP distribution $\rho(\lambda)$, which is parametrized by the variance $\sigma^2$ and the aspect ratio $Q$ of the matrix $\mathbf{W}$, $Q = m/n \geq 1$, $n$ being the number of units and $m$ the length of the weight vectors.
+In light of the findings of the previous sections and based on results in model compression that make use of matrix factorization ~\autocite{lebedev2014speeding} to compress deep neural networks, we propose a subspace analysis of chosen layer weight matrices, as a way to confirm the intuition we got from the visualization, and to learn more about the properties of models of different sizes. Inspired from the use of Random Matrix Theory of \cite{martin2018implicit} to study implicit self-regularization of neural networks, we analyze the Empirical Spectral Density (ESD) of layer correlation matrices. We also look at how performing a low-rank approximation of certain layer weight matrices affects the test accuracy, to see how informative the obtained low-complexity component is, depending on the model.
+
+\subsubsection*{Random Matrix Theory}
+For a given weight matrix $\mathbf{W} \in \mathbb{R}^{m \times n}$, the ESD of the correlation matrix $\mathbf{X} = \mathbf{W}\mathbf{W}^T, \mathbf{X} \in \mathbb{R}^{m \times m}$ is the density of eigenvalues $\rho(\lambda)$. If $\textbf{Z}$ denotes a $m \times n$ random matrix whose entries are independent identically distributed random variables with mean 0 and variance $\sigma^2 < \infty$, let
+
+\begin{align*}
+ \mathbf{Y}_n  = \frac{1}{n} \mathbf{Z} \mathbf{Z}^T, \mathbf{Y}_n \in \mathbb{R}^{m \times m}
+\end{align*}
+
+Then Marchenko-Pastur (MP) theory states that the ESD of $\mathbf{Y}_n$ has the limity density given by the MP distribution $\rho(\lambda)$. Note that $\rho(\lambda)$ is parametrized by the variance $\sigma^2$ and the aspect ratio $Q = n/m$ of the matrix $\mathbf{Z}$. In our case, $(\textbf{W})_{ij} \overset{\text{i.i.d.}}{\sim} \mathcal{N}(0, \sigma^2)$, where $\sigma^2$ is determined by the Gaussian Glorot distribution, and
+
+\begin{align*}
+ \mathbf{X} &= \mathbf{W}\mathbf{W}^T \\
+ & = \frac{1}{n} (\sqrt{n}\mathbf{W})(\sqrt{n}\mathbf{W}^T)
+\end{align*}
+
+Since $(\sqrt{n}\mathbf{W})_{ij} \overset{\text{i.i.d.}}{\sim} \mathcal{N}(0, n\sigma^2)$, the limiting distribution of the ESD of $\mathbf{X}$ depends only on $Q = n/m$ and $n\sigma^2$.
+
+\subsubsection*{Orthogonal Projections}
+Let $\mathbf{A} \in \mathbb{R}^{m \times n}$ be a real (possibly rectangular) matrix with $m \geq n$. Suppose that $\mathbf{A} = \mathbf{U}\mathbf{\Sigma}\mathbf{V}^T$ is the Singular Value Decomposition (SVD) of $\mathbf{A}$. Recall that $\mathbf{U}$ and $\mathbf{V}$ are orthogonal matrices, and $\mathbf{\Sigma}$ is an $m \times n$ diagonal matrix with entries $(\sigma_1, \sigma_2, \dots, \sigma_n)$ such that $\sigma_1 \geq \sigma_2 \geq \dots \geq \sigma_n \geq 0$. Then the Eckart–Young–Mirsky theorem states that the best rank $k$ approximation to $\mathbf{A}$ in the spectral norm, denoted by $\|\cdot\|_2$, is given by
+
+\begin{align*}
+\mathbf{A}_k = \sum\limits_{i=1}^k \sigma_i \mathbf{u}_i \mathbf{v}_i^T,
+\end{align*}
+
+where $\mathbf{u}_i$ and $\mathbf{v}_i^T$ denote the $i^{\text{th}}$ column of $\mathbf{U}$ and $\mathbf{V}$ respectively. \\
+
+We are interested in the row-space of a weight matrix $\mathbf{W} \in \mathbb{R}^{m \times n}$, to study how implicit self-regularization mechanism operate at the level of units. Thus we perform a rank $k$ approximation of the matrix $\mathbf{W}^T, k < m$, denoted by $\mathbf{W}_k^T$, before replacing $\mathbf{W}$ by $\mathbf{W}_k$ in the original network. To find a good value of $k$, the elbow method is applied to the function that maps the rank $k, 1 \leq k < m$, to the residuals obtained when performing a low-rank approximation of rank $k$.
 
 \subsubsection*{Observations}
 
 \begin{figure}[H]
 \centering
 	\includegraphics[scale=0.36]{images/conv2-fc1-svd-comp.png}
-\caption{Empirical spectral densities of Conv-2 first fully connected layer correlation matrix. $Q = 64, \sigma^2 = 1.20$e-4.}
+\caption{Empirical spectral densities of Conv-2 first fully connected layer correlation matrix, $Q = 64$.}
 \label{fig:conv2-fc1-svd-comp} 
 \end{figure}
 
@@ -322,13 +348,13 @@ In light of the findings of the previous sections and based on results in model 
 \centering
 \begin{subfigure}[b]{\textwidth}
    \includegraphics[width=1\linewidth]{images/vgg-fc1-svd-comp.png}
-   \caption{First fully connected layer. $Q = 1, \sigma^2 = 1.95$e-3.}
+   \caption{First fully connected layer, $Q = 1$.}
    \label{fig:vgg-conv16-svd-comp}
 \end{subfigure}
 
 \begin{subfigure}[b]{\textwidth}
    \includegraphics[width=1\linewidth]{images/vgg-conv16-svd-comp.png}
-   \caption{Last convolutional layer. $Q = 4, \sigma^2 = 3.47$e-4.}
+   \caption{Last convolutional layer, $Q = 9$.}
    \label{fig:vgg-conv16-svd-comp} 
 \end{subfigure}
 \caption{Empirical spectral densities of VGG19 layer correlation matrices}
@@ -339,7 +365,7 @@ In light of the findings of the previous sections and based on results in model 
 \scalebox{0.9}
 {\begin{tabular}{SSSS} \toprule
     {\textit{Network}} & {Conv-2} & {Conv-6} & {VGG19} \\ \midrule
-    {\textit{Elbow}} & {10} & {10} & {10} \\
+    {\textit{Rank} $k$} & {10} & {10} & {10} \\
     {$100 \cdot \frac{ \| \textbf{W}_{\text{proj}} \|_F }{ \| \textbf{W} \|_F }$}  & {70} & {80} & {99} \\
     {$a - a_{\text{proj}}$}  & {3} & {2} & {0.1} \\
     {\textit{Standard deviation}} & {0.2} & {0.2} & {\textbf{--}}\\ \bottomrule
@@ -349,8 +375,7 @@ In light of the findings of the previous sections and based on results in model 
 
 \section{Discussion}
 
-Write Conclusion and discuss future work.
-Even though emergence of removable and repeated units, implicit self-regularization operates at a different level. Subspace, study more in detail what they mean (singular vectors) in terms of the previous layer, to design better pruning methods.
+Write conclusion and discuss future work. Even though emergence of removable and repeated units, implicit self-regularization operates at a different level. Subspace, study more in detail what they mean (singular vectors) in terms of the previous layer, to design better pruning methods.
 
 \nocite{*}
 \printbibliography
