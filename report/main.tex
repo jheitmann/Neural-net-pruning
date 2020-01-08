@@ -337,6 +337,8 @@ We are interested in the row-space of a weight matrix $\mathbf{W} \in \mathbb{R}
 
 \subsubsection*{Observations}
 
+Figures \ref{fig:conv2-fc1-svd-comp}, \ref{fig:vgg-conv16-svd-comp} and \ref{fig:vgg-conv16-svd-comp} show the empirical spectral densities we get for different layers. Without adding an explicit regularization term when optimizing with SGD, all layer weight matrices converge to a low-complexity solution (with a small nuclear norm), as demonstrated by the large number of eigenvalues close to 0 and just a few bigger eigenvalues. This seems to be particularly true for larger models such as VGG19 (fig. \ref{fig:vgg-conv16-svd-comp} and fig. \ref{fig:vgg-conv16-svd-comp}), where there is no tail-off close to 0 in the distribution of eigenvalues but rather a drop. \\
+
 \begin{figure}[H]
 \centering
 	\includegraphics[scale=0.36]{images/conv2-fc1-svd-comp.png}
@@ -360,11 +362,12 @@ We are interested in the row-space of a weight matrix $\mathbf{W} \in \mathbb{R}
 \caption{Empirical spectral densities of VGG19 layer correlation matrices}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[h]
 \centering
 \scalebox{0.9}
 {\begin{tabular}{SSSS} \toprule
     {\textit{Network}} & {Conv-2} & {Conv-6} & {VGG19} \\ \midrule
+	{\textit{Number of neurons}} & {256} & {256} & {512} \\    
     {\textit{Aspect ratio Q}} & {64} & {16} & {1} \\
     {\textit{Rank} $k$} & {10} & {10} & {10} \\
     {$100 \cdot \frac{ \| \mathbf{W}_k \|_F }{ \| \mathbf{W} \|_F }$}  & {71.61} & {61.43} & {99.99} \\
@@ -372,7 +375,12 @@ We are interested in the row-space of a weight matrix $\mathbf{W} \in \mathbb{R}
     {\textit{Standard deviation}} & {\textbf{--}} & {\textbf{--}} & {\textbf{--}}\\ \bottomrule
 \end{tabular}}
 \caption{Low-rank approximation of first fully connected layer, tested with different architectures. For Conv-2 and Conv-6, values are averages taken over 10 random experiments. $a_{\text{proj}}$ denotes the accuracy obtained after replacing $\mathbf{W}$ by $\mathbf{W}_k$.}
+\label{fig:low-rank}
 \end{figure}
+
+Figure \ref{fig:low-rank} confirms this observation, when performing a rank 10 approximation of the first fully connected layer's weight matrix, there is no drop in test accuracy for the VGG19 model, and the norm of the weight matrix is almost unaffected by the approximation. Another thing we observe is that the deeper the model, the smaller the drop in test accuracy after the rank 10 approximation. Note that with increasing depth, the aspect ratio of the first fully connected layer's weight matrix decreases. This might result in a better exploration of the feature space.  \\
+
+It is curious that irrespective of the model, the elbow value for the rank $k$ of the approximation is 10 for all first fully connected layers. 10 is also the number of classes in the CIFAR-10 dataset, and it would be interesting to check whether this would also apply to a different number of classes. 
 
 \section{Discussion}
 
