@@ -30,7 +30,8 @@
 %	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
 %----------------------------------------------------------------------------------------
 
-\documentclass[12pt]{article}
+\documentclass[10pt]{article}
+\usepackage[margin=1.5in]{geometry}
 \usepackage[utf8]{inputenc} % remove x to make it compatible to biblography
 \usepackage[T1]{fontenc} % added instead of utf8x
 \usepackage{textcomp} % added instead of utf8x
@@ -73,7 +74,7 @@
 %----------------------------------------------------------------------------------------
 
 \textsc{\LARGE Data Science Semester Project}\\[1.5cm] % Name of your university/college
-\textsc{\large{Author: }Julien Heitmann}\\[0.5cm] % Major heading such as course name
+\textsc{Signal Processing Laboratory (LTS4)}\\[0.5cm] % Major heading such as course name
 
 %----------------------------------------------------------------------------------------
 %	TITLE SECTION
@@ -84,15 +85,7 @@
 \HRule \\[0.6cm]
 { \huge \bfseries Sources of Redundancy in Neural Networks}\\[0.5cm] % Title of your document
 \HRule \\[1.5cm]
- 
-%----------------------------------------------------------------------------------------
-%	AUTHOR SECTION
-%----------------------------------------------------------------------------------------
 
-
-% If you don't want a supervisor, uncomment the two lines below and remove the section above
-%\Large \emph{Author:}\\
-%John \textsc{Smith}\\[3cm] % Your name
 
 %----------------------------------------------------------------------------------------
 %	DATE SECTION
@@ -100,6 +93,18 @@
 \begin{figure}[!h] 
         \centering \includegraphics[width=0.6\columnwidth]{images/EPFL_Logo_Digital_RGB_PROD.jpg}
 \end{figure}
+
+\vspace{2.5cm}
+%----------------------------------------------------------------------------------------
+%	AUTHOR SECTION
+%----------------------------------------------------------------------------------------
+
+
+% If you don't want a supervisor, uncomment the two lines below and remove the section above
+\Large \emph{Author:}\\
+Julien Niklas Heitmann\\[.5cm] % Your name
+\Large \emph{Supervisor:}\\
+Guillermo Ortiz Jiménez\\[.5cm] %  Name of supervisor
 
 \vfill % Fill the rest of the page with whitespace
 \end{titlepage}
@@ -110,7 +115,7 @@
 \setlength\parindent{0pt}
 
 \section{Introduction}
-One of the suprising results of training deep neural networks with many more parameters than training samples is that one can achieve zero-training loss but still get good generalisation ~~\autocite{neyshabur2018towards}. While statistical learning theory suggests that such heavily over-parametrised networks generalise poorly without further regularisation, experiments show that in most cases, increasing the number of parameters does not worsen the capability to generalise. In fact, it often happens that, when training two models with $N1$ and $N2$ neurons respectively, $N1 > N2$, training will converge to zero-training loss in both cases, but the larger model will generalise better. This paradox is one of the big unresolved questions of deep learning, and understanding the phenomena behind it would deliver a lot of insights about why neural networks work so well. The question arises why the network doesn't exploit its full expressive power to overfit the training dataset. Modern network architectures, which can have up to 100x more trainable parameters than training samples ~\autocite{zagoruyko2016wide}, most certainly are capable of learning the entire dataset, independently of the labels. It has been shown that zero training loss can even be achieved when the training labels are randomly shuffled ~\autocite{zhang2016understanding}, thus preventing the learning of underlying features of the data that are sufficient to solve the classification task at hand. \\
+One of the suprising results of training deep neural networks with many more parameters than training samples is that one can achieve zero-training loss but still get good generalisation ~~\autocite{neyshabur2018towards}. While statistical learning theory suggests that such heavily over-parameterized networks generalize poorly without further regularisation, experiments show that in most cases, increasing the number of parameters does not worsen the capability to generalize. In fact, it often happens that, when training two models with $N1$ and $N2$ neurons respectively, $N1 > N2$, training will converge to zero-training loss in both cases, but the larger model will generalize better. This paradox is one of the big unresolved questions of deep learning, and understanding the phenomena behind it would deliver a lot of insights about why neural networks work so well. The question arises why the network doesn't exploit its full expressive power to overfit the training dataset. Modern network architectures, which can have up to 100x more trainable parameters than training samples ~\autocite{zagoruyko2016wide}, most certainly are capable of learning the entire dataset independently of the labels. It has been shown that zero training loss can even be achieved when the training labels are randomly shuffled ~\autocite{zhang2016understanding}, thus preventing the learning of underlying features of the data that are sufficient to solve the classification task at hand. \\
 
 Surely one must look at the interplay between the dataset properties, the network architecture and the optimization algorithm, but the latter in particular seems to play a crucial role, as it somehow consistently favors solutions in the optimization landscape that generalize, over solutions that overfit the data and in some cases do not learn a representation of the data. Is it a property of the optimization algorithm, does stochastic gradient descent optimization lead to sparse solutions? If yes, how do these sparse solutions look like? Do trained neural networks rely on single components (nodes or filters), even with a growing number of parameters? Or does each of the components contribute equally to the estimated function, thus reducing the contribution when there are more parameters? \\
 
@@ -120,7 +125,9 @@ This project aims to explore different hypotheses about neural network training 
 
 \subsection{Formal background}
 
-Formally define frame potential, generalization error, network architecture, optimization algorithms. 
+Formally define neural networks, generalization error, structured and unstructured pruning. \\
+
+\textbf{TODO}
 
 \section{Related work}
 \label{section:prior}
@@ -150,25 +157,31 @@ Contemporary experience suggests that overparameterized networks are easier to t
 
 According to the authors, at initialization, some weights that form a sub-network "win the lottery", because the combination of their initial value and the way they are aranged in that particular sub-network makes them particularly "trainable" by the chosen optimization algorithm, compared to other weights that are not in the sub-network. Those weights form what is called a "winning ticket", and the paper provides a way to identify the winning ticket after multiple iterations of pruning, based on the weight magnitudes, and retraining, to compensate for the loss in accuracy caused by pruning. One of the important results of the paper is that when the weights of the winning ticket, which can be seen as a mask applied to the weights of the network, are reset to their initial value (all other weights set to zero), then the newly obtained network reaches similar if not better accuracy than the original network, up to a certain degree of pruning (up to 96\%). Surprisingly, this result does not hold when the weights of the winning ticket are re-sampled, meaning that both the pruned architecture and the values of the unpruned weights are of importance. When randomly re-sampled, the winning tickets learn slower and reach lower accuracy than the re-initialized one. \\
 
-Note that, as individual weights are pruned to identify the winning ticket, the theory makes use of unstructured pruning, and a winning ticket obtained by this procedure would have to rely on speciliased libraries and hardware to exploit benefits of the weight matrix sparsity. According to \cite{liu2018rethinking}, the results do not hold when using structured pruning, and might even be misleading in the case of unstructured pruning. The authors of the paper claim that the optimization algorithm (ADAM) and the small initial learning rate of the original paper lead to inferior accuracy when the winning ticket is randomly initialized, but this can be remedied using SGD and a higher learning rate. Moreover, as claimed in the original paper, the procedure to identify a winning ticket fails for deeper networks. Nonetheless, according to Frankle and Carbin, even if in some cases, up to a certain level of sparsity, highly overparameterized networks can be pruned, reinitialized and retrained successfully, beyond a certain point, when the network is extremely pruned, less severely overparameterized networks only maintain a good validation accuracy if they are well-initialised. Also, winning tickets have been found for deeper networks ~\autocite{frankle2019lottery} when, instead of resetting the weights of the winning ticket to their initial values, they are rewinded to their former values at iteration $k$, where $k$ is much smaller than the total number of training iterations. Finally, winning tickets generate so much interest because they might reveal a lot about how to better initialise neural networks, but also help better understand the bias of modern optimization algorithms towards sparse solutions. Surprisingly, it has been shown that, within the natural images domain, winning ticket initialisations generalise across a variety of datasets, often achieving performance close to that of winning tickets generated on the same dataset ~\autocite{morcos2019one}. This suggests that winning tickets somehow have an inductive bias generic to neural networks, which generalizes to multiple configurations. 
+Note that, as individual weights are pruned to identify the winning ticket, the theory makes use of unstructured pruning, and a winning ticket obtained by this procedure would have to rely on speciliased libraries and hardware to exploit benefits of the weight matrix sparsity. According to \cite{liu2018rethinking}, the results do not hold when using structured pruning, and might even be misleading in the case of unstructured pruning. The authors of the paper claim that the optimization algorithm (ADAM) and the small initial learning rate of the original paper lead to inferior accuracy when the winning ticket is randomly initialized, but this can be remedied using SGD and a higher learning rate. Moreover, as claimed in the original paper, the procedure to identify a winning ticket fails for deeper networks. Nonetheless, according to Frankle and Carbin, even if in some cases, up to a certain level of sparsity, highly overparameterized networks can be pruned, reinitialized and retrained successfully, beyond a certain point, when the network is extremely pruned, less severely overparameterized networks only maintain a good validation accuracy if they are well-initialised. Also, winning tickets have been found for deeper networks ~\autocite{frankle2019lottery} when, instead of resetting the weights of the winning ticket to their initial values, they are rewinded to their former values at iteration $k$, where $k$ is much smaller than the total number of training iterations. Finally, winning tickets generate so much interest because they might reveal a lot about how to better initialise neural networks, but also help better understand the bias of modern optimization algorithms towards sparse solutions. Surprisingly, it has been shown that, within the natural images domain, winning ticket initialisations generalize across a variety of datasets, often achieving performance close to that of winning tickets generated on the same dataset ~\autocite{morcos2019one}. This suggests that winning tickets somehow have an inductive bias generic to neural networks, which generalizes to multiple configurations. 
 
 \subsubsection*{Alignment of weight vectors during training}
 \cite{brutzkus2019larger} define a simple 3-layer neural network for a binary classification task they call the XORD problem (XOR Detection). Its input is a vector with $2d$ entries, which take values in $\{-1, 1\}$, and the vector can be written as a sequence of $d$ pairs. The goal is to determine whether any of the pairs has twice the same value ($1$ or $-1$). For this purpose a neural network is trained, with a convolutional, a max-pool and a fully connected layer. Only the weights of the convolutional layer, which are vectors in $\mathbb{R}^2$, are trainable. The authors prove that increasing the size of the convolutional layer results in better feature exploration, and that after convergence the weight vectors associated to the learned convolutions cluster around just a few directions. Furthermore, they show that when the size of the convolutional layer is small (just a few trainable weights), the network can achieve zero-training error on specific datasets, but not generalize well, because it is missing some patterns. This is less likely to happen with a larger convolutional layer because of better exploration of the feature space. According to the authors, this might explain why over-parameterized neural networks don't overfit the training dataset and in some cases even generalize better than smaller networks. The former can be explained by weight clustering, which reduces the effective capacity of the network, and the latter by better exploration of the input space. Hence the observed generalization properties of over-parameterized networks do not contradict the findings of statistical learning, since training with gradient descent will facilitate the formation of clusters, thus reducing the network's expressive power. Empirically, the paper looks at a 3-layer neural network with a large convolutional layer, trained on MNIST. More specifically, after training, the vectors associated to the convolutional filters are clustered using K-Means with four clusters. The distribution of angles with respect to the closest cluster center is compared to that of clustered untrained vectors (at initialization). The findings are in accordance with the XORD theory, as trained vectors tend to be much closer to the center of the cluster they are part of.\\
 
-Coming back to the second question: XOR-problem, sparse subspace spanned by trained vectors. Question arises: will optimization algorithms such as SGD enforce this alignment, therefore preventing overfitting? Interplay between vector alignment and "trainable" vectors. Goal is to explore and go beyond, understanding this mechanism will help us design better optimization algorithms, pruning methods, architectures, initialization methods, etc. Collapse at last layer?
+%Coming back to the second question: XOR-problem, sparse subspace spanned by trained vectors. Question arises: will optimization algorithms such as SGD enforce this alignment, therefore preventing overfitting? Interplay between vector alignment and "trainable" vectors. Goal is to explore and go beyond, understanding this mechanism will help us design better optimization algorithms, pruning methods, architectures, initialization methods, etc. Collapse at last layer?%
 
 
 \subsubsection*{Additional work}
-Better exploration, luck and overlap, alignment of noise subspace.
+Better exploration, luck and overlap, alignment of noise subspace. \\
 
+\textbf{TODO}
 
 \subsection{Leveraging model simplicity: Compression and Pruning}
-Structured vs unstructured pruning, surprisingly leads to better generalization, pruning as a noise signal. Speed-up, memory foot-print. Need over-parameterized network for better exploration of hidden layer space (give examples), once the model converges / during training, remove useless components. Surprising results: prune components with highest magnitude, can lead to better test accuracy after re-training the pruned network.
+Structured vs unstructured pruning, surprisingly leads to better generalization, pruning as a noise signal. Speed-up, memory foot-print. Need over-parameterized network for better exploration of hidden layer space (give examples), once the model converges / during training, remove useless components. Surprising results: prune components with highest magnitude, can lead to better test accuracy after re-training the pruned network. \\
+
+\textbf{TODO}
 
 \section{Results}
 
-This project focuses on classification tasks on natural images datasets, solved by neural networks. It takes a weight-vector perspective when reasoning about the sources of redundancy and the effects of pruning. This means that only structured pruning will be performed, at the level of neurons or filters. Those will also be the main entities studied when trying to understand the properties of neural network optimization. Why not look at unstructured pruning / individual weights? \\
+This project focuses on classification tasks on natural images datasets, solved by neural networks. It takes a weight-vector perspective when reasoning about the sources of redundancy and the effects of pruning. This means that only structured pruning will be performed, at the level of neurons or filters. Those will also be the main entities studied when trying to understand the properties of neural network optimization. Why not look at unstructured pruning or individual weights? \\
 
+\textbf{TODO}
+
+\begin{comment}
 The fact that the lottery ticket hypothesis might not really apply at the level of nodes / filters ~\autocite{liu2018rethinking} could be due to multiple reasons:
 \begin{itemize}
 \item It is more difficult to identify winning tickets at the level of nodes or filters, i. e. iterative pruning based on the $\ell_2$-norm fails to identify elements that are part of the winning ticket
@@ -184,6 +197,7 @@ Nonetheless, larger networks might still generalize better, and when we do not k
 Assuming that the lottery ticket hypothesis is true, all nodes or filters of a layer in a neural network have the same probability of being part of the "trainable" subnetwork at initialization, that is having some weights that are in the winning ticket. Also, at every layer, all nodes or filters have the same expected number of weights in the winning ticket. 
 
 Marginal distribution? Given that the node contains at least one weight that is part of the winning ticket, how does that affect the probability of other weights in the same node or filter of being part of the winning ticket?
+\end{comment}
 
 \subsubsection*{Models}
 
@@ -302,7 +316,23 @@ The next section is motivated by the wish to examine more precisely the nature o
 \end{figure}
 
 \subsubsection*{Additional observations}
-TODO
+Figures \ref{fig:conv2-sgd-resampled} and \ref{fig:fc1-sgd-resampled}.
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}[b]{0.62\textwidth}
+   \includegraphics[width=\linewidth]{images/conv2-sgd-resampled.png}
+   \caption{Last convolutional layer, inner-product cutoff: 0.48}
+   \label{fig:conv2-sgd-resampled} 
+\end{subfigure}
+
+\begin{subfigure}[b]{0.62\textwidth}
+   \includegraphics[width=\linewidth]{images/fc1-sgd-resampled.png}
+   \caption{First fully connected layer, inner-product cutoff: 0.25}
+   \label{fig:fc1-sgd-resampled}
+\end{subfigure}
+\caption{Model comparison when re-sampling the classifier}
+\end{figure}
 
 \subsection{Subspace analysis}
 
@@ -378,13 +408,17 @@ Figures \ref{fig:conv2-fc1-svd-comp}, \ref{fig:vgg-conv16-svd-comp} and \ref{fig
 \label{fig:low-rank}
 \end{figure}
 
-Figure \ref{fig:low-rank} confirms this observation, when performing a rank 10 approximation of the first fully connected layer's weight matrix, there is no drop in test accuracy for the VGG19 model, and the norm of the weight matrix is almost unaffected by the approximation. Another thing we observe is that the deeper the model, the smaller the drop in test accuracy after the rank 10 approximation. Note that with increasing depth, the aspect ratio of the first fully connected layer's weight matrix decreases. This might result in a better exploration of the feature space.  \\
+Figure \ref{fig:low-rank} confirms this observation, when performing a rank 10 approximation of the first fully connected layer's weight matrix, there is no drop in test accuracy for the VGG19 model, and the norm of the weight matrix is almost unaffected by the approximation. We observe that the deeper the model, the smaller the drop in test accuracy after the rank 10 approximation. Note that with increasing depth, the aspect ratio $Q$ of the first fully connected layer's weight matrix decreases. A smaller value of $Q$ might result in a better exploration of the feature space, which in turn might help to find more robust solutions, that are less complex. Finally, we see that although the first fully connected layer of Conv-6 experiences a higher drop in Frobenius-norm after a low-rank approximation than the one of Conv-2, the drop in test accuracy is smaller. A possible explanation could be that in deeper networks, the noise component of a weight matrix has worse alignment with the outputs of the last convolutional layer, hence has less of an impact on the output of the network. As for VGG19, the noise component was almost entirely suppressed over the course of training. One should keep in mind that VGG19 was trained for longer, compared to the other networks, and with a learning rate schedule, which allowed to squeeze out very fine-scale structures. \\
 
-It is curious that irrespective of the model, the elbow value for the rank $k$ of the approximation is 10 for all first fully connected layers. 10 is also the number of classes in the CIFAR-10 dataset, and it would be interesting to check whether this would also apply to a different number of classes. 
+On a side node, it is curious that irrespective of the model, the elbow value for the rank $k$ of the approximation is 10 for all first fully connected layers. 10 is also the number of classes in the CIFAR-10 dataset, and it would be interesting to check whether this would also apply to a different number of classes. \\
+
+\textbf{TODO: Fill table}
 
 \section{Discussion}
 
-Write conclusion and discuss future work. Even though emergence of removable and repeated units, implicit self-regularization operates at a different level. Subspace, study more in detail what they mean (singular vectors) in terms of the previous layer, to design better pruning methods.
+Write conclusion and discuss future work. Even though emergence of removable and repeated units, implicit self-regularization operates at a different level. Subspace, study more in detail what they mean (singular vectors) in terms of the previous layer, to design better pruning methods. \\
+
+\textbf{TODO}
 
 \nocite{*}
 \printbibliography
