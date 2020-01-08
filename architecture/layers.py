@@ -8,16 +8,15 @@ import torch.nn.functional as F
 
 
 class MaskedLinear(nn.Linear):
-    def __init__(self, in_features, out_features, in_channels=0, bias=True, track_corr=True):
+    def __init__(self, in_features, out_features, in_channels=0, bias=True, track_corr=False):
         super(MaskedLinear, self).__init__(in_features, out_features, bias)
         w = self.weight.detach()
         self.register_buffer("mask", w.new_full(w.shape, 1.))
-        self.track_corr = track_corr
-        self.n_inputs = 0
         self.in_channels = in_channels
-        input_params = in_channels if in_channels else in_features
-        self.input_sum = torch.zeros(input_params)
-        self.input_dot = torch.zeros(input_params, input_params)
+        if track_corr:
+            self.track_correlation()
+        else:
+            self.track_corr = False
 
     def get_mask(self):
         return self.mask.clone()
@@ -37,11 +36,20 @@ class MaskedLinear(nn.Linear):
         b = self.bias.clone().detach()
         return b
 
+    def track_correlation(self):
+        self.track_corr = True
+        self.n_inputs = 0
+        input_params = self.in_channels if self.in_channels else self.weight.shape[1]
+        self.input_sum = torch.zeros(input_params)
+        self.input_dot = torch.zeros(input_params, input_params)
+
     def unpruned_parameters(self):
         first_col = self.mask[:, 0]
         return first_col.nonzero().flatten().tolist()
 
     def input_correlation(self):
+        assert self.track_corr
+
         N = self.n_inputs
         if self.in_channels:
             feature_map_size = self.in_features // self.in_channels
@@ -57,12 +65,12 @@ class MaskedLinear(nn.Linear):
 
         corr = (input_dot_mean - mean_prod) / np.sqrt(var_prod)
 
+        self.track_corr = False
+
         return corr
 
     def forward(self, x):
-        print("Linear layer: shape", x.shape)
         if self.track_corr:
-            print(x[0][:30])
             batch_size, in_features = x.shape[0], x.shape[1]
             if self.in_channels:
                 x_flattened = x.view(batch_size, self.in_channels, -1)
@@ -82,16 +90,16 @@ class MaskedLinear(nn.Linear):
 
 class MaskedConv2d(nn.Conv2d):
     def __init__(self, in_channels, out_channels, kernel_size, stride=1,
-                 padding=0, dilation=1, groups=1, bias=True, track_corr=True):
+                 padding=0, dilation=1, groups=1, bias=True, track_corr=False):
         super(MaskedConv2d, self).__init__(in_channels, out_channels,
                                            kernel_size, stride, padding, dilation, groups, bias)
         w = self.weight.detach()
         self.register_buffer("mask", w.new_full(w.shape, 1.))
-        self.track_corr = track_corr
-        self.n_inputs = 0
-        self.input_sum = torch.zeros(in_channels)
-        self.input_dot = torch.zeros(in_channels, in_channels)
-        self.feature_map_size = 0
+        self.in_channels = in_channels
+        if track_corr:
+            self.track_correlation()
+        else:
+            self.track_corr = False
 
     def get_mask(self):
         return self.mask.clone().view(self.mask.shape[0], -1)
@@ -111,11 +119,19 @@ class MaskedConv2d(nn.Conv2d):
         b = self.bias.clone().detach()
         return b
 
+    def track_correlation(self):
+        self.track_corr = True
+        self.n_inputs = 0
+        self.input_sum = torch.zeros(self.in_channels)
+        self.input_dot = torch.zeros(self.in_channels, self.in_channels)
+
     def unpruned_parameters(self):
         first_col = self.mask[:, 0, 0, 0]
         return first_col.nonzero().flatten().tolist()
 
     def input_correlation(self):
+        assert self.track_corr
+
         N = self.n_inputs * self.feature_map_size
 
         input_mean = (self.input_sum[:, None] / N).numpy()
@@ -128,10 +144,11 @@ class MaskedConv2d(nn.Conv2d):
 
         corr = (input_dot_mean - mean_prod) / np.sqrt(var_prod)
 
+        self.track_corr = False
+
         return corr
 
     def forward(self, x):
-        print("Convolutional layer: shape", x.shape)
         if self.track_corr:
             batch_size, in_channels = x.shape[0], x.shape[1]
             x_flattened = x.view(batch_size, in_channels, -1)

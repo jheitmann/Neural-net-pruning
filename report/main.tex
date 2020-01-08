@@ -365,12 +365,13 @@ We are interested in the row-space of a weight matrix $\mathbf{W} \in \mathbb{R}
 \scalebox{0.9}
 {\begin{tabular}{SSSS} \toprule
     {\textit{Network}} & {Conv-2} & {Conv-6} & {VGG19} \\ \midrule
+    {\textit{Aspect ratio Q}} & {64} & {16} & {1} \\
     {\textit{Rank} $k$} & {10} & {10} & {10} \\
-    {$100 \cdot \frac{ \| \textbf{W}_{\text{proj}} \|_F }{ \| \textbf{W} \|_F }$}  & {70} & {80} & {99} \\
-    {$a - a_{\text{proj}}$}  & {3} & {2} & {0.1} \\
-    {\textit{Standard deviation}} & {0.2} & {0.2} & {\textbf{--}}\\ \bottomrule
+    {$100 \cdot \frac{ \| \mathbf{W}_k \|_F }{ \| \mathbf{W} \|_F }$}  & {71.61} & {61.43} & {99.99} \\
+    {$a - a_{\text{proj}}$}  & {5.21} & {1.61} & {0} \\
+    {\textit{Standard deviation}} & {\textbf{--}} & {\textbf{--}} & {\textbf{--}}\\ \bottomrule
 \end{tabular}}
-\caption{Low-rank approximation of first fully connected layer, tested with different architectures. For Conv-2 and Conv-6, values are averages taken over 10 random experiments.}
+\caption{Low-rank approximation of first fully connected layer, tested with different architectures. For Conv-2 and Conv-6, values are averages taken over 10 random experiments. $a_{\text{proj}}$ denotes the accuracy obtained after replacing $\mathbf{W}$ by $\mathbf{W}_k$.}
 \end{figure}
 
 \section{Discussion}

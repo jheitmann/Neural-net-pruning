@@ -2,6 +2,7 @@ import numpy as np
 import os
 import torch
 import torch.nn.functional as F
+from torch.nn import CrossEntropyLoss
 
 import architecture.models as models
 import common
@@ -50,10 +51,12 @@ class Snapshots:  # add option to save all results
             norm_series.append(weight_norms)
         return torch.stack(norm_series)
 
-    def compute_input_correlations(self, layer):
+    def compute_input_correlations(self, layer, testloader):
         correlations = []
-        for model in self.models:
+        for epoch, model in enumerate(self.models):
             param = getattr(model, layer)
+            param.track_correlation()
+            self.evaluate_model(testloader, CrossEntropyLoss(), epoch)
             corr = np.nan_to_num(param.input_correlation())  # careful with layer (next layer)
             correlations.append(corr)
         return np.stack(correlations)
@@ -74,6 +77,7 @@ class Snapshots:  # add option to save all results
         #correlations = self.compute_input_correlations(layer)
         #ip_path = helpers.train_results_path(self.base_dir, common.IP_PREFIX, layer)  # changeme
         #np.save(ip_path, correlations)
+        #print("Saved input correlations to:", ip_path)
         return fp_path, ip_path, norms_path
 
     def create_adjacency(self, layer, merged=False):  # 3-D tensor
