@@ -308,6 +308,39 @@
       \field{pages}{1135\bibrangedash 1143}
       \range{pages}{9}
     \endentry
+    \entry{hassibi1993second}{inproceedings}{}
+      \name{author}{2}{}{%
+        {{uniquename=0,uniquepart=base,hash=9a3ee20fcdff97d76ca8c93e3ea76655}{%
+           family={Hassibi},
+           familyi={H\bibinitperiod},
+           given={Babak},
+           giveni={B\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=afc98afc05a3316cc20767394b042692}{%
+           family={Stork},
+           familyi={S\bibinitperiod},
+           given={David\bibnamedelima G},
+           giveni={D\bibinitperiod\bibinitdelim G\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{bde45d36ca9b8c251e04072590ac2d03}
+      \strng{fullhash}{bde45d36ca9b8c251e04072590ac2d03}
+      \strng{bibnamehash}{bde45d36ca9b8c251e04072590ac2d03}
+      \strng{authorbibnamehash}{bde45d36ca9b8c251e04072590ac2d03}
+      \strng{authornamehash}{bde45d36ca9b8c251e04072590ac2d03}
+      \strng{authorfullhash}{bde45d36ca9b8c251e04072590ac2d03}
+      \field{sortinit}{H}
+      \field{sortinithash}{5f15a7bc777ad49ff15aa4d2831b1681}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Advances in neural information processing systems}
+      \field{title}{Second order derivatives for network pruning: Optimal brain surgeon}
+      \field{year}{1993}
+      \field{pages}{164\bibrangedash 171}
+      \range{pages}{8}
+    \endentry
     \entry{lebedev2014speeding}{article}{}
       \name{author}{5}{}{%
         {{uniquename=0,uniquepart=base,hash=fa1a5ac60e32e44bf8ee9f723bd9ed41}{%
@@ -360,7 +393,7 @@
     \entry{lecun1998gradient}{article}{}
       \true{moreauthor}
       \true{morelabelname}
-      \name{author}{4}{}{%
+      \name{author}{4}{uniquelist=2}{%
         {{uniquename=0,uniquepart=base,hash=6a1aa6b7eab12b931ca7c7e3f927231d}{%
            family={LeCun},
            familyi={L\bibinitperiod},
@@ -389,11 +422,11 @@
       \list{publisher}{1}{%
         {Taipei, Taiwan}%
       }
-      \strng{namehash}{9e4c6012409dc8dd9b2aa198a2059804}
+      \strng{namehash}{e3f3024681df7a22911935ea71cd27ad}
       \strng{fullhash}{42172b2d9585ff08d91ea80787027307}
-      \strng{bibnamehash}{9e4c6012409dc8dd9b2aa198a2059804}
-      \strng{authorbibnamehash}{9e4c6012409dc8dd9b2aa198a2059804}
-      \strng{authornamehash}{9e4c6012409dc8dd9b2aa198a2059804}
+      \strng{bibnamehash}{e3f3024681df7a22911935ea71cd27ad}
+      \strng{authorbibnamehash}{e3f3024681df7a22911935ea71cd27ad}
+      \strng{authornamehash}{e3f3024681df7a22911935ea71cd27ad}
       \strng{authorfullhash}{42172b2d9585ff08d91ea80787027307}
       \field{sortinit}{L}
       \field{sortinithash}{2c7981aaabc885868aba60f0c09ee20f}
@@ -408,6 +441,45 @@
       \field{year}{1998}
       \field{pages}{2278\bibrangedash 2324}
       \range{pages}{47}
+    \endentry
+    \entry{lecun1990optimal}{inproceedings}{}
+      \name{author}{3}{}{%
+        {{uniquename=0,uniquepart=base,hash=6a1aa6b7eab12b931ca7c7e3f927231d}{%
+           family={LeCun},
+           familyi={L\bibinitperiod},
+           given={Yann},
+           giveni={Y\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=4f138434f743ff4d54b0b36a04662329}{%
+           family={Denker},
+           familyi={D\bibinitperiod},
+           given={John\bibnamedelima S},
+           giveni={J\bibinitperiod\bibinitdelim S\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=e0080d095fa815959bcf34e2f311154e}{%
+           family={Solla},
+           familyi={S\bibinitperiod},
+           given={Sara\bibnamedelima A},
+           giveni={S\bibinitperiod\bibinitdelim A\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{d10d261eaf314aa1f674b212859bb294}
+      \strng{fullhash}{d10d261eaf314aa1f674b212859bb294}
+      \strng{bibnamehash}{d10d261eaf314aa1f674b212859bb294}
+      \strng{authorbibnamehash}{d10d261eaf314aa1f674b212859bb294}
+      \strng{authornamehash}{d10d261eaf314aa1f674b212859bb294}
+      \strng{authorfullhash}{d10d261eaf314aa1f674b212859bb294}
+      \field{sortinit}{L}
+      \field{sortinithash}{2c7981aaabc885868aba60f0c09ee20f}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Advances in neural information processing systems}
+      \field{title}{Optimal brain damage}
+      \field{year}{1990}
+      \field{pages}{598\bibrangedash 605}
+      \range{pages}{8}
     \endentry
     \entry{li2016pruning}{article}{}
       \name{author}{5}{}{%

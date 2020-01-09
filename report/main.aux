@@ -82,6 +82,11 @@
 \abx@aux@page{18}{6}
 \abx@aux@page{19}{6}
 \abx@aux@page{20}{6}
+\abx@aux@cite{lecun1990optimal}
+\abx@aux@segm{0}{0}{lecun1990optimal}
+\abx@aux@cite{hassibi1993second}
+\abx@aux@segm{0}{0}{hassibi1993second}
+\abx@aux@segm{0}{0}{li2016pruning}
 \abx@aux@cite{lecun1998gradient}
 \abx@aux@segm{0}{0}{lecun1998gradient}
 \abx@aux@cite{simonyan2014very}
@@ -91,14 +96,17 @@
 \abx@aux@segm{0}{0}{lecun1998gradient}
 \abx@aux@segm{0}{0}{simonyan2014very}
 \abx@aux@segm{0}{0}{glorot2010understanding}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Leveraging model simplicity: Pruning and Compression}{7}{subsection.2.3}}
+\abx@aux@page{21}{7}
+\abx@aux@page{22}{7}
+\abx@aux@page{23}{7}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Results}{7}{section.3}}
 \abx@aux@segm{0}{0}{nagarajan2019uniform}
 \abx@aux@segm{0}{0}{brutzkus2019larger}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Leveraging model simplicity: Compression and Pruning}{7}{subsection.2.3}}
-\@writefile{toc}{\contentsline {section}{\numberline {3}Results}{7}{section.3}}
-\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Architectures tested in this project. Convolutions are 3x3. Lenet is from \cite {lecun1998gradient}. Conv-2/4/6 are variants of VGG \nobreakspace  {}\autocite {simonyan2014very}. Initializations are Gaussian Glorot \nobreakspace  {}\autocite {glorot2010understanding}.\relax }}{7}{figure.caption.7}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Comparison of pruning criteria}{7}{subsection.3.1}}
-\abx@aux@page{27}{7}
-\abx@aux@page{28}{8}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Architectures tested in this project. Convolutions are 3x3. Lenet is from \cite {lecun1998gradient}. Conv-2/4/6 are variants of VGG \nobreakspace  {}\autocite {simonyan2014very}. Initializations are Gaussian Glorot \nobreakspace  {}\autocite {glorot2010understanding}.\relax }}{8}{figure.caption.7}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Comparison of pruning criteria}{8}{subsection.3.1}}
+\abx@aux@page{30}{8}
+\abx@aux@page{31}{8}
 \providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
 \newlabel{fig:lenet-fc1}{{2a}{10}{Pruning the first fully connected layer of LeNet\relax }{figure.caption.11}{}}
 \newlabel{sub@fig:lenet-fc1}{{a}{10}{Pruning the first fully connected layer of LeNet\relax }{figure.caption.11}{}}
@@ -109,9 +117,9 @@
 \abx@aux@segm{0}{0}{nagarajan2019uniform}
 \abx@aux@segm{0}{0}{brutzkus2019larger}
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Visualizing training dynamics}{11}{subsection.3.2}}
-\abx@aux@page{29}{11}
-\abx@aux@page{30}{11}
-\abx@aux@page{31}{12}
+\abx@aux@page{32}{11}
+\abx@aux@page{33}{11}
+\abx@aux@page{34}{12}
 \newlabel{fig:conv2-fc1-init}{{3a}{13}{At initialization\relax }{figure.caption.14}{}}
 \newlabel{sub@fig:conv2-fc1-init}{{a}{13}{At initialization\relax }{figure.caption.14}{}}
 \newlabel{fig:conv2-fc1-final}{{3b}{13}{After convergence\relax }{figure.caption.14}{}}
@@ -128,8 +136,8 @@
 \newlabel{sub@fig:fc1-sgd-resampled}{{b}{16}{First fully connected layer, inner-product cutoff: 0.25\relax }{figure.caption.17}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Model comparison after training, when re-sampling the classifier. Red nodes correspond to weight vectors of the initial model, blue nodes to weight vectors of the model with re-sampled classifier.\relax }}{16}{figure.caption.17}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Subspace analysis}{17}{subsection.3.3}}
-\abx@aux@page{32}{17}
-\abx@aux@page{33}{17}
+\abx@aux@page{35}{17}
+\abx@aux@page{36}{17}
 \@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Empirical spectral densities of Conv-2 first fully connected layer correlation matrix, $Q = 64$.\relax }}{18}{figure.caption.21}}
 \newlabel{fig:conv2-fc1-svd-comp}{{6}{18}{Empirical spectral densities of Conv-2 first fully connected layer correlation matrix, $Q = 64$.\relax }{figure.caption.21}{}}
 \newlabel{fig:vgg-conv16-svd-comp}{{7a}{19}{First fully connected layer, $Q = 1$.\relax }{figure.caption.22}{}}
@@ -140,10 +148,10 @@
 \@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Low-rank approximation of first fully connected layer, tested with different architectures. For Conv-2 and Conv-6, values are averages taken over 10 random experiments. $a_{\text  {proj}}$ denotes the accuracy obtained after replacing $\mathbf  {W}$ by $\mathbf  {W}_k$.\relax }}{19}{figure.caption.23}}
 \newlabel{fig:low-rank}{{8}{19}{Low-rank approximation of first fully connected layer, tested with different architectures. For Conv-2 and Conv-6, values are averages taken over 10 random experiments. $a_{\text {proj}}$ denotes the accuracy obtained after replacing $\mathbf {W}$ by $\mathbf {W}_k$.\relax }{figure.caption.23}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {4}Discussion}{20}{section.4}}
-\abx@aux@page{34}{20}
-\abx@aux@page{35}{20}
-\abx@aux@page{36}{20}
 \abx@aux@page{37}{20}
+\abx@aux@page{38}{20}
+\abx@aux@page{39}{20}
+\abx@aux@page{40}{20}
 \abx@aux@refcontextdefaultsdone
 \abx@aux@defaultrefcontext{0}{brutzkus2019larger}{nyt/global//global/global}
 \abx@aux@defaultrefcontext{0}{casper2019removable}{nyt/global//global/global}
@@ -152,8 +160,10 @@
 \abx@aux@defaultrefcontext{0}{glorot2010understanding}{nyt/global//global/global}
 \abx@aux@defaultrefcontext{0}{goldt2019dynamics}{nyt/global//global/global}
 \abx@aux@defaultrefcontext{0}{han2015learning}{nyt/global//global/global}
+\abx@aux@defaultrefcontext{0}{hassibi1993second}{nyt/global//global/global}
 \abx@aux@defaultrefcontext{0}{lebedev2014speeding}{nyt/global//global/global}
 \abx@aux@defaultrefcontext{0}{lecun1998gradient}{nyt/global//global/global}
+\abx@aux@defaultrefcontext{0}{lecun1990optimal}{nyt/global//global/global}
 \abx@aux@defaultrefcontext{0}{li2016pruning}{nyt/global//global/global}
 \abx@aux@defaultrefcontext{0}{liu2018rethinking}{nyt/global//global/global}
 \abx@aux@defaultrefcontext{0}{martin2018implicit}{nyt/global//global/global}
@@ -165,9 +175,6 @@
 \abx@aux@defaultrefcontext{0}{tian2019luck}{nyt/global//global/global}
 \abx@aux@defaultrefcontext{0}{zagoruyko2016wide}{nyt/global//global/global}
 \abx@aux@defaultrefcontext{0}{zhang2016understanding}{nyt/global//global/global}
-\abx@aux@page{38}{21}
-\abx@aux@page{39}{21}
-\abx@aux@page{40}{21}
 \abx@aux@page{41}{21}
 \abx@aux@page{42}{21}
 \abx@aux@page{43}{21}
@@ -181,3 +188,8 @@
 \abx@aux@page{51}{21}
 \abx@aux@page{52}{21}
 \abx@aux@page{53}{21}
+\abx@aux@page{54}{21}
+\abx@aux@page{55}{21}
+\abx@aux@page{56}{21}
+\abx@aux@page{57}{21}
+\abx@aux@page{58}{21}

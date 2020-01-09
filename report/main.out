@@ -3,7 +3,7 @@
 \BOOKMARK [1][-]{section.2}{Related work}{}% 3
 \BOOKMARK [2][-]{subsection.2.1}{Self-regularization of over-parameterized models}{section.2}% 4
 \BOOKMARK [2][-]{subsection.2.2}{Advantageous properties of over-parameterized models}{section.2}% 5
-\BOOKMARK [2][-]{subsection.2.3}{Leveraging model simplicity: Compression and Pruning}{section.2}% 6
+\BOOKMARK [2][-]{subsection.2.3}{Leveraging model simplicity: Pruning and Compression}{section.2}% 6
 \BOOKMARK [1][-]{section.3}{Results}{}% 7
 \BOOKMARK [2][-]{subsection.3.1}{Comparison of pruning criteria}{section.3}% 8
 \BOOKMARK [2][-]{subsection.3.2}{Visualizing training dynamics}{section.3}% 9
