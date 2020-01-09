@@ -288,7 +288,9 @@ Based on the self-regularization mechanism discussed in section \ref{section:pri
 
 The observations confirm our initial assumptions. In general, weight vectors move closer to each other, and often we see one big cluster, with some outliers that are not part of this big connected component (see fig. \ref{fig:conv2-fc1-final}). The emergence of the cluster probably indicates the presence of a low-rank subspace, that corresponds to the low-complexity component. Figure \ref{fig:conv2-fc1-final}, showing the graph we get for the first fully connected layer of Conv-2, is particularly interesting, because it highlights multiple phenomena discussed in section \ref{section:prior}. First, the aforementioned main big cluster, and the outliers around it, that in addition to not being part of the cluster are not close either to other weight vectors. Second, the emergence of removable units, which are units that do not experience a significant change during the training process and can be dropped out of the network without hurting the validation accuracy much. Note that in this case, since these removable units are not affected much by training, they are also not pushed towards the main cluster (most likely the low-rank subspace). This explains why in our pruning experiment for the same layer (fig. \ref{fig:conv2-fc1}), \textit{Magnitude pruning} and \textit{Frame-potential pruning} perform equally well, up to quite a high value of pruned units. In this particular example it becomes clear why magnitude is a good estimate of a unit's saliency. \\
 
-A surprising result was that in some cases, even for larger networks, the weight vectors actually get clustered, as figure \ref{fig:vgg-conv16-final} shows. The threshold below which edges are removed was set to a value close to 1 for this graph. This means that if there is an edge between two nodes, the corresponding weight vectors almost overlap. The distinct clusters are clearly visible. The question was whether overlapping weight vectors would also produce similar outputs. Because bias-term, different magnitudes of the weight vectors and non-linearity of the activation function. has been added as a feature to the visualization. Reveal more repeated units. Indeed repeated units, corresponding to clustered weight vectors.  \\
+A surprising result was that in some cases, even for larger networks, the weight vectors actually get clustered, as figure \ref{fig:vgg-conv16-final} shows. The threshold below which edges are removed was set to a value close to 1 for this graph. This means that if there is an edge between two nodes, the corresponding weight vectors almost overlap. The distinct clusters are clearly visible. The question was whether overlapping weight vectors would also produce similar outputs. 
+
+%Because bias-term, different magnitudes of the weight vectors and non-linearity of the activation function. has been added as a feature to the visualization. Reveal more repeated units. Indeed repeated units, corresponding to clustered weight vectors.%  \\
 
 The next section is motivated by the wish to examine more precisely the nature of the big cluster.  \\
 
@@ -318,15 +320,26 @@ The next section is motivated by the wish to examine more precisely the nature o
 \end{figure}
 
 \subsubsection*{Additional observations}
-Figures \ref{fig:conv2-sgd-resampled} and \ref{fig:fc1-sgd-resampled}. \\
+The visualization makes it possible to compare layer weight matrices with different number of units, but same number of input connections. Let $\mathbf{W}_1 \in \mathbb{R}^{m_1 \times n}, \mathbf{W}_2 \in \mathbb{R}^{m_2 \times n}$ be two layer weight matrices. Then we can construct a new weight matrix 
 
-\textbf{TODO}
+\begin{align*}
+\mathbf{W} = \left[ \begin{array}{r}
+\mathbf{W}_1 \\
+\mathbf{W}_2 \\
+\end{array}\right] \in \mathbb{R}^{(m_1+m_2) \times n}
+\end{align*}
+
+and apply our visualization to it. This can be used to compare layers of different networks (e. g. same model but different weight values), to see if there are any correlations between the learned weight vectors of the layers. \\
+
+Among the experiments that were carried out with this tool, one which delivered curious results is worth mentioning in this report. The setup was the following: a Conv-2 network, which can be modeled as $f(x; \theta)$, with initial parameters $\theta = \theta_0 \sim \mathcal{D}_{\theta}$, was trained with SGD until it reached minimum test accuracy at iteration $j$, arriving at parameters $\theta_j$. Then, the same network was reset to its initial parameters $\theta_0$, and the weights of the classifier were re-sampled according to $\mathcal{D}_{\theta}$. The classifier is a component that corresponds to the 3 fully connected layers of the network (after the convolutional layers), and is present in all the VGG-variants. Thus we get a model $f(x; \theta'_0)$, where $\theta'_0$ is the set of parameters that is identical to $\theta_0$ except for the classifier component. We then train the model until iteration $j$, arriving at parameters $\theta'_j$. The question was how different the weight vectors learned in the two copies of the network would be, which lead us to compare the weight matrices of the final convolutional layer (started with identical weights, fig. \ref{fig:conv2-sgd-resampled} shows similarity after training), and the weight matrices of the first fully connected layer (started with different weights, fig. \ref{fig:fc1-sgd-resampled} shows similarity after training). \\
+
+To our surprise, the two networks seem to have converged to similar solutions in the convolutional layers, as illustrated by the similarity between the weight vectors and their initial copy (fig. \ref{fig:conv2-sgd-resampled}). Also, the big cluster we observe after training in the first fully connected layer contains trained units of both models (fig. \ref{fig:fc1-sgd-resampled}). If indeed the main cluster is indication for the existence of a low-rank subspace, then it seems like the two learned subspaces are very similar (later, the principal angle between low-rank approximations was measured and confirms this). This would mean that similar importance is given to the outputs of the last convolutional layer, which is more evidence to support that the convolutional layer of the two models learned similar representations. If this turns out to be more than just a lucky observation, but rather a property that generalizes to other layers and networks, we would have to question the validity of certain interpretations of the Lottery Ticket Hypothesis. We are saying that, based on our observations, the learned representations of a layer depend only on its initialization, and maybe on the initializations of the preceding layers, but not on the initialization of the subsequent layers. This would question the existence of well-initialized subnetworks that "win the lottery", since a subnetwork that contains weights of a certain layer also includes weights of subsequent layers (in our case the classifier). A more thorough analysis should be done in the future do get more precise results.
 
 \begin{figure}[H]
 \centering
 \begin{subfigure}[b]{0.62\textwidth}
    \includegraphics[width=\linewidth]{images/conv2-sgd-resampled.png}
-   \caption{Last convolutional layer, inner-product cutoff: 0.48}
+   \caption{Last convolutional layer, inner-product cutoff: 0.48. All nodes are only connected to their image in the other model, which was identical to it at initialization.}
    \label{fig:conv2-sgd-resampled} 
 \end{subfigure}
 
@@ -335,7 +348,7 @@ Figures \ref{fig:conv2-sgd-resampled} and \ref{fig:fc1-sgd-resampled}. \\
    \caption{First fully connected layer, inner-product cutoff: 0.25}
    \label{fig:fc1-sgd-resampled}
 \end{subfigure}
-\caption{Model comparison when re-sampling the classifier}
+\caption{Model comparison after training, when re-sampling the classifier. Red nodes correspond to weight vectors of the initial model, blue nodes to weight vectors of the model with re-sampled classifier.}
 \end{figure}
 
 \subsection{Subspace analysis}
