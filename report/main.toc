@@ -5,8 +5,8 @@
 \contentsline {subsection}{\numberline {2.1}Self-regularization of over-parameterized models}{3}{subsection.2.1}
 \contentsline {subsection}{\numberline {2.2}Advantageous properties of over-parameterized models}{4}{subsection.2.2}
 \contentsline {subsection}{\numberline {2.3}Leveraging model simplicity: Pruning and Compression}{7}{subsection.2.3}
-\contentsline {section}{\numberline {3}Results}{7}{section.3}
+\contentsline {section}{\numberline {3}Results}{8}{section.3}
 \contentsline {subsection}{\numberline {3.1}Comparison of pruning criteria}{8}{subsection.3.1}
-\contentsline {subsection}{\numberline {3.2}Visualizing training dynamics}{11}{subsection.3.2}
-\contentsline {subsection}{\numberline {3.3}Subspace analysis}{17}{subsection.3.3}
-\contentsline {section}{\numberline {4}Discussion}{20}{section.4}
+\contentsline {subsection}{\numberline {3.2}Visualizing training dynamics}{12}{subsection.3.2}
+\contentsline {subsection}{\numberline {3.3}Subspace analysis}{18}{subsection.3.3}
+\contentsline {section}{\numberline {4}Discussion}{21}{section.4}

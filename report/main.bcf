@@ -1947,19 +1947,22 @@
     <bcf:citekey order="21">lecun1990optimal</bcf:citekey>
     <bcf:citekey order="22">hassibi1993second</bcf:citekey>
     <bcf:citekey order="23">li2016pruning</bcf:citekey>
-    <bcf:citekey order="24">lecun1998gradient</bcf:citekey>
-    <bcf:citekey order="25">simonyan2014very</bcf:citekey>
-    <bcf:citekey order="26">glorot2010understanding</bcf:citekey>
+    <bcf:citekey order="24">suau2019filter</bcf:citekey>
+    <bcf:citekey order="25">bartoldson2019generalization</bcf:citekey>
+    <bcf:citekey order="26">namhoon2018SNIP</bcf:citekey>
     <bcf:citekey order="27">lecun1998gradient</bcf:citekey>
     <bcf:citekey order="28">simonyan2014very</bcf:citekey>
     <bcf:citekey order="29">glorot2010understanding</bcf:citekey>
-    <bcf:citekey order="30">nagarajan2019uniform</bcf:citekey>
-    <bcf:citekey order="31">brutzkus2019larger</bcf:citekey>
-    <bcf:citekey order="32">martin2018implicit</bcf:citekey>
+    <bcf:citekey order="30">lecun1998gradient</bcf:citekey>
+    <bcf:citekey order="31">simonyan2014very</bcf:citekey>
+    <bcf:citekey order="32">glorot2010understanding</bcf:citekey>
     <bcf:citekey order="33">nagarajan2019uniform</bcf:citekey>
     <bcf:citekey order="34">brutzkus2019larger</bcf:citekey>
-    <bcf:citekey order="35">lebedev2014speeding</bcf:citekey>
-    <bcf:citekey order="36">martin2018implicit</bcf:citekey>
+    <bcf:citekey order="35">martin2018implicit</bcf:citekey>
+    <bcf:citekey order="36">nagarajan2019uniform</bcf:citekey>
+    <bcf:citekey order="37">brutzkus2019larger</bcf:citekey>
+    <bcf:citekey order="38">lebedev2014speeding</bcf:citekey>
+    <bcf:citekey order="39">martin2018implicit</bcf:citekey>
     <bcf:citekey order="0">*</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->

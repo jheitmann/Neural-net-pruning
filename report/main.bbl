@@ -19,6 +19,49 @@
 
 \refsection{0}
   \datalist[entry]{nyt/global//global/global}
+    \entry{bartoldson2019generalization}{article}{}
+      \name{author}{4}{}{%
+        {{uniquename=0,uniquepart=base,hash=d21efd60a37226814bddddb37464d314}{%
+           family={Bartoldson},
+           familyi={B\bibinitperiod},
+           given={Brian\bibnamedelima R},
+           giveni={B\bibinitperiod\bibinitdelim R\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=4f81a3fa41b643b5c3f26ebe87dd0919}{%
+           family={Morcos},
+           familyi={M\bibinitperiod},
+           given={Ari\bibnamedelima S},
+           giveni={A\bibinitperiod\bibinitdelim S\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=a83c8036789ea95544661945eb34e807}{%
+           family={Barbu},
+           familyi={B\bibinitperiod},
+           given={Adrian},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=b7e723fbf9e83fbcacd606962f328cfc}{%
+           family={Erlebacher},
+           familyi={E\bibinitperiod},
+           given={Gordon},
+           giveni={G\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{670ea799704eab27e06fb97075899e49}
+      \strng{fullhash}{0e2fd35949b4cebaec37c0353c3e4137}
+      \strng{bibnamehash}{670ea799704eab27e06fb97075899e49}
+      \strng{authorbibnamehash}{670ea799704eab27e06fb97075899e49}
+      \strng{authornamehash}{670ea799704eab27e06fb97075899e49}
+      \strng{authorfullhash}{0e2fd35949b4cebaec37c0353c3e4137}
+      \field{sortinit}{B}
+      \field{sortinithash}{276475738cc058478c1677046f857703}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{arXiv preprint arXiv:1906.03728}
+      \field{title}{The Generalization-Stability Tradeoff in Neural Network Pruning}
+      \field{year}{2019}
+    \endentry
     \entry{brutzkus2019larger}{inproceedings}{}
       \name{author}{2}{}{%
         {{uniquename=0,uniquepart=base,hash=b73d179cb38c337fca11643785220aac}{%
@@ -481,6 +524,43 @@
       \field{pages}{598\bibrangedash 605}
       \range{pages}{8}
     \endentry
+    \entry{namhoon2018SNIP}{article}{}
+      \name{author}{3}{}{%
+        {{uniquename=0,uniquepart=base,hash=4f6586995ae6501f97a78f845e707fd5}{%
+           family={Lee},
+           familyi={L\bibinitperiod},
+           given={Namhoon},
+           giveni={N\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=3c62fb0bfb373c1f1802a7d359db5369}{%
+           family={Ajanthan},
+           familyi={A\bibinitperiod},
+           given={Thalaiyasingam},
+           giveni={T\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=d76cd9ac847163e992ddb1c39e744459}{%
+           family={Torr},
+           familyi={T\bibinitperiod},
+           given={Philip\bibnamedelimb H.\bibnamedelimi S.},
+           giveni={P\bibinitperiod\bibinitdelim H\bibinitperiod\bibinitdelim S\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{cec0d97f257f1032b8e20486a5e2a24f}
+      \strng{fullhash}{cec0d97f257f1032b8e20486a5e2a24f}
+      \strng{bibnamehash}{cec0d97f257f1032b8e20486a5e2a24f}
+      \strng{authorbibnamehash}{cec0d97f257f1032b8e20486a5e2a24f}
+      \strng{authornamehash}{cec0d97f257f1032b8e20486a5e2a24f}
+      \strng{authorfullhash}{cec0d97f257f1032b8e20486a5e2a24f}
+      \field{sortinit}{L}
+      \field{sortinithash}{2c7981aaabc885868aba60f0c09ee20f}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{arXiv preprint arXiv:1810.02340}
+      \field{title}{{SNIP:} Single-shot Network Pruning based on Connection Sensitivity}
+      \field{year}{2018}
+    \endentry
     \entry{li2016pruning}{article}{}
       \name{author}{5}{}{%
         {{uniquename=0,uniquepart=base,hash=2620b9afd37cca5b9b7354f67c036d4d}{%
@@ -850,6 +930,34 @@
       \field{labeltitlesource}{title}
       \field{journaltitle}{arXiv preprint arXiv:1905.13405}
       \field{title}{Luck Matters: Understanding Training Dynamics of Deep ReLU Networks}
+      \field{year}{2019}
+    \endentry
+    \entry{suau2019filter}{article}{}
+      \name{author}{1}{}{%
+        {{uniquename=0,uniquepart=base,hash=62b5c4c5ce06739c992f19705d679694}{%
+           family={Xavier\bibnamedelima Suau},
+           familyi={X\bibinitperiod\bibinitdelim S\bibinitperiod},
+           given={Nicholas\bibnamedelima Apostoloff},
+           giveni={N\bibinitperiod\bibinitdelim A\bibinitperiod},
+           givenun=0,
+           suffix={Luca\bibnamedelima Zappella},
+           suffixi={L\bibinitperiod\bibinitdelim Z\bibinitperiod},
+           suffixun=0}}%
+      }
+      \strng{namehash}{62b5c4c5ce06739c992f19705d679694}
+      \strng{fullhash}{62b5c4c5ce06739c992f19705d679694}
+      \strng{bibnamehash}{62b5c4c5ce06739c992f19705d679694}
+      \strng{authorbibnamehash}{62b5c4c5ce06739c992f19705d679694}
+      \strng{authornamehash}{62b5c4c5ce06739c992f19705d679694}
+      \strng{authorfullhash}{62b5c4c5ce06739c992f19705d679694}
+      \field{sortinit}{X}
+      \field{sortinithash}{b0b62a29ee4a21a0e618fed53a0313cc}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{arXiv preprint arXiv:1807.10585}
+      \field{title}{Filter Distillation for Network Compression}
       \field{year}{2019}
     \endentry
     \entry{zagoruyko2016wide}{article}{}
