@@ -186,9 +186,17 @@ Both unstructured and structured pruning methods are often \textit{iterative}, w
 
 \section{Results}
 
-This project focuses on classification tasks on natural images datasets, solved by neural networks. It takes a weight-vector perspective when reasoning about the sources of redundancy and the effects of pruning. This means that only structured pruning will be performed, at the level of neurons or filters. Those will also be the main entities studied when trying to understand the properties of neural network optimization. Why not look at unstructured pruning or individual weights? \\
+This project focuses on classification tasks on natural images datasets, solved by neural networks. It takes a weight-vector perspective when reasoning about the sources of redundancy and the effects of pruning. This means that only structured pruning will be performed, at the level of neurons or filters. Those will also be the main entities studied when trying to understand the properties of neural network optimization. Having discussed the drawbacks of unstructured pruning, the initial idea was to reproduce the findings of the Lottery Ticket Hypothesis in a structured manner, but research suggests that the dynamics of "winning tickets", made of individual weights, do not apply to entire neurons or filters ~\autocite{liu2018rethinking}. \\
 
-\textbf{TODO}
+Still, extending the Lottery Ticket Hypothesis to units (neurons or convolutional filters), we would prune based on magnitude of the associated weight vectors. This is still a popular strategy when it comes to structured pruning, and we would like to investigate more theoretically sound alternatives. For that purpose, we study the sources of redundancy in neural networks, that must exist since the maximum capacity of the network is not reached in most cases, and see how they apply at the level of units (and their corresponding weight vector). We do this in order to formulate suggestions on how we could exploit these sources of redundancy to design new structured pruning strategies that yield efficient models with a test accuracy close to that of a reference model. The observations and discoveries made in this project can be summed up by three distinct contributions:
+
+\begin{itemize}
+\item Evaluate the efficiency of a new pruning strategy, that relies on angle instead of magnitude.
+\item Provide a visualization tool, to explore training dynamics from a weight vector perspective, where similarity is defined in terms of the angle between two weight vectors.  
+\item Perform a subspace analysis of chosen layer weight matrices. This is the most promising and direct way of analyzing redundancy at the level of units.
+\end{itemize}
+
+Before diving into the first part, here are the specifications of the models we used in our experiments:
 
 \begin{comment}
 The fact that the lottery ticket hypothesis might not really apply at the level of nodes / filters ~\autocite{liu2018rethinking} could be due to multiple reasons:
