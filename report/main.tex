@@ -125,7 +125,14 @@ This project aims to explore different hypotheses about neural network training 
 
 \subsection{Formal background}
 
-Formally define neural networks, generalization error, structured and unstructured pruning. \\
+Formally define neural networks, generalization error, structured and unstructured pruning. 
+
+Feed-forward network, with input, hidden and output layers.
+
+Weight matrix: fully connected easy, convolutional flattened tensor.
+
+Unstructured: set individual entries to 0
+Structured: set entire rows (and column of the next layer if it exists) to 0. Could effectively be removed. \\
 
 \textbf{TODO}
 
@@ -155,7 +162,7 @@ Contemporary experience suggests that overparameterized networks are easier to t
 
 \textit{A randomly-initialized, dense neural network contains a sub-network that is initialized such that - when trained in isolation - it can match the test accuracy of the original network after training for at most the same number of iterations.} \\
 
-According to the authors, at initialization, some weights that form a sub-network "win the lottery", because the combination of their initial value and the way they are aranged in that particular sub-network makes them particularly "trainable" by the chosen optimization algorithm, compared to other weights that are not in the sub-network. Those weights form what is called a "winning ticket", and the paper provides a way to identify the winning ticket after multiple iterations of pruning, based on the weight magnitudes, and retraining, to compensate for the loss in accuracy caused by pruning. One of the important results of the paper is that when the weights of the winning ticket, which can be seen as a mask applied to the weights of the network, are reset to their initial value (all other weights set to zero), then the newly obtained network reaches similar if not better accuracy than the original network, up to a certain degree of pruning (up to 96\%). Surprisingly, this result does not hold when the weights of the winning ticket are re-sampled, meaning that both the pruned architecture and the values of the unpruned weights are of importance. When randomly re-sampled, the winning tickets learn slower and reach lower accuracy than the re-initialized one. \\
+According to the authors, at initialization, some weights that form a sub-network "win the lottery", because the combination of their initial value and the way they are arranged in that particular sub-network makes them particularly "trainable" by the chosen optimization algorithm, compared to other weights that are not in the sub-network. Those weights form what is called a "winning ticket", and the paper provides a way to identify the winning ticket after multiple iterations of pruning, based on the weight magnitudes, and retraining, to compensate for the loss in accuracy caused by pruning. One of the important results of the paper is that when the weights of the winning ticket, which can be seen as a mask applied to the weights of the network, are reset to their initial value (all other weights set to zero), then the newly obtained network reaches similar if not better accuracy than the original network, up to a certain degree of pruning (up to 96\%). Surprisingly, this result does not hold when the weights of the winning ticket are re-sampled, meaning that both the pruned architecture and the values of the unpruned weights are of importance. When randomly re-sampled, the winning tickets learn slower and reach lower accuracy than the re-initialized one. \\
 
 Note that, as individual weights are pruned to identify the winning ticket, the theory makes use of unstructured pruning, and a winning ticket obtained by this procedure would have to rely on speciliased libraries and hardware to exploit benefits of the weight matrix sparsity. According to \cite{liu2018rethinking}, the results do not hold when using structured pruning, and might even be misleading in the case of unstructured pruning. The authors of the paper claim that the optimization algorithm (ADAM) and the small initial learning rate of the original paper lead to inferior accuracy when the winning ticket is randomly initialized, but this can be remedied using SGD and a higher learning rate. Moreover, as claimed in the original paper, the procedure to identify a winning ticket fails for deeper networks. Nonetheless, according to Frankle and Carbin, even if in some cases, up to a certain level of sparsity, highly overparameterized networks can be pruned, reinitialized and retrained successfully, beyond a certain point, when the network is extremely pruned, less severely overparameterized networks only maintain a good validation accuracy if they are well-initialised. Also, winning tickets have been found for deeper networks ~\autocite{frankle2019lottery} when, instead of resetting the weights of the winning ticket to their initial values, they are rewinded to their former values at iteration $k$, where $k$ is much smaller than the total number of training iterations. Finally, winning tickets generate so much interest because they might reveal a lot about how to better initialise neural networks, but also help better understand the bias of modern optimization algorithms towards sparse solutions. Surprisingly, it has been shown that, within the natural images domain, winning ticket initialisations generalize across a variety of datasets, often achieving performance close to that of winning tickets generated on the same dataset ~\autocite{morcos2019one}. This suggests that winning tickets somehow have an inductive bias generic to neural networks, which generalizes to multiple configurations. 
 
@@ -445,9 +452,15 @@ On a side node, it is curious that irrespective of the model, the elbow value fo
 
 \section{Discussion}
 
-Write conclusion and discuss future work. Even though emergence of removable and repeated units, implicit self-regularization operates at a different level. Subspace, study more in detail what they mean (singular vectors) in terms of the previous layer, to design better pruning methods. \\
+We have seen that indeed sources of redundancy emerge at the level of units of a neural network, observing for instance removable neurons in the first fully connected layer of Conv-2, or repeated (clustered) filters in the last convolutional layer of VGG19. A naive pruning strategy that removes those types of units suffers from the fact that first, removable units are not that frequent in larger networks and second, it is unclear how to properly remove redundant units. If we want to prune more heavily, we need to exploit other sources of redundancy. \\
 
-\textbf{TODO}
+The problem with iterative methods that prune multiple times during training is that we alter the already complicated geometry of the loss function, in a way that cannot be foreseen. Most iterative methods lack a theoretical explanation, and fail to deliver results that could not have been reached by smaller networks. \\ 
+
+Some weight matrices (if not all) of a neural network are undoubtedly low-rank after training, as the empirical spectral densities of VGG19 layer correlation matrices show. We think that getting a good understanding of this low-rankness might help us in designing better pruning strategies. \\
+
+Finally, we think that this project raised some questions that are interesting from a theoretical point of view: Why do the weight vectors of some layers perfectly cluster around just a few directions, whereas in other layers this doesn't happen? Are the weight vectors in a layer learned more or less independently of the subsequent layers? \\
+
+Hopefully these questions can be investigated in future work.
 
 \nocite{*}
 \printbibliography
