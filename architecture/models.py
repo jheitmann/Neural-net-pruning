@@ -187,18 +187,6 @@ class VGG11(PruningModule):
                 nn.init.constant_(m.bias, 0)
 
 
-# For testing purposes
-class VGG19BN(PruningModule):
-    def __init__(self, bias=True):
-        super(VGG19BN, self).__init__(bias)
-        self.fc1 = MaskedLinear(512, 512, bias=bias)
-        self.fc2 = MaskedLinear(512, 512, bias=bias)
-        self.fc3 = MaskedLinear(512, 10, bias=bias)
-
-    def forward(self, x):
-        return x
-
-
 class VGG19_BN(PruningModule):
 
     def __init__(self, bias=True):

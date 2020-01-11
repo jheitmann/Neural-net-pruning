@@ -1957,13 +1957,14 @@
     <bcf:citekey order="31">lecun1998gradient</bcf:citekey>
     <bcf:citekey order="32">simonyan2014very</bcf:citekey>
     <bcf:citekey order="33">glorot2010understanding</bcf:citekey>
-    <bcf:citekey order="34">nagarajan2019uniform</bcf:citekey>
-    <bcf:citekey order="35">brutzkus2019larger</bcf:citekey>
-    <bcf:citekey order="36">martin2018implicit</bcf:citekey>
-    <bcf:citekey order="37">nagarajan2019uniform</bcf:citekey>
-    <bcf:citekey order="38">brutzkus2019larger</bcf:citekey>
-    <bcf:citekey order="39">lebedev2014speeding</bcf:citekey>
-    <bcf:citekey order="40">martin2018implicit</bcf:citekey>
+    <bcf:citekey order="34">li2016pruning</bcf:citekey>
+    <bcf:citekey order="35">nagarajan2019uniform</bcf:citekey>
+    <bcf:citekey order="36">brutzkus2019larger</bcf:citekey>
+    <bcf:citekey order="37">martin2018implicit</bcf:citekey>
+    <bcf:citekey order="38">nagarajan2019uniform</bcf:citekey>
+    <bcf:citekey order="39">brutzkus2019larger</bcf:citekey>
+    <bcf:citekey order="40">lebedev2014speeding</bcf:citekey>
+    <bcf:citekey order="41">martin2018implicit</bcf:citekey>
     <bcf:citekey order="0">*</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
