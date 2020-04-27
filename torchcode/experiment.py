@@ -4,7 +4,7 @@ import os
 import torch
 
 import common
-import helpers
+import torchcode.helpers as helpers
 
 # Seeding for reproducibility, only once (remove from nb?)
 torch.manual_seed(common.SEED)

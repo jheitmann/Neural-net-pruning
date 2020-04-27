@@ -3,7 +3,7 @@ from copy import deepcopy
 from math import ceil
 
 import common
-import helpers
+import torchcode.helpers as helpers
 
 np.random.seed(common.SEED)
 

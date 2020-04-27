@@ -2,12 +2,10 @@ import json
 from flask import Flask, jsonify, request, redirect, render_template, url_for
 
 import common
-
-from processing.snapshots import Snapshots
+from torchcode.snapshots import Snapshots
 
 
 app = Flask(__name__)
-
 graph_data = None
 
 

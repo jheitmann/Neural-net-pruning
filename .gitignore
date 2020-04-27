@@ -106,6 +106,7 @@ venv.bak/
 # Data and results
 data/
 out/
+report/
 flaskcode/
 
 # PyCharm project

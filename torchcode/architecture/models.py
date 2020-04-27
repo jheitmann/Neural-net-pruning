@@ -2,8 +2,8 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from architecture.layers import MaskedLinear, MaskedConv2d
-from architecture.pruning_module import PruningModule
+from torchcode.architecture.layers import MaskedLinear, MaskedConv2d
+from torchcode.architecture.pruning_module import PruningModule
 
 
 class LeNet_300_100(PruningModule):

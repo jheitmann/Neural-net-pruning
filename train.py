@@ -2,9 +2,9 @@ import argparse
 import torch.nn as nn
 import torch.optim as optim
 
-from processing.snapshots import Snapshots
-from data import get_mnist, get_cifar
-from experiment import Experiment
+from torchcode.snapshots import Snapshots
+from torchcode.data import get_mnist, get_cifar
+from torchcode.experiment import Experiment
 
 
 def save_results(output_dir, layers):

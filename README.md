@@ -7,8 +7,8 @@ Create a conda environment and activate it:
 
 Run the training script and launch the web-server:
 
-        python train.py -cif 64 1000 10 AlexNet nn.CrossEntropyLoss optim.Adam lr=0.001
-        python viz_main.py
+        python train.py -cif 64 1000 10 Conv6 nn.CrossEntropyLoss optim.Adam lr=0.0003
+        python visualize.py
 
 `train.py` has the following arguments:
 - `-cif`: if option is chosen, CIFAR-10 will be used instead of MNIST

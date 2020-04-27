@@ -4,11 +4,11 @@ import torch
 import torch.nn.functional as F
 from torch.nn import CrossEntropyLoss
 
-import architecture.models as models
+import torchcode.architecture.models as models
 import common
-import helpers
-from architecture.pruning_module import inner_products
-from experiment import Experiment
+import torchcode.helpers as helpers
+from torchcode.architecture.pruning_module import inner_products
+from torchcode.experiment import Experiment
 
 
 class Snapshots:  # add option to save all results
