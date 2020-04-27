@@ -1,9 +1,15 @@
-# Neural-net-pruning
-Semester project: Determine near-optimal pruning strategies for neural networks
+# Sources of Redundancy in Neural Networks
+
+This is the repository for my Data Science Semester Project: Sources of Redundancy in Neural Networks
+
+The final report can be found [here](https://jheitmann.github.io/assets/Project_Heitmann.pdf).
+ 
+Most of the code has been used for experimental purposes, and thus lacks some comments explaining the code architecture. To check out the visualization tool that was implemented as part of the project, create a conda environment, train a model, and run the visualization script. 
 
 Create a conda environment and activate it:
 
         conda env create -f environment.yml
+        conda activate nn-pruning
 
 Run the training script and launch the web-server:
 

@@ -25,7 +25,7 @@ def root():
 
 @app.route('/params', methods=["GET", "POST"])
 def params():
-    """ Flask method of the root page with the forms """
+    """ Flask method of a page to select the layer to visualize """
     with open(common.MODEL_SPECS_PATH, 'r') as fp:
         models = json.load(fp)
 

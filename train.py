@@ -51,7 +51,7 @@ if __name__=="__main__":
     parser.add_argument("-cif", "--cifar", help="use cifar dataset", action="store_true")
     args = parser.parse_args()
 
-    exec(f"from architecture.models import {args.model_class}")
+    exec(f"from torchcode.architecture.models import {args.model_class}")
 
     args_dict = {}
     for t in args.optim_args:
